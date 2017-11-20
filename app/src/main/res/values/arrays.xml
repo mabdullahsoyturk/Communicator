@@ -1,0 +1,56 @@
+<resources>
+
+    <string-array name="fake_members">
+        <item>"Muhammet"</item>
+        <item>"Abdullah"</item>
+        <item>"Soytürk"</item>
+        <item>"Fake"</item>
+    </string-array>
+
+    <string-array name="pref_currency_labels">
+        <item>"Dollar"</item>
+        <item>"Pound"</item>
+        <item>"Turkish_Lira"</item>
+    </string-array>
+
+    <string-array name="pref_currency_values">
+        <item>"Dollar"</item>
+        <item>"Pound"</item>
+        <item>"Turkish_Lira"</item>
+    </string-array>
+
+    <string-array name="pref_currency_defaults">
+        <item>"Turkish_Lira"</item>
+    </string-array>
+
+    <string-array name="pref_currency_options">
+        <item>@string/pref_currency_label_turkish_lira</item>
+        <item>@string/pref_currency_label_dollar</item>
+        <item>@string/pref_currency_label_pound</item>
+    </string-array>
+
+    <string-array name="pref_time_period_options">
+        <item>@string/pref_time_period_label_week</item>
+        <item>@string/pref_time_period_label_month</item>
+        <item>@string/pref_time_period_label_year</item>
+        <item>@string/pref_time_period_label_all</item>
+    </string-array>
+
+    <string-array name="pref_time_period_values">
+        <item>@string/pref_time_period_label_week</item>
+        <item>@string/pref_time_period_label_month</item>
+        <item>@string/pref_time_period_label_year</item>
+        <item>@string/pref_time_period_label_all</item>
+    </string-array>
+    
+    <string-array name="spending_types">
+        <item>"Food/Groceries"</item>
+        <item>"Maintenance"</item>
+        <item>"Utilities"</item>
+        <item>"Rent"</item>
+        <item>"Home Supplies"</item>
+        <item>"Internet"</item>
+        <item>"Borrowing Money"</item>
+        <item>"Others"</item>
+    </string-array>
+</resources>

@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Communicator</string>
+    <string name="facebook_app_id">1901170196809767</string>
+    <string name="fb_login_protocol_scheme">fb1901170196809767</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="title_home">Home</string>
+    <string name="title_buy_me">Buy Me</string>
+    <string name="title_spendings">Spendings</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="pref_currency_label">Currency</string>
+    <string name="pref_currency_key">currency2</string>
+    <string name="pref_currency_label_turkish_lira">Turkish_Lira</string>
+    <string name="pref_currency_label_dollar">Dollar</string>
+    <string name="pref_currency_label_pound">Pound</string>
+    <string name="pref_time_period_key">time_period</string>
+    <string name="pref_time_period_label">Time Period</string>
+    <string name="pref_time_period_label_week">Last Week</string>
+    <string name="pref_time_period_label_month">Last Month</string>
+    <string name="pref_time_period_label_year">Last Year</string>
+    <string name="pref_time_period_label_all">All</string>
+
+</resources>
