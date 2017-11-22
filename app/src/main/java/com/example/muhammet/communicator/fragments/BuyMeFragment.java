@@ -15,6 +15,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.example.muhammet.communicator.ListItemClickListener;
 import com.example.muhammet.communicator.R;
@@ -27,8 +29,10 @@ import com.example.muhammet.communicator.data.CommunicatorContract;
 public class BuyMeFragment extends Fragment implements ListItemClickListener,
                                                         LoaderManager.LoaderCallbacks<Cursor>{
 
-    private static final int TASK_LOADER_ID = 0;
+    private static final int BUY_ME_LOADER_ID = 0;
 
+    private Button deleteAllButton;
+    private ProgressBar mLoadingIndicator;
     RecyclerView rv_buy_me;
     BuyMeAdapter toBuyAdapter;
     private DividerItemDecoration mDividerItemDecoration;
@@ -39,6 +43,8 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener,
 
         View view = inflater.inflate(R.layout.fragment_buy_me, container, false);
 
+        deleteAllButton = view.findViewById(R.id.buy_me_delete);
+        mLoadingIndicator = view.findViewById(R.id.pb_loading_indicator);
         rv_buy_me = view.findViewById(R.id.rv_buy_me);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         rv_buy_me.setLayoutManager(layoutManager);
@@ -48,48 +54,21 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener,
         toBuyAdapter = new BuyMeAdapter(getContext(),this);
         rv_buy_me.setAdapter(toBuyAdapter);
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            // Called when a user swipes left or right on a ViewHolder
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                // Here is where you'll implement swipe to delete
-
-                // COMPLETED (1) Construct the URI for the item to delete
-                //[Hint] Use getTag (from the adapter code) to get the id of the swiped item
-                // Retrieve the id of the task to delete
-                int id = (int) viewHolder.itemView.getTag();
-
-                // Build appropriate uri with String row id appended
-                String stringId = Integer.toString(id);
-                Uri uri = CommunicatorContract.BuyMeEntry.CONTENT_URI;
-                uri = uri.buildUpon().appendPath(stringId).build();
-
-                // COMPLETED (2) Delete a single row of data using a ContentResolver
-                getActivity().getContentResolver().delete(uri, null, null);
-
-                // COMPLETED (3) Restart the loader to re-query for all tasks after a deletion
-                restartLoader();
-            }
-        }).attachToRecyclerView(rv_buy_me);
+        setSwipeHelper();
+        setDeleteButton();
 
         return view;
     }
 
     public void restartLoader(){
-        getActivity().getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+        getActivity().getSupportLoaderManager().restartLoader(BUY_ME_LOADER_ID, null, this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        // re-queries for all tasks
-        getActivity().getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+        getActivity().getSupportLoaderManager().restartLoader(BUY_ME_LOADER_ID, null, this);
     }
 
     @Override
@@ -101,16 +80,16 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener,
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new AsyncTaskLoader<Cursor>(getContext()) {
 
-            // Initialize a Cursor, this will hold all the task data
-            Cursor mTaskData = null;
+            Cursor mBuyMeData = null;
 
             // onStartLoading() is called when a loader first starts loading data
             @Override
             protected void onStartLoading() {
-                if (mTaskData != null) {
+                if (mBuyMeData != null) {
                     // Delivers any previously loaded data immediately
-                    deliverResult(mTaskData);
+                    deliverResult(mBuyMeData);
                 } else {
+                    mLoadingIndicator.setVisibility(View.VISIBLE);
                     // Force a new load
                     forceLoad();
                 }
@@ -139,7 +118,7 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener,
 
             // deliverResult sends the result of the load, a Cursor, to the registered listener
             public void deliverResult(Cursor data) {
-                mTaskData = data;
+                mBuyMeData = data;
                 super.deliverResult(data);
             }
         };
@@ -153,5 +132,46 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener,
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         toBuyAdapter.swapCursor(null);
+    }
+
+    public void setSwipeHelper(){
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                // Here is where you'll implement swipe to delete
+
+                // COMPLETED (1) Construct the URI for the item to delete
+                //[Hint] Use getTag (from the adapter code) to get the id of the swiped item
+                // Retrieve the id of the task to delete
+                int id = (int) viewHolder.itemView.getTag();
+
+                // Build appropriate uri with String row id appended
+                String stringId = Integer.toString(id);
+                Uri uri = CommunicatorContract.BuyMeEntry.CONTENT_URI;
+                uri = uri.buildUpon().appendPath(stringId).build();
+
+                // COMPLETED (2) Delete a single row of data using a ContentResolver
+                getActivity().getContentResolver().delete(uri, null, null);
+
+                // COMPLETED (3) Restart the loader to re-query for all tasks after a deletion
+                restartLoader();
+            }
+        }).attachToRecyclerView(rv_buy_me);
+    }
+
+    public void setDeleteButton(){
+        deleteAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Uri uri = CommunicatorContract.BuyMeEntry.CONTENT_URI;
+                    getActivity().getContentResolver().delete(uri, null, null);
+                    restartLoader();
+            }
+        });
     }
 }

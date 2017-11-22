@@ -21,14 +21,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button android:id="@+id/btn_switch"
+    <Button android:id="@+id/btn_add_member"
         android:layout_width="190dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Switch"
+        android:text="Add Member"
         android:textSize="14sp"
         android:textColor="#FFFFFF"
         android:shadowColor="#A8A8A8"

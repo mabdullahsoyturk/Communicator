@@ -132,6 +132,9 @@ public class CommunicatorContentProvider extends ContentProvider{
                 // Use selections/selectionArgs to filter for this ID
                 tasksDeleted = db.delete(TABLE_NAME, "_id=?", new String[]{id});
                 break;
+            case BUY_MES:
+                tasksDeleted = db.delete(TABLE_NAME, null, null);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
