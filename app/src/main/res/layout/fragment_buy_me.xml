@@ -35,7 +35,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:drawableLeft="@drawable/ic_clear_all_black_24dp"
-        android:text="Delete All"
+        android:text="@string/fragment_buy_me_delete_all"
         android:onClick="onClickDeleteAll"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"

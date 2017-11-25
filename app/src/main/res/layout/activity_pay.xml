@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="204dp"
         android:layout_marginStart="40dp"
-        android:text="From: "
+        android:text="@string/activity_pay_from"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="152dp"
         android:layout_marginStart="40dp"
-        android:text="To: "
+        android:text="@string/activity_pay_to"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -71,7 +71,7 @@
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="5"
-        android:text="Confirm"
+        android:text="@string/confirm"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -18,14 +18,14 @@
         android:layout_height="wrap_content"
         android:maxWidth="100dp"
         android:maxHeight="15dp"
-        android:text="Name"
+        android:text="@string/spending_row_name"
         android:textStyle="bold"
         android:layout_toRightOf="@id/spending_icon"/>
 
     <TextView android:id="@+id/spending_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date"
+        android:text="@string/spending_row_date"
         android:layout_toRightOf="@id/spending_name"
         android:layout_marginLeft="10dp"/>
 
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Your Share:"
+        android:text="@string/spending_row_your_share"
         android:layout_below="@id/spending_name"
         android:layout_toRightOf="@id/spending_icon"/>
 
@@ -41,7 +41,7 @@
         android:drawableLeft="@drawable/ic_touch_app_black_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit"
+        android:text="@string/spending_row_edit"
         android:textColor="@color/colorPrimary"
         style="?android:attr/borderlessButtonStyle"
         android:layout_alignParentRight="true"/>

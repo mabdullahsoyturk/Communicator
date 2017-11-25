@@ -21,9 +21,9 @@ public class NetworkUtilities {
             "https://andfun-weather.udacity.com/weather";
 
     private static final String STATIC_WEATHER_URL =
-            "https://andfun-weather.udacity.com/staticweather";
+            "http://10.0.2.2:3000/signup";
 
-    private static final String FORECAST_BASE_URL = STATIC_WEATHER_URL;
+    private static final String USER_BASE_URL = STATIC_WEATHER_URL;
 
     /* The format we want our API to return */
     private static final String format = "json";
@@ -72,12 +72,9 @@ public class NetworkUtilities {
     }*/
 
 
-    private static URL buildUrlWithLocationQuery(String locationQuery) {
-        Uri weatherQueryUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                .appendQueryParameter(QUERY_PARAM, locationQuery)
-                .appendQueryParameter(FORMAT_PARAM, format)
-                .appendQueryParameter(UNITS_PARAM, units)
-                .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+    public static URL buildUrlWithPath(String addedPath) {
+        Uri weatherQueryUri = Uri.parse(USER_BASE_URL).buildUpon()
+                .appendPath(addedPath)
                 .build();
 
         try {
@@ -108,6 +105,8 @@ public class NetworkUtilities {
             urlConnection.disconnect();
         }
     }
+
+
 
     /*
     public static ContentValues[] getWeatherContentValuesFromJson(Context context, String forecastJsonStr)

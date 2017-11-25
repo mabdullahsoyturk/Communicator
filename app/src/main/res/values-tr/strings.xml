@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Communicator</string>
+    <string name="action_settings">Ayarlar</string>
+    <string name="action_logout">Çıkış Yap</string>
+    <string name="title_home">Ev</string>
+    <string name="title_buy_me">Alınacaklar</string>
+    <string name="title_spendings">Harcamalar</string>
+    <string name="pref_currency_label">Para Birimi</string>
+    <string name="pref_currency_label_turkish_lira">Türk Lirası</string>
+    <string name="pref_currency_label_dollar">Dolar</string>
+    <string name="pref_currency_label_pound">Pound</string>
+    <string name="pref_time_period_label">Zaman Aralığı</string>
+    <string name="pref_time_period_label_week">Son 1 Hafta</string>
+    <string name="pref_time_period_label_month">Son 1 Ay</string>
+    <string name="pref_time_period_label_year">Son 1 Yıl</string>
+    <string name="pref_time_period_label_all">Hepsi</string>
+    <string name="confirm">Onayla</string>
+    <string name="activity_add_spending_type">Türü</string>
+    <string name="activity_add_spending_cost">Maliyeti</string>
+    <string name="activity_add_spending_who_paid_it">Kim Ödedi:</string>
+    <string name="activity_add_buy_me_name">İsim</string>
+    <string name="activity_add_buy_me_description">Açıklama</string>
+    <string name="activity_pay_from">Ödeyen</string>
+    <string name="activity_pay_to">Ödenen</string>
+    <string name="buy_me_row_name">İsim</string>
+    <string name="buy_me_row_description">Açıklama</string>
+    <string name="buy_me_row_edit">Düzenle</string>
+    <string name="buy_me_row_delete">Sil</string>
+    <string name="fragment_buy_me_delete_all">Hepsini Sil</string>
+    <string name="fragment_home_house_name">Ev İsmi</string>
+    <string name="fragment_home_house_add_member">Üye Ekle</string>
+    <string name="fragment_home_house_pay">Öde</string>
+    <string name="fragment_home_house_add_spending">Harcama</string>
+    <string name="fragment_spendings_filter">Filtrele</string>
+    <string name="spending_row_name">İsim</string>
+    <string name="spending_row_date">Tarih</string>
+    <string name="spending_row_your_share">Senin Payın:</string>
+    <string name="spending_row_edit">Düzenle</string>
+</resources>

@@ -1,26 +1,57 @@
 <resources>
     <string name="app_name">Communicator</string>
-    <string name="facebook_app_id">1901170196809767</string>
-    <string name="fb_login_protocol_scheme">fb1901170196809767</string>
+    <string name="facebook_app_id" translatable="false">1901170196809767</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1901170196809767</string>
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
     <string name="title_home">Home</string>
     <string name="title_buy_me">Buy Me</string>
     <string name="title_spendings">Spendings</string>
-    <string name="title_activity_base">BaseActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_base" translatable="false">BaseActivity</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <string name="pref_currency_label">Currency</string>
-    <string name="pref_currency_key">currency2</string>
+    <string name="pref_currency_key" translatable="false">currency2</string>
     <string name="pref_currency_label_turkish_lira">Turkish_Lira</string>
     <string name="pref_currency_label_dollar">Dollar</string>
     <string name="pref_currency_label_pound">Pound</string>
-    <string name="pref_time_period_key">time_period</string>
+    <string name="pref_time_period_key" translatable="false">time_period</string>
     <string name="pref_time_period_label">Time Period</string>
     <string name="pref_time_period_label_week">Last Week</string>
     <string name="pref_time_period_label_month">Last Month</string>
     <string name="pref_time_period_label_year">Last Year</string>
     <string name="pref_time_period_label_all">All</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="activity_add_spending_type">Type: </string>
+    <string name="activity_add_spending_cost">Cost: </string>
+    <string name="activity_add_spending_who_paid_it">Who Paid It: </string>
+
+    <string name="activity_add_buy_me_name">Name: </string>
+    <string name="activity_add_buy_me_description">Description: </string>
+
+    <string name="activity_pay_from">From: </string>
+    <string name="activity_pay_to">To: </string>
+
+    <string name="buy_me_row_name">Name</string>
+    <string name="buy_me_row_description">Description</string>
+    <string name="buy_me_row_edit">Edit</string>
+    <string name="buy_me_row_delete">Delete</string>
+
+    <string name="fragment_buy_me_delete_all">Delete All</string>
+
+    <string name="fragment_home_house_name">House Name</string>
+    <string name="fragment_home_house_add_member">Add Member</string>
+    <string name="fragment_home_house_pay">Pay</string>
+    <string name="fragment_home_house_add_spending">Spending</string>
+
+    <string name="fragment_spendings_filter">Filter</string>
+
+    <string name="spending_row_name">Name</string>
+    <string name="spending_row_date">Date</string>
+    <string name="spending_row_your_share">Your Share: </string>
+    <string name="spending_row_edit">Edit</string>
+
 
 </resources>

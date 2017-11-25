@@ -2,6 +2,7 @@ package com.example.muhammet.communicator.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -17,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.muhammet.communicator.MainActivity;
@@ -28,9 +30,11 @@ import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
-public class BaseActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private Fragment fragment;
     private FragmentManager fragmentManager;
@@ -40,6 +44,7 @@ public class BaseActivity extends AppCompatActivity
 
     private TextView name;
     private TextView email;
+    private ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,7 @@ public class BaseActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         name = navigationView.getHeaderView(0).findViewById(R.id.name_surname);
         email = navigationView.getHeaderView(0).findViewById(R.id.email);
+        image = navigationView.getHeaderView(0).findViewById(R.id.imageView);
         /////////////////////////////////FACEBOOK USER CHECK////////////////////////////////////////
         // register a receiver for the onCurrentProfileChanged event
         profileTracker = new ProfileTracker() {
@@ -93,6 +99,7 @@ public class BaseActivity extends AppCompatActivity
                 if (currentProfile != null) {
                     name.setText(currentProfile.getFirstName() + currentProfile.getLastName());
                     email.setText("muhammetsoyturk@gmail.com");
+
                 }
             }
         };
@@ -104,6 +111,7 @@ public class BaseActivity extends AppCompatActivity
             if (currentProfile != null) {
                 name.setText(currentProfile.getFirstName() + " " + currentProfile.getLastName());
                 email.setText("muhammetsoyturk@gmail.com");
+                displayProfileInfo(currentProfile);
             }
             else {
                 // Fetch the profile, which will trigger the onCurrentProfileChanged receiver
@@ -171,6 +179,25 @@ public class BaseActivity extends AppCompatActivity
         LoginManager.getInstance().logOut();
         launchLoginActivity();
     }
+
+    ///////////////////////////////////////FORMAT IMAGES////////////////////////////////////////////
+    private void displayProfilePic(Uri uri) {
+        // helper method to load the profile pic in a circular imageview
+        Transformation transformation = new RoundedTransformationBuilder()
+                .cornerRadiusDp(30)
+                .oval(false)
+                .build();
+        Picasso.with(this)
+                .load(uri)
+                .transform(transformation)
+                .into(image);
+    }
+
+    private void displayProfileInfo(Profile profile) {
+        Uri profilePicUri = profile.getProfilePictureUri(100, 100);
+        displayProfilePic(profilePicUri);
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////DIRECT TO ANOTHER ACTIVITY//////////////////////////////////
     private void launchLoginActivity() {

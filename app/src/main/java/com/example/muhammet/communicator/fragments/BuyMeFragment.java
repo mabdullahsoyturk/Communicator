@@ -127,6 +127,7 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener,
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         toBuyAdapter.swapCursor(data);
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
     @Override

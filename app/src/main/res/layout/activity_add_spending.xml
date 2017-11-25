@@ -23,9 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="236dp"
-        android:text="Type: "
+        android:layout_marginTop="240dp"
+        android:text="@string/activity_add_spending_type"
         app:layout_constraintEnd_toStartOf="@+id/add_spending_spinner"
+        app:layout_constraintHorizontal_bias="0.785"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,29 +43,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="276dp"
-        android:text="Amount: "
+        android:text="@string/activity_add_spending_cost"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:layout_width="110dp"
-        android:layout_height="28dp"
+        android:layout_width="246dp"
+        android:layout_height="24dp"
         android:layout_marginStart="108dp"
         android:layout_marginTop="276dp"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="276dp"
-        android:entries="@array/pref_currency_labels"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></Spinner>
 
     <Button
         android:id="@+id/add_spending_button"
@@ -78,7 +70,7 @@
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="5"
-        android:text="Confirm"
+        android:text="@string/confirm"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -90,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="316dp"
-        android:text="Who Paid It:"
+        android:text="@string/activity_add_spending_who_paid_it"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
