@@ -17,7 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="100dp"
-        android:maxHeight="15dp"
         android:text="@string/spending_row_name"
         android:textStyle="bold"
         android:layout_toRightOf="@id/spending_icon"/>

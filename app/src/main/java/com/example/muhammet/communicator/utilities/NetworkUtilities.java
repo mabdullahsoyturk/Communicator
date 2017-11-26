@@ -17,9 +17,6 @@ import java.util.Scanner;
 
 public class NetworkUtilities {
 
-    private static final String DYNAMIC_WEATHER_URL =
-            "https://andfun-weather.udacity.com/weather";
-
     private static final String STATIC_WEATHER_URL =
             "http://10.0.2.2:3000/signup";
 

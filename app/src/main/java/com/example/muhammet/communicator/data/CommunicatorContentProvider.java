@@ -15,8 +15,14 @@ import static com.example.muhammet.communicator.data.CommunicatorContract.BuyMeE
 
 public class CommunicatorContentProvider extends ContentProvider{
 
-    public static final int BUY_MES = 100;
-    public static final int BUY_MES_WITH_ID = 101;
+    public static final int USERS = 100;
+    public static final int USERS_WITH_ID = 101;
+    public static final int HOUSES = 200;
+    public static final int HOUSES_WITH_ID = 201;
+    public static final int BUY_MES = 300;
+    public static final int BUY_MES_WITH_ID = 301;
+    public static final int SPENDINGS = 400;
+    public static final int SPENDINGS_WITH_ID = 401;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -24,8 +30,14 @@ public class CommunicatorContentProvider extends ContentProvider{
 
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+        uriMatcher.addURI(CommunicatorContract.AUTHORITY, CommunicatorContract.PATH_USERS, USERS);
+        uriMatcher.addURI(CommunicatorContract.AUTHORITY, CommunicatorContract.PATH_USERS + "/#", USERS_WITH_ID);
+        uriMatcher.addURI(CommunicatorContract.AUTHORITY, CommunicatorContract.PATH_HOUSES, HOUSES);
+        uriMatcher.addURI(CommunicatorContract.AUTHORITY, CommunicatorContract.PATH_HOUSES + "/#", HOUSES_WITH_ID);
         uriMatcher.addURI(CommunicatorContract.AUTHORITY, CommunicatorContract.PATH_BUY_MES, BUY_MES);
         uriMatcher.addURI(CommunicatorContract.AUTHORITY, CommunicatorContract.PATH_BUY_MES + "/#", BUY_MES_WITH_ID);
+        uriMatcher.addURI(CommunicatorContract.AUTHORITY, CommunicatorContract.PATH_SPENDINGS, SPENDINGS);
+        uriMatcher.addURI(CommunicatorContract.AUTHORITY, CommunicatorContract.PATH_SPENDINGS + "/#", SPENDINGS_WITH_ID);
 
         return uriMatcher;
     }
@@ -38,7 +50,7 @@ public class CommunicatorContentProvider extends ContentProvider{
 
         Context context = getContext();
         mCommunicatorDbHelper = new CommunicatorDbHelper(context);
-        
+
         return true;
     }
 
@@ -55,7 +67,7 @@ public class CommunicatorContentProvider extends ContentProvider{
         switch (match) {
             // Query for the tasks directory
             case BUY_MES:
-                retCursor =  db.query(TABLE_NAME,
+                retCursor =  db.query(CommunicatorContract.BuyMeEntry.TABLE_NAME,
                         null,
                         null,
                         null,
@@ -63,6 +75,35 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null,
                         null);
                 break;
+            case USERS:
+                retCursor = db.query(CommunicatorContract.UserEntry.TABLE_NAME,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                        );
+
+            case HOUSES:
+                retCursor = db.query(CommunicatorContract.HouseEntry.TABLE_NAME,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                );
+
+            case SPENDINGS:
+                retCursor = db.query(CommunicatorContract.SpendingEntry.TABLE_NAME,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                );
             // Default exception
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -94,9 +135,36 @@ public class CommunicatorContentProvider extends ContentProvider{
             case BUY_MES:
                 // Insert new values into the database
                 // Inserting values into tasks table
-                long id = db.insert(TABLE_NAME, null, contentValues);
-                if ( id > 0 ) {
-                    returnUri = ContentUris.withAppendedId(CommunicatorContract.BuyMeEntry.CONTENT_URI, id);
+                long buy_me_id = db.insert(CommunicatorContract.BuyMeEntry.TABLE_NAME, null, contentValues);
+                if ( buy_me_id > 0 ) {
+                    returnUri = ContentUris.withAppendedId(CommunicatorContract.BuyMeEntry.CONTENT_URI, buy_me_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+
+            case USERS:
+                long user_id = db.insert(CommunicatorContract.UserEntry.TABLE_NAME, null, contentValues);
+                if ( user_id > 0 ) {
+                    returnUri = ContentUris.withAppendedId(CommunicatorContract.UserEntry.CONTENT_URI, user_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+
+            case HOUSES:
+                long house_id = db.insert(CommunicatorContract.HouseEntry.TABLE_NAME, null, contentValues);
+                if ( house_id > 0 ) {
+                    returnUri = ContentUris.withAppendedId(CommunicatorContract.HouseEntry.CONTENT_URI, house_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+
+            case SPENDINGS:
+                long spending_id = db.insert(CommunicatorContract.SpendingEntry.TABLE_NAME, null, contentValues);
+                if ( spending_id > 0 ) {
+                    returnUri = ContentUris.withAppendedId(CommunicatorContract.SpendingEntry.CONTENT_URI, spending_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -128,13 +196,35 @@ public class CommunicatorContentProvider extends ContentProvider{
             // Handle the single item case, recognized by the ID included in the URI path
             case BUY_MES_WITH_ID:
                 // Get the task ID from the URI path
-                String id = uri.getPathSegments().get(1);
+                String buy_me_id = uri.getPathSegments().get(1);
                 // Use selections/selectionArgs to filter for this ID
-                tasksDeleted = db.delete(TABLE_NAME, "_id=?", new String[]{id});
+                tasksDeleted = db.delete(CommunicatorContract.BuyMeEntry.TABLE_NAME, "_id=?", new String[]{buy_me_id});
                 break;
             case BUY_MES:
-                tasksDeleted = db.delete(TABLE_NAME, null, null);
+                tasksDeleted = db.delete(CommunicatorContract.BuyMeEntry.TABLE_NAME, null, null);
                 break;
+
+            case USERS_WITH_ID:
+                // Get the task ID from the URI path
+                String user_id = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+                tasksDeleted = db.delete(CommunicatorContract.UserEntry.TABLE_NAME, "_id=?", new String[]{user_id});
+                break;
+
+            case HOUSES_WITH_ID:
+                // Get the task ID from the URI path
+                String house_id = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+                tasksDeleted = db.delete(CommunicatorContract.HouseEntry.TABLE_NAME, "_id=?", new String[]{house_id});
+                break;
+
+            case SPENDINGS_WITH_ID:
+                // Get the task ID from the URI path
+                String spending_id = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+                tasksDeleted = db.delete(CommunicatorContract.SpendingEntry.TABLE_NAME, "_id=?", new String[]{spending_id});
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         Context context = MainActivity.this;
         Class baseActivity = BaseActivity.class;
         Intent intent = new Intent(context, baseActivity);
+        intent.putExtra("facebook_id", id);
         startActivity(intent);
         finish();
     }

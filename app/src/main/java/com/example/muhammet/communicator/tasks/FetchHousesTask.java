@@ -2,15 +2,11 @@ package com.example.muhammet.communicator.tasks;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.example.muhammet.communicator.R;
-import com.example.muhammet.communicator.adapters.MemberAdapter;
-import com.example.muhammet.communicator.models.Member;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,26 +19,20 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
 
-/**
- * Created by Muhammet on 13.11.2017.
- */
-
-public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
+public class FetchHousesTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
-    MemberAdapter memberAdapter;
 
     private String facebook_id = "10215415549690496";
 
-    public FetchMembersTask(Context context, MemberAdapter memberAdapter) throws MalformedURLException {
+    public FetchHousesTask(Context context) throws MalformedURLException {
         mContext = context;
-        this.memberAdapter = memberAdapter;
     }
 
     @Override
-    protected Member[] doInBackground(String... strings) {
+    protected String doInBackground(String... strings) {
+
         HttpURLConnection urlConnection   = null;
         BufferedReader    reader          = null;
         String 		      forecastJsonStr = null;
@@ -84,38 +74,22 @@ public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
             }
         }
 
-        try {
-            return getMembersDataFromJson(forecastJsonStr);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    private Member[] getMembersDataFromJson(String forecastJsonStr)
-            throws JSONException {
-
-        JSONArray memberJson  = new JSONArray(forecastJsonStr);
-        JSONObject  memberObject  = memberJson.getJSONObject(0);
-
-        Member[] members = new Member[memberJson.length()];
-
-        for(int i = 0; i < memberJson.length(); i++) {
-
-            String first_name = memberJson.getJSONObject(i).getString("first_name");
-            String debt = memberJson.getJSONObject(i).getString("balance");
-            Member member = new Member(R.drawable.icon_profile_empty, first_name, debt);
-
-            members[i] = member;
-        }
-        return members;
+        return forecastJsonStr;
     }
 
     @Override
-    protected void onPostExecute(Member[] members) {
-        super.onPostExecute(members);
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
 
-        memberAdapter.setMemberData(members);
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = new JSONArray(s);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            String name = jsonObject.getString("name");
+            TextView txtView = ((Activity)mContext).findViewById(R.id.tv_house_name);
+            txtView.setText(name);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

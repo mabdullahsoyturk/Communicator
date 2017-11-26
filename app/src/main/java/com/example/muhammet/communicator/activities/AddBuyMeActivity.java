@@ -1,6 +1,7 @@
 package com.example.muhammet.communicator.activities;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,11 @@ import android.widget.Toast;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.models.BuyMe;
+import com.example.muhammet.communicator.tasks.AddBuyMeTask;
+import com.example.muhammet.communicator.tasks.FetchBuyMeTask;
+
+import java.net.MalformedURLException;
 
 public class AddBuyMeActivity extends AppCompatActivity {
 
@@ -26,7 +32,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
         tv_description = findViewById(R.id.activity_add_buy_me_description);
     }
 
-    public void onClickAddBuyMe(View view){
+    public void onClickAddBuyMe(View view) throws MalformedURLException {
         String name = tv_name.getText().toString();
         String description = tv_description.getText().toString();
 
@@ -34,19 +40,11 @@ public class AddBuyMeActivity extends AppCompatActivity {
             return;
         }
 
-        ContentValues contentValues = new ContentValues();
+        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, name,description);
+        addBuyMeTask.execute("http://10.0.2.2:3000/api/users/5a19e38c8ad03b25c85b23a3/houses/5a19e3d38ad03b25c85b23a4/buy_mes");
 
-        contentValues.put(CommunicatorContract.BuyMeEntry.COLUMN_NAME, name);
-        contentValues.put(CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION, description);
-
-        Uri uri = getContentResolver().insert(CommunicatorContract.BuyMeEntry.CONTENT_URI, contentValues);
-
-        if(uri != null) {
-            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
-        }
-
-        // Finish activity (this returns back to MainActivity)
-        finish();
+        Intent intent = new Intent(this,BaseActivity.class);
+        startActivity(intent);
 
     }
 }

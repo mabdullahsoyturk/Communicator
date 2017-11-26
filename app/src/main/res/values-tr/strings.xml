@@ -37,4 +37,8 @@
     <string name="spending_row_date">Tarih</string>
     <string name="spending_row_your_share">Senin Payın:</string>
     <string name="spending_row_edit">Düzenle</string>
+    <string name="pref_language_label">Dil Seçimi</string>
+    <string name="pref_language_label_en">İngilizce</string>
+    <string name="pref_language_label_tr">Türkçe</string>
+    <string name="activity_add_spending_name">İsim:</string>
 </resources>

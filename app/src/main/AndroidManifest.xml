@@ -45,6 +45,7 @@
             android:name=".activities.BaseActivity"
             android:label="@string/title_activity_base"
             android:launchMode="singleTop"
+            android:configChanges="locale"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity

@@ -17,13 +17,11 @@ import java.util.List;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdapterViewHolder> {
 
-    private int  mNumberItems;
-    List<Member> members;
+    Member[] members;
     public ListItemClickListener mOnClickListener;
 
-    public MemberAdapter(int numberOfItems, List<Member> members, ListItemClickListener listener){
+    public MemberAdapter(Member[] members, ListItemClickListener listener){
         this.members = members;
-        mNumberItems = numberOfItems;
         mOnClickListener = listener;
     }
 
@@ -72,17 +70,16 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
 
     @Override
     public void onBindViewHolder(MemberAdapterViewHolder holder, int position) {
-        holder.bind(members.get(position));
+        holder.bind(members[position]);
     }
 
     @Override
     public int getItemCount() {
-        return mNumberItems;
+        return members.length;
     }
 
-    public void setMemberData(List<Member> memberData) {
+    public void setMemberData(Member[] memberData) {
         members = memberData;
-        mNumberItems = memberData.size();
         notifyDataSetChanged();
     }
 

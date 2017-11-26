@@ -18,10 +18,10 @@ import java.util.List;
 
 public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.SpendingAdapterViewHolder> {
 
-    List<Spending> spendings;
+    Spending[] spendings;
     private ListItemClickListener mOnClickListener;
 
-    public SpendingAdapter(List<Spending> spendings, ListItemClickListener listener){
+    public SpendingAdapter(Spending[] spendings, ListItemClickListener listener){
         this.spendings = spendings;
         mOnClickListener = listener;
     }
@@ -73,16 +73,16 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
 
     @Override
     public void onBindViewHolder(SpendingAdapterViewHolder holder, int position) {
-        Spending spending = spendings.get(position);
+        Spending spending = spendings[position];
         holder.bind(spending);
     }
 
     @Override
     public int getItemCount() {
-        return spendings.size();
+        return spendings.length;
     }
 
-    public void setSpendingData(List<Spending> spendingData) {
+    public void setSpendingData(Spending[] spendingData) {
         spendings = spendingData;
         notifyDataSetChanged();
     }

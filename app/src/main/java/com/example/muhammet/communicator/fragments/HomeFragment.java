@@ -17,14 +17,21 @@ import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.MemberProfileActivity;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
 import com.example.muhammet.communicator.models.Member;
+import com.example.muhammet.communicator.tasks.FetchHousesTask;
+import com.example.muhammet.communicator.tasks.FetchMembersTask;
+import com.example.muhammet.communicator.tasks.FetchUserTask;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements ListItemClickListener {
 
-    private List<Member> members;
-    private static final int itemNumber = 4;
+    Member[] members = {new Member(R.drawable.icon_profile_empty, "Muhammet", "0.00 $"),
+            new Member(R.drawable.icon_profile_empty, "Yakup", "0.00 $"),
+            new Member(R.drawable.icon_profile_empty, "Burhan", "0.00 $"),
+            new Member(R.drawable.icon_profile_empty, "Mertcan", "0.00 $")
+    };
     MemberAdapter memberAdapter;
     RecyclerView rv_members;
     private DividerItemDecoration mDividerItemDecoration;
@@ -35,13 +42,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        members = new ArrayList<Member>();
-
-        members.add(new Member(R.drawable.icon_profile_empty, "Muhammet", "0.00 $"));
-        members.add(new Member(R.drawable.icon_profile_empty, "Yakup", "0.00 $"));
-        members.add(new Member(R.drawable.icon_profile_empty, "Burhan", "0.00 $"));
-        members.add(new Member(R.drawable.icon_profile_empty, "Mertcan", "0.00 $"));
-
         rv_members = view.findViewById(R.id.recycler_view);
         rv_members.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
@@ -50,8 +50,21 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
         mDividerItemDecoration = new DividerItemDecoration(rv_members.getContext(), layoutManager.getOrientation());
         rv_members.addItemDecoration(mDividerItemDecoration);
 
-        memberAdapter = new MemberAdapter(itemNumber, members, this);
+        memberAdapter = new MemberAdapter(members, this);
         rv_members.setAdapter(memberAdapter);
+
+        try {
+            FetchUserTask fetchUserTask = new FetchUserTask(getContext());
+            fetchUserTask.execute("http://10.0.2.2:3000/signup");
+
+            FetchHousesTask fetchHousesTask = new FetchHousesTask(getContext());
+            fetchHousesTask.execute("http://10.0.2.2:3000/api/users/5a19e36b8ad03b25c85b23a0/houses");
+
+            FetchMembersTask fetchMembersTask = new FetchMembersTask(getContext(),memberAdapter);
+            fetchMembersTask.execute("http://10.0.2.2:3000/api/users/5a19e36b8ad03b25c85b23a0/houses/5a19e3d38ad03b25c85b23a4/members");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         return view;
     }
@@ -60,8 +73,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
     public void onListItemClick(int clickedItemIndex) {
         Intent intent = new Intent(getActivity(), MemberProfileActivity.class);
 
-        String member_name = members.get(clickedItemIndex).getMember_name();
-        String member_debt = members.get(clickedItemIndex).getMember_debt();
+        String member_name = members[clickedItemIndex].getMember_name();
+        String member_debt = members[clickedItemIndex].getMember_debt();
 
         intent.putExtra("member_name", member_name);
         intent.putExtra("member_debt", member_debt);

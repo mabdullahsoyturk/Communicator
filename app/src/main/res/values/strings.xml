@@ -16,6 +16,7 @@
     <string name="pref_currency_label_turkish_lira">Turkish_Lira</string>
     <string name="pref_currency_label_dollar">Dollar</string>
     <string name="pref_currency_label_pound">Pound</string>
+
     <string name="pref_time_period_key" translatable="false">time_period</string>
     <string name="pref_time_period_label">Time Period</string>
     <string name="pref_time_period_label_week">Last Week</string>
@@ -23,7 +24,13 @@
     <string name="pref_time_period_label_year">Last Year</string>
     <string name="pref_time_period_label_all">All</string>
 
+    <string name="pref_language_key" translatable="false">language</string>
+    <string name="pref_language_label">Language</string>
+    <string name="pref_language_label_en">English</string>
+    <string name="pref_language_label_tr">Turkish</string>
+
     <string name="confirm">Confirm</string>
+    <string name="activity_add_spending_name">Name: </string>
     <string name="activity_add_spending_type">Type: </string>
     <string name="activity_add_spending_cost">Cost: </string>
     <string name="activity_add_spending_who_paid_it">Who Paid It: </string>
@@ -44,7 +51,7 @@
     <string name="fragment_home_house_name">House Name</string>
     <string name="fragment_home_house_add_member">Add Member</string>
     <string name="fragment_home_house_pay">Pay</string>
-    <string name="fragment_home_house_add_spending">Spending</string>
+    <string name="fragment_home_house_add_spending">Add Spending</string>
 
     <string name="fragment_spendings_filter">Filter</string>
 
