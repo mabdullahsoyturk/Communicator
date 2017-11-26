@@ -55,13 +55,13 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
 
         try {
             FetchUserTask fetchUserTask = new FetchUserTask(getContext());
-            fetchUserTask.execute("http://10.0.2.2:3000/signup");
+            fetchUserTask.execute("https://warm-meadow-40773.herokuapp.com/signup");
 
             FetchHousesTask fetchHousesTask = new FetchHousesTask(getContext());
-            fetchHousesTask.execute("http://10.0.2.2:3000/api/users/5a19e36b8ad03b25c85b23a0/houses");
+            fetchHousesTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses");
 
             FetchMembersTask fetchMembersTask = new FetchMembersTask(getContext(),memberAdapter);
-            fetchMembersTask.execute("http://10.0.2.2:3000/api/users/5a19e36b8ad03b25c85b23a0/houses/5a19e3d38ad03b25c85b23a4/members");
+            fetchMembersTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/members");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

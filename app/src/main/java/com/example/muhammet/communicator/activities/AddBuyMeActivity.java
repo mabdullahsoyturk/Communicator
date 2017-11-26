@@ -41,7 +41,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
         }
 
         AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, name,description);
-        addBuyMeTask.execute("http://10.0.2.2:3000/api/users/5a19e38c8ad03b25c85b23a3/houses/5a19e3d38ad03b25c85b23a4/buy_mes");
+        addBuyMeTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/buy_mes");
 
         Intent intent = new Intent(this,BaseActivity.class);
         startActivity(intent);

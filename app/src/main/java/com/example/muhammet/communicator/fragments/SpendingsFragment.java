@@ -62,7 +62,7 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
             }
 
             FetchSpendingsTask fetchSpendingsTask = new FetchSpendingsTask(getContext(),spendingAdapter);
-            fetchSpendingsTask.execute("http://10.0.2.2:3000/api/users/5a19e38c8ad03b25c85b23a3/houses/5a19e3d38ad03b25c85b23a4/spendings?limit=" +query);
+            fetchSpendingsTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/spendings?limit=" +query);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
