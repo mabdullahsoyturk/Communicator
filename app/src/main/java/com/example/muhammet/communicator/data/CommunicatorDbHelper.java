@@ -8,8 +8,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "communicator2.db";
 
-    private static final int VERSION = 3;
-
+    private static final int VERSION = 4;
 
     public CommunicatorDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -24,11 +23,17 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.UserEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_BALANCE + " DECIMAL(6,2), " +
                 CommunicatorContract.UserEntry.COLUMN_CREATED_TIME + " TEXT NOT NULL, " +
+                CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + " INTEGER, " +
+                "FOREIGN KEY (" + CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + ") " + "REFERENCES " +
+                CommunicatorContract.HouseEntry.TABLE_NAME + "(" + CommunicatorContract.HouseEntry._ID + "), " +
                 CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + " TEXT NOT NULL);";
 
         final String CREATE_HOUSES_TABLE = "CREATE TABLE " + CommunicatorContract.HouseEntry.TABLE_NAME + " (" +
                 CommunicatorContract.HouseEntry._ID + " INTEGER PRIMARY KEY, " +
                 CommunicatorContract.HouseEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                CommunicatorContract.HouseEntry.COLUMN_USER_ID + " INTEGER, " +
+                "FOREIGN KEY (" + CommunicatorContract.HouseEntry.COLUMN_USER_ID + ") " + "REFERENCES " +
+                CommunicatorContract.UserEntry.TABLE_NAME + "(" + CommunicatorContract.UserEntry._ID + "), " +
                 CommunicatorContract.HouseEntry.COLUMN_CREATED_TIME + " TEXT NOT NULL);";
 
         final String CREATE_BUY_MES_TABLE = "CREATE TABLE "  + CommunicatorContract.BuyMeEntry.TABLE_NAME + " (" +

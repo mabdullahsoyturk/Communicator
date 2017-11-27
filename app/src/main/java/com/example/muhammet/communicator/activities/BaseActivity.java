@@ -35,12 +35,17 @@ import com.example.muhammet.communicator.fragments.SpendingsFragment;
 import com.example.muhammet.communicator.tasks.FetchHousesTask;
 import com.example.muhammet.communicator.tasks.FetchUserTask;
 import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.util.Locale;
@@ -55,6 +60,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private TextView name;
 
+    private String mail;
+    private String first_name;
+    private String last_name;
+    private String photo_url;
+    private String facebook_id;
 
     private TextView email;
     private ImageView image;
@@ -113,26 +123,42 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             @Override
             protected void onCurrentProfileChanged (Profile oldProfile, Profile currentProfile) {
                 if (currentProfile != null) {
+                    fetchMail();
+                    first_name = currentProfile.getFirstName();
+                    last_name = currentProfile.getLastName();
+                    photo_url = currentProfile.getProfilePictureUri(100,100).toString();
                     name.setText(currentProfile.getFirstName() + currentProfile.getLastName());
-                    email.setText("muhammetsoyturk@gmail.com");
-
                 }
             }
         };
 
         if (AccessToken.getCurrentAccessToken() != null) {
-            // If there is an access token then Login Button was used
-            // Check if the profile has already been fetched
+
+            fetchMail();
+
             Profile currentProfile = Profile.getCurrentProfile();
             if (currentProfile != null) {
-                name.setText(currentProfile.getFirstName() + " " + currentProfile.getLastName());
-                email.setText("muhammetsoyturk@gmail.com");
+                first_name = currentProfile.getFirstName();
+                last_name = currentProfile.getLastName();
+                photo_url = currentProfile.getProfilePictureUri(100,100).toString();
+                facebook_id = currentProfile.getId();
+                name.setText(first_name + " " + last_name);
                 displayProfileInfo(currentProfile);
+                Log.i("Link uri:", currentProfile.getLinkUri().toString());
+                Log.i("Photo:", currentProfile.getProfilePictureUri(100,100).toString());
             }
             else {
                 // Fetch the profile, which will trigger the onCurrentProfileChanged receiver
                 Profile.fetchProfileForCurrentAccessToken();
             }
+        }
+
+        FetchUserTask fetchUserTask = null;
+        try {
+            fetchUserTask = new FetchUserTask(this, first_name, last_name, photo_url,mail, facebook_id);
+            fetchUserTask.execute("https://warm-meadow-40773.herokuapp.com/signup");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -213,6 +239,30 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Uri profilePicUri = profile.getProfilePictureUri(100, 100);
         displayProfilePic(profilePicUri);
     }
+
+    private void fetchMail(){
+        GraphRequest request = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        try {
+                            if (object.has("email")) {
+                                mail = object.getString("email");
+                                email.setText(mail);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,first_name,last_name,email,gender,birthday"); // id,first_name,last_name,email,gender,birthday,cover,picture.type(large)
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////DIRECT TO ANOTHER ACTIVITY//////////////////////////////////
@@ -244,5 +294,4 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         startActivity(startAddBuyMeActivity);
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
 }

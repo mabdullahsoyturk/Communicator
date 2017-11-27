@@ -20,17 +20,23 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by Muhammet on 25.11.2017.
- */
-
 public class FetchUserTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
 
-    private String facebook_id = "10215415549690496";
+    private String first_name;
+    private String last_name;
+    private String photo_url;
+    private String email;
+    private String facebook_id;
 
-    public FetchUserTask(Context context) throws MalformedURLException {
+    public FetchUserTask(Context context, String first_name, String last_name,
+                            String photo_url, String email, String facebook_id) throws MalformedURLException {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.photo_url = photo_url;
+        this.email = email;
+        this.facebook_id = facebook_id;
         mContext = context;
     }
 
@@ -51,6 +57,10 @@ public class FetchUserTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoOutput(true);
 
             JSONObject jsonParam = new JSONObject();
+            jsonParam.put("first_name", first_name);
+            jsonParam.put("last_name", last_name);
+            jsonParam.put("photo_url", photo_url);
+            jsonParam.put("email", email);
             jsonParam.put("facebook_id", facebook_id);
 
             Log.i("JSON", jsonParam.toString());
@@ -74,7 +84,6 @@ public class FetchUserTask extends AsyncTask<String, Void, String> {
                     forecastJsonStr = buffer.toString();
                 }
             }
-
 
             Log.i("FORECAST", forecastJsonStr);
 
@@ -106,5 +115,10 @@ public class FetchUserTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+
+        if (s.equals("false")){
+            Intent intent = new Intent(mContext, BaseActivity.class);
+            mContext.startActivity(intent);
+        }
     }
 }

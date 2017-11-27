@@ -54,9 +54,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
         rv_members.setAdapter(memberAdapter);
 
         try {
-            FetchUserTask fetchUserTask = new FetchUserTask(getContext());
-            fetchUserTask.execute("https://warm-meadow-40773.herokuapp.com/signup");
-
             FetchHousesTask fetchHousesTask = new FetchHousesTask(getContext());
             fetchHousesTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses");
 

@@ -3,10 +3,6 @@ package com.example.muhammet.communicator.data;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-/**
- * Created by Muhammet on 20.11.2017.
- */
-
 public class CommunicatorContract {
 
     public static final String AUTHORITY = "com.example.muhammet.communicator";
@@ -32,6 +28,7 @@ public class CommunicatorContract {
         public static final String COLUMN_LAST_NAME = "last_name";
         public static final String COLUMN_BALANCE = "balance";
         public static final String COLUMN_FACEBOOK_ID = "facebook_id";
+        public static final String COLUMN_HOUSE_ID = "house_id";
         public static final String COLUMN_CREATED_TIME = "created_time";
 
     }
@@ -42,6 +39,7 @@ public class CommunicatorContract {
 
         public static final String TABLE_NAME = "houses";
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_USER_ID = "user_id";
         public static final String COLUMN_CREATED_TIME = "created_time";
     }
 
