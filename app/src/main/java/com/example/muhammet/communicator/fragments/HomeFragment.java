@@ -20,6 +20,7 @@ import com.example.muhammet.communicator.models.Member;
 import com.example.muhammet.communicator.tasks.FetchHousesTask;
 import com.example.muhammet.communicator.tasks.FetchMembersTask;
 import com.example.muhammet.communicator.tasks.FetchUserTask;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -55,10 +56,10 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
 
         try {
             FetchHousesTask fetchHousesTask = new FetchHousesTask(getContext());
-            fetchHousesTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses");
+            fetchHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses");
 
             FetchMembersTask fetchMembersTask = new FetchMembersTask(getContext(),memberAdapter);
-            fetchMembersTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/members");
+            fetchMembersTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/members");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -32,9 +32,7 @@ public class FetchSpendingsTask extends AsyncTask<String, Void, Spending[]> {
 
     Context mContext;
     SpendingAdapter spendingAdapter;
-
-    private String facebook_id = "10215415549690496";
-
+    
     public FetchSpendingsTask(Context context, SpendingAdapter spendingAdapter) throws MalformedURLException {
         mContext = context;
         this.spendingAdapter = spendingAdapter;
@@ -44,11 +42,11 @@ public class FetchSpendingsTask extends AsyncTask<String, Void, Spending[]> {
     protected Spending[] doInBackground(String... strings) {
         HttpURLConnection urlConnection   = null;
         BufferedReader reader          = null;
-        String 		      forecastJsonStr = null;
+        String 		      communicatorJsonStr = null;
 
         try {
-            URL weatherURL = new URL(strings[0]);
-            urlConnection  = (HttpURLConnection) weatherURL.openConnection();
+            URL communicatorURL = new URL(strings[0]);
+            urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -63,11 +61,11 @@ public class FetchSpendingsTask extends AsyncTask<String, Void, Spending[]> {
                     buffer.append(line + "\n");
                 }
                 if (buffer.length() != 0) {
-                    forecastJsonStr = buffer.toString();
+                    communicatorJsonStr = buffer.toString();
                 }
             }
 
-            Log.i("forecastJsonStr", forecastJsonStr);
+            Log.i("communicatorJsonStr", communicatorJsonStr);
         } catch (IOException e) {
             Log.e("MainActivity", "Error ", e);
         } finally{
@@ -84,7 +82,7 @@ public class FetchSpendingsTask extends AsyncTask<String, Void, Spending[]> {
         }
 
         try {
-            return getSpendingsDataFromJson(forecastJsonStr);
+            return getSpendingsDataFromJson(communicatorJsonStr);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -94,10 +92,10 @@ public class FetchSpendingsTask extends AsyncTask<String, Void, Spending[]> {
         return temp;
     }
 
-    private Spending[] getSpendingsDataFromJson(String forecastJsonStr)
+    private Spending[] getSpendingsDataFromJson(String communicatorJsonStr)
             throws JSONException {
 
-        JSONArray memberJson  = new JSONArray(forecastJsonStr);
+        JSONArray memberJson  = new JSONArray(communicatorJsonStr);
         JSONObject memberObject  = memberJson.getJSONObject(0);
 
         Spending[] spendings = new Spending[memberJson.length()];

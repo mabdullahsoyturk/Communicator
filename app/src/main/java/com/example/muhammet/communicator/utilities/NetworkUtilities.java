@@ -17,10 +17,13 @@ import java.util.Scanner;
 
 public class NetworkUtilities {
 
-    private static final String STATIC_WEATHER_URL =
-            "http://10.0.2.2:3000/signup";
+    public static final String STATIC_COMMUNICATOR_URL =
+            "http://10.0.2.2:3000/";
 
-    private static final String USER_BASE_URL = STATIC_WEATHER_URL;
+    //private static final String STATIC_COMMUNICATOR_URL =
+    //        "https://warm-meadow-40773.herokuapp.com/";
+
+    private static final String USER_BASE_URL = STATIC_COMMUNICATOR_URL;
 
     /* The format we want our API to return */
     private static final String format = "json";

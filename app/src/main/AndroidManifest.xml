@@ -70,7 +70,7 @@
             android:authorities="com.example.muhammet.communicator"
             android:exported="false" />
 
-        <activity android:name=".HouseCheckActivity"></activity>
+        <activity android:name=".activities.HouseCheckActivity"></activity>
     </application>
 
 </manifest>

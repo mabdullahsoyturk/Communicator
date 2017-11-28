@@ -23,9 +23,7 @@ import java.net.URL;
 public class FetchHousesTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
-
-    private String facebook_id = "10215415549690496";
-
+    
     public FetchHousesTask(Context context) throws MalformedURLException {
         mContext = context;
     }
@@ -35,11 +33,11 @@ public class FetchHousesTask extends AsyncTask<String, Void, String> {
 
         HttpURLConnection urlConnection   = null;
         BufferedReader    reader          = null;
-        String 		      forecastJsonStr = null;
+        String 		      communicatorJsonStr = null;
 
         try {
-            URL weatherURL = new URL(strings[0]);
-            urlConnection  = (HttpURLConnection) weatherURL.openConnection();
+            URL communicatorURL = new URL(strings[0]);
+            urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -54,11 +52,11 @@ public class FetchHousesTask extends AsyncTask<String, Void, String> {
                     buffer.append(line + "\n");
                 }
                 if (buffer.length() != 0) {
-                    forecastJsonStr = buffer.toString();
+                    communicatorJsonStr = buffer.toString();
                 }
             }
 
-            Log.i("forecastJsonStr", forecastJsonStr);
+            Log.i("communicatorJsonStr", communicatorJsonStr);
         } catch (IOException e) {
             Log.e("MainActivity", "Error ", e);
         } finally{
@@ -74,7 +72,7 @@ public class FetchHousesTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        return forecastJsonStr;
+        return communicatorJsonStr;
     }
 
     @Override

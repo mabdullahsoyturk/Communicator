@@ -23,9 +23,7 @@ import java.net.URL;
 public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
-
-    private String facebook_id = "10215415549690496";
-
+    
     public DeleteAllBuyMesTask(Context context) throws MalformedURLException {
         mContext = context;
     }
@@ -35,11 +33,11 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
 
         HttpURLConnection urlConnection   = null;
         BufferedReader reader          = null;
-        String 		      forecastJsonStr = null;
+        String 		      communicatorJsonStr = null;
 
         try {
-            URL weatherURL = new URL(strings[0]);
-            urlConnection  = (HttpURLConnection) weatherURL.openConnection();
+            URL communicatorURL = new URL(strings[0]);
+            urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             urlConnection.setRequestProperty("Accept","application/json");
@@ -67,16 +65,12 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
                     buffer.append(line + "\n");
                 }
                 if (buffer.length() != 0) {
-                    forecastJsonStr = buffer.toString();
+                    communicatorJsonStr = buffer.toString();
                 }
             }
 
+            Log.i("RESULT", communicatorJsonStr);
 
-            Log.i("FORECAST", forecastJsonStr);
-
-            Log.i("STATUS", String.valueOf(urlConnection.getResponseCode()));
-            Log.i("MSG" , urlConnection.getResponseMessage());
-            Log.i("RESPONSE", urlConnection.getContent().toString());
         } catch (IOException e) {
             Log.e("MainActivity", "Error ", e);
         } catch (JSONException e) {
@@ -89,8 +83,8 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
 
         String success = "";
         try {
-            JSONObject forecastJson  = new JSONObject(forecastJsonStr);
-            success = forecastJson.getString("success");
+            JSONObject communicatorJson  = new JSONObject(communicatorJsonStr);
+            success = communicatorJson.getString("success");
             Log.i("success", success);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -26,6 +26,7 @@ import com.example.muhammet.communicator.models.BuyMe;
 import com.example.muhammet.communicator.tasks.AddBuyMeTask;
 import com.example.muhammet.communicator.tasks.DeleteAllBuyMesTask;
 import com.example.muhammet.communicator.tasks.FetchBuyMeTask;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
 
@@ -54,9 +55,9 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener{
                 DeleteAllBuyMesTask deleteAllBuyMesTask = null;
                 try {
                     deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext());
-                    deleteAllBuyMesTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b12128351e60014b50505/houses/5a19e3d38ad03b25c85b23a4/buy_mes/delete_all");
+                    deleteAllBuyMesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b12128351e60014b50505/houses/5a19e3d38ad03b25c85b23a4/buy_mes/delete_all");
                     FetchBuyMeTask fetchBuyMeTask = new FetchBuyMeTask(getContext(),toBuyAdapter);
-                    fetchBuyMeTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b12128351e60014b50505/houses/5a19e3d38ad03b25c85b23a4/buy_mes");
+                    fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b12128351e60014b50505/houses/5a19e3d38ad03b25c85b23a4/buy_mes");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -74,7 +75,7 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener{
 
         try {
             FetchBuyMeTask fetchBuyMeTask = new FetchBuyMeTask(getContext(),toBuyAdapter);
-            fetchBuyMeTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/buy_mes");
+            fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/buy_mes");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -92,7 +93,7 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener{
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        fetchBuyMeTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/buy_mes");
+        fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/buy_mes");
     }
 
     @Override

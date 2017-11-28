@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
+import com.example.muhammet.communicator.activities.HouseCheckActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 String token = loginResult.getAccessToken().getToken();
                 String id = loginResult.getAccessToken().getUserId();
-                launchBaseActivity(token,id);
+                launchHouseCheckActivity(token,id);
             }
 
             @Override
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         com.facebook.AccessToken loginToken = com.facebook.AccessToken.getCurrentAccessToken();
         if (loginToken != null) {
             // if previously logged in, proceed to the account activity
-            launchBaseActivity(loginToken.getCurrentAccessToken().getToken(), loginToken.getUserId());
+            launchHouseCheckActivity(loginToken.getCurrentAccessToken().getToken(), loginToken.getUserId());
         }
     }
 
@@ -62,10 +63,11 @@ public class MainActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void launchBaseActivity(String token, String id) {
+    private void launchHouseCheckActivity(String token, String id) {
         Context context = MainActivity.this;
-        Class baseActivity = BaseActivity.class;
-        Intent intent = new Intent(context, baseActivity);
+        Class houseCheckActivity = HouseCheckActivity.class;
+        Intent intent = new Intent(context, houseCheckActivity);
+        Log.i("id", id);
         intent.putExtra("facebook_id", id);
         startActivity(intent);
         finish();

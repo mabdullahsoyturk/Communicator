@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.muhammet.communicator.HouseCheckActivity">
+    tools:context="com.example.muhammet.communicator.activities.HouseCheckActivity">
 
     <TextView
         android:layout_width="200dp"
@@ -12,7 +12,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="108dp"
-        android:text="If you have an invitation code from a house please enter it."
+        android:text="@string/activity_check_house_explanation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +24,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="172dp"
         android:inputType="number"
-        android:hint="House Invitation Code"
+        android:hint="@string/activity_check_house_invitation_code"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +54,7 @@
         android:layout_marginBottom="180dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="Or add a new house"
+        android:text="@string/activity_check_house_or"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +73,7 @@
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="5"
-        android:text="Add a New House"
+        android:text="@string/activity_check_house_add_a_new_house"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"

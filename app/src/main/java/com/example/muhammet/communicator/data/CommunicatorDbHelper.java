@@ -21,7 +21,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.BuyMeEntry._ID + " INTEGER PRIMARY KEY, " +
                 CommunicatorContract.UserEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
-                CommunicatorContract.UserEntry.COLUMN_BALANCE + " DECIMAL(6,2), " +
+                CommunicatorContract.UserEntry.COLUMN_BALANCE + " REAL, " +
                 CommunicatorContract.UserEntry.COLUMN_CREATED_TIME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + " INTEGER, " +
                 "FOREIGN KEY (" + CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + ") " + "REFERENCES " +

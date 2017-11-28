@@ -1,12 +1,8 @@
 package com.example.muhammet.communicator.tasks;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
@@ -23,19 +19,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
-
-/**
- * Created by Muhammet on 13.11.2017.
- */
 
 public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
 
     Context mContext;
     MemberAdapter memberAdapter;
-
-    private String facebook_id = "10215415549690496";
-
+    
     public FetchMembersTask(Context context, MemberAdapter memberAdapter) throws MalformedURLException {
         mContext = context;
         this.memberAdapter = memberAdapter;
@@ -45,11 +34,11 @@ public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
     protected Member[] doInBackground(String... strings) {
         HttpURLConnection urlConnection   = null;
         BufferedReader    reader          = null;
-        String 		      forecastJsonStr = null;
+        String 		      communicatorJsonStr = null;
 
         try {
-            URL weatherURL = new URL(strings[0]);
-            urlConnection  = (HttpURLConnection) weatherURL.openConnection();
+            URL communicatorURL = new URL(strings[0]);
+            urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -64,11 +53,11 @@ public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
                     buffer.append(line + "\n");
                 }
                 if (buffer.length() != 0) {
-                    forecastJsonStr = buffer.toString();
+                    communicatorJsonStr = buffer.toString();
                 }
             }
 
-            Log.i("forecastJsonStr", forecastJsonStr);
+            Log.i("communicatorJsonStr", communicatorJsonStr);
         } catch (IOException e) {
             Log.e("MainActivity", "Error ", e);
         } finally{
@@ -85,7 +74,7 @@ public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
         }
 
         try {
-            return getMembersDataFromJson(forecastJsonStr);
+            return getMembersDataFromJson(communicatorJsonStr);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -93,10 +82,10 @@ public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
         return null;
     }
 
-    private Member[] getMembersDataFromJson(String forecastJsonStr)
+    private Member[] getMembersDataFromJson(String communicatorJsonStr)
             throws JSONException {
 
-        JSONArray memberJson  = new JSONArray(forecastJsonStr);
+        JSONArray memberJson  = new JSONArray(communicatorJsonStr);
         JSONObject  memberObject  = memberJson.getJSONObject(0);
 
         Member[] members = new Member[memberJson.length()];

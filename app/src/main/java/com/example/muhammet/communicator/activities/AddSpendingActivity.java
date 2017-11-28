@@ -10,6 +10,7 @@ import android.widget.EditText;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.models.Spending;
 import com.example.muhammet.communicator.tasks.AddSpendingTask;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
 import java.text.DateFormat;
@@ -40,7 +41,7 @@ public class AddSpendingActivity extends AppCompatActivity {
         Log.i("currentDateandTime", currentDateandTime);
 
         AddSpendingTask addSpendingTask = new AddSpendingTask(this,name,cost,currentDateandTime);
-        addSpendingTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/spendings");
+        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/spendings");
 
         Intent intent = new Intent(this, BaseActivity.class);
         startActivity(intent);

@@ -34,6 +34,7 @@ import com.example.muhammet.communicator.fragments.HomeFragment;
 import com.example.muhammet.communicator.fragments.SpendingsFragment;
 import com.example.muhammet.communicator.tasks.FetchHousesTask;
 import com.example.muhammet.communicator.tasks.FetchUserTask;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -76,6 +77,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_base);
 
         house_name = findViewById(R.id.tv_house_name);
+
+        Intent intent = getIntent();
+        first_name = intent.getStringExtra("first_name");
+        last_name = intent.getStringExtra("last_name");
+        mail = intent.getStringExtra("email");
+        photo_url = intent.getStringExtra("photo_url");
+        facebook_id = intent.getStringExtra("facebook_id");
 
         //////////////////////////TOOLBAR CONFIGS///////////////////////////////////////////////////
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -151,14 +159,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 // Fetch the profile, which will trigger the onCurrentProfileChanged receiver
                 Profile.fetchProfileForCurrentAccessToken();
             }
-        }
-
-        FetchUserTask fetchUserTask = null;
-        try {
-            fetchUserTask = new FetchUserTask(this, first_name, last_name, photo_url,mail, facebook_id);
-            fetchUserTask.execute("https://warm-meadow-40773.herokuapp.com/signup");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         }
     }
 

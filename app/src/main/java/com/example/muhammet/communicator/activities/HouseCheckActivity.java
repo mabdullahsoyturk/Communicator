@@ -1,5 +1,7 @@
-package com.example.muhammet.communicator;
+package com.example.muhammet.communicator.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,7 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.muhammet.communicator.R;
+import com.example.muhammet.communicator.tasks.FetchHousesTask;
 import com.example.muhammet.communicator.tasks.FetchUserTask;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -20,6 +25,8 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 
 public class HouseCheckActivity extends AppCompatActivity {
+
+    Context mContext;
 
     private EditText invitation;
     private Button confirm;
@@ -40,6 +47,7 @@ public class HouseCheckActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_check);
 
+        mContext = this;
         invitation = findViewById(R.id.activity_house_check_invitation);
 
         profileTracker = new ProfileTracker() {
@@ -64,8 +72,6 @@ public class HouseCheckActivity extends AppCompatActivity {
                 last_name = currentProfile.getLastName();
                 photo_url = currentProfile.getProfilePictureUri(100,100).toString();
                 facebook_id = currentProfile.getId();
-                Log.i("Link uri:", currentProfile.getLinkUri().toString());
-                Log.i("Photo:", currentProfile.getProfilePictureUri(100,100).toString());
             }
             else {
                 // Fetch the profile, which will trigger the onCurrentProfileChanged receiver
@@ -78,7 +84,12 @@ public class HouseCheckActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 invitation_code = invitation.getText().toString();
-
+                try {
+                    FetchHousesTask fetchHousesTask = new FetchHousesTask(getBaseContext());
+                    fetchHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -89,14 +100,6 @@ public class HouseCheckActivity extends AppCompatActivity {
 
             }
         });
-
-        FetchUserTask fetchUserTask = null;
-        try {
-            fetchUserTask = new FetchUserTask(this, first_name, last_name, photo_url,mail, facebook_id);
-            fetchUserTask.execute("https://warm-meadow-40773.herokuapp.com/signup");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
     }
 
     private void fetchMail(){
@@ -110,6 +113,13 @@ public class HouseCheckActivity extends AppCompatActivity {
                         try {
                             if (object.has("email")) {
                                 mail = object.getString("email");
+                                FetchUserTask fetchUserTask = null;
+                                try {
+                                    fetchUserTask = new FetchUserTask(mContext, first_name, last_name, photo_url, mail, facebook_id);
+                                    fetchUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup");
+                                } catch (MalformedURLException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -14,6 +14,7 @@ import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.models.BuyMe;
 import com.example.muhammet.communicator.tasks.AddBuyMeTask;
 import com.example.muhammet.communicator.tasks.FetchBuyMeTask;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
 
@@ -41,7 +42,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
         }
 
         AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, name,description);
-        addBuyMeTask.execute("https://warm-meadow-40773.herokuapp.com/api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/buy_mes");
+        addBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/buy_mes");
 
         Intent intent = new Intent(this,BaseActivity.class);
         startActivity(intent);
