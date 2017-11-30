@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.muhammet.communicator.AsyncResponse;
 import com.example.muhammet.communicator.R;
-import com.example.muhammet.communicator.tasks.FetchHousesTask;
-import com.example.muhammet.communicator.tasks.FetchUserTask;
+import com.example.muhammet.communicator.tasks.CheckHousesTask;
+import com.example.muhammet.communicator.tasks.CheckUserTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 
-public class HouseCheckActivity extends AppCompatActivity {
+public class HouseCheckActivity extends AppCompatActivity{
 
     Context mContext;
 
@@ -39,6 +40,7 @@ public class HouseCheckActivity extends AppCompatActivity {
     private String last_name;
     private String photo_url;
     private String facebook_id;
+    private String user_id;
 
     private String invitation_code;
 
@@ -64,8 +66,6 @@ public class HouseCheckActivity extends AppCompatActivity {
 
         if (AccessToken.getCurrentAccessToken() != null) {
 
-            fetchMail();
-
             Profile currentProfile = Profile.getCurrentProfile();
             if (currentProfile != null) {
                 first_name = currentProfile.getFirstName();
@@ -77,6 +77,8 @@ public class HouseCheckActivity extends AppCompatActivity {
                 // Fetch the profile, which will trigger the onCurrentProfileChanged receiver
                 Profile.fetchProfileForCurrentAccessToken();
             }
+
+            fetchMail();
         }
 
         confirm = findViewById(R.id.activity_house_check_confirm);
@@ -85,8 +87,9 @@ public class HouseCheckActivity extends AppCompatActivity {
             public void onClick(View view) {
                 invitation_code = invitation.getText().toString();
                 try {
-                    FetchHousesTask fetchHousesTask = new FetchHousesTask(getBaseContext());
-                    fetchHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/");
+                    Log.i("HouseCheckId", user_id);
+                    CheckHousesTask checkHousesTask = new CheckHousesTask(mContext, user_id);
+                    checkHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + invitation_code);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -97,7 +100,9 @@ public class HouseCheckActivity extends AppCompatActivity {
         addNewHouse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(mContext, AddNewHouseActivity.class);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
             }
         });
     }
@@ -110,13 +115,24 @@ public class HouseCheckActivity extends AppCompatActivity {
                     public void onCompleted(
                             JSONObject object,
                             GraphResponse response) {
+                        first_name = Profile.getCurrentProfile().getFirstName();
+                        last_name = Profile.getCurrentProfile().getLastName();
+                        photo_url = Profile.getCurrentProfile().getProfilePictureUri(100,100).toString();
+                        facebook_id = Profile.getCurrentProfile().getId();
                         try {
                             if (object.has("email")) {
                                 mail = object.getString("email");
-                                FetchUserTask fetchUserTask = null;
+                                CheckUserTask checkUserTask = null;
                                 try {
-                                    fetchUserTask = new FetchUserTask(mContext, first_name, last_name, photo_url, mail, facebook_id);
-                                    fetchUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup");
+                                    Log.i("facebook_id", facebook_id);
+                                    checkUserTask = new CheckUserTask(mContext, first_name, last_name, photo_url, mail, facebook_id, new AsyncResponse() {
+                                        @Override
+                                        public void processFinish(String output) {
+                                            user_id = output;
+                                            Log.i("FetchUserId", "id is " + user_id);
+                                        }
+                                    });
+                                    checkUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup");
                                 } catch (MalformedURLException e) {
                                     e.printStackTrace();
                                 }

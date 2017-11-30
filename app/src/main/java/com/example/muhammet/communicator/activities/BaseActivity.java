@@ -2,12 +2,8 @@ package com.example.muhammet.communicator.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -19,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,9 +27,6 @@ import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.fragments.BuyMeFragment;
 import com.example.muhammet.communicator.fragments.HomeFragment;
 import com.example.muhammet.communicator.fragments.SpendingsFragment;
-import com.example.muhammet.communicator.tasks.FetchHousesTask;
-import com.example.muhammet.communicator.tasks.FetchUserTask;
-import com.example.muhammet.communicator.utilities.NetworkUtilities;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -48,9 +40,6 @@ import com.squareup.picasso.Transformation;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.util.Locale;
-
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private Fragment fragment;
@@ -58,15 +47,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private FragmentTransaction fragmentTransaction;
 
     ProfileTracker profileTracker;
-
-    private TextView name;
-
     private String mail;
     private String first_name;
     private String last_name;
     private String photo_url;
     private String facebook_id;
+    private String user_id;
+    private String house_id;
 
+    private TextView name;
     private TextView email;
     private ImageView image;
     public TextView house_name;
@@ -79,11 +68,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         house_name = findViewById(R.id.tv_house_name);
 
         Intent intent = getIntent();
-        first_name = intent.getStringExtra("first_name");
-        last_name = intent.getStringExtra("last_name");
-        mail = intent.getStringExtra("email");
-        photo_url = intent.getStringExtra("photo_url");
-        facebook_id = intent.getStringExtra("facebook_id");
+        user_id = intent.getStringExtra("user_id");
+        house_id = intent.getStringExtra("house_id");
 
         //////////////////////////TOOLBAR CONFIGS///////////////////////////////////////////////////
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -99,12 +85,24 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         fragment = new HomeFragment();
+                        Bundle bundleHome = new Bundle();
+                        bundleHome.putString("user_id", user_id);
+                        bundleHome.putString("house_id", house_id);
+                        fragment.setArguments(bundleHome);
                         break;
                     case R.id.navigation_buy_me:
                         fragment = new BuyMeFragment();
+                        Bundle bundleBuyMe = new Bundle();
+                        bundleBuyMe.putString("user_id", user_id);
+                        bundleBuyMe.putString("house_id", house_id);
+                        fragment.setArguments(bundleBuyMe);
                         break;
                     case R.id.navigation_spendings:
                         fragment = new SpendingsFragment();
+                        Bundle bundleSpendings = new Bundle();
+                        bundleSpendings.putString("user_id", user_id);
+                        bundleSpendings.putString("house_id", house_id);
+                        fragment.setArguments(bundleSpendings);
                         break;
             }
                 fragmentTransaction = fragmentManager.beginTransaction();
@@ -160,6 +158,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Profile.fetchProfileForCurrentAccessToken();
             }
         }
+
+
     }
 
     @Override
@@ -212,6 +212,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     public void addLandingFragment(){
         fragment = new HomeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("user_id", user_id);
+        bundle.putString("house_id",house_id);
+        fragment.setArguments(bundle);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.base_container, fragment).commit();

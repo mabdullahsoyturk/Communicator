@@ -1,8 +1,11 @@
 package com.example.muhammet.communicator.tasks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.muhammet.communicator.activities.BaseActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,19 +20,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by Muhammet on 26.11.2017.
+ * Created by Muhammet on 29.11.2017.
  */
 
-public class AddBuyMeTask extends AsyncTask<String, Void, String> {
+public class AddNewHouseTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
-    private String name;
-    private String description;
-    
-    public AddBuyMeTask(Context context,String name, String description) throws MalformedURLException {
+    private String user_id;
+    private String house_name;
+
+    public AddNewHouseTask(Context context, String user_id, String house_name) throws MalformedURLException {
         mContext = context;
-        this.name = name;
-        this.description = description;
+        this.user_id = user_id;
+        this.house_name = house_name;
     }
 
     @Override
@@ -49,8 +52,7 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoOutput(true);
 
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("name", name);
-            jsonParam.put("description", description);
+            jsonParam.put("name", house_name);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
@@ -83,19 +85,33 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        String success = "";
-        try {
-            JSONObject resultJson  = new JSONObject(resultJsonStr);
-            success = resultJson.getString("success");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return success;
+        return resultJsonStr;
     }
 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+
+        String success = "";
+        String house_id = "";
+
+        JSONObject resultJson = null;
+        JSONObject jsonObject = null;
+        try {
+            resultJson  = new JSONObject(s);
+            jsonObject = resultJson.getJSONObject("data");
+            house_id = jsonObject.getString("_id");
+            success = resultJson.getString("success");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(success.equals("true")){
+            Intent intent = new Intent(mContext, BaseActivity.class);
+            intent.putExtra("user_id", user_id);
+            intent.putExtra("house_id", house_id);
+            mContext.startActivity(intent);
+        }
+
     }
 }

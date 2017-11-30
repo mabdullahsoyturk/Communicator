@@ -1,17 +1,11 @@
 package com.example.muhammet.communicator.fragments;
 
 
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +15,7 @@ import android.widget.ProgressBar;
 import com.example.muhammet.communicator.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;
-import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.models.BuyMe;
-import com.example.muhammet.communicator.tasks.AddBuyMeTask;
 import com.example.muhammet.communicator.tasks.DeleteAllBuyMesTask;
 import com.example.muhammet.communicator.tasks.FetchBuyMeTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
@@ -42,10 +34,13 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener{
     BuyMeAdapter toBuyAdapter;
     private DividerItemDecoration mDividerItemDecoration;
 
+    private String user_id = "";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        user_id = getArguments().getString("user_id");
         View view = inflater.inflate(R.layout.fragment_buy_me, container, false);
 
         deleteAllButton = view.findViewById(R.id.buy_me_delete);

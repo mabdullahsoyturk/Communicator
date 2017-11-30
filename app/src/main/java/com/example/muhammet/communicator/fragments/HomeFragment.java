@@ -1,30 +1,28 @@
 package com.example.muhammet.communicator.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.muhammet.communicator.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.MemberProfileActivity;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
 import com.example.muhammet.communicator.models.Member;
-import com.example.muhammet.communicator.tasks.FetchHousesTask;
-import com.example.muhammet.communicator.tasks.FetchMembersTask;
-import com.example.muhammet.communicator.tasks.FetchUserTask;
+import com.example.muhammet.communicator.tasks.FetchHouseTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment implements ListItemClickListener {
 
@@ -37,12 +35,24 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
     RecyclerView rv_members;
     private DividerItemDecoration mDividerItemDecoration;
 
+    Context mContext;
+    private TextView house_name;
+    private Button btn_add_member;
+
+    private String user_id;
+    private String house_id;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        user_id = getArguments().getString("user_id");
+        house_id = getArguments().getString("house_id");
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        mContext = getContext();
+        house_name = view.findViewById(R.id.tv_house_name);
         rv_members = view.findViewById(R.id.recycler_view);
         rv_members.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
@@ -55,14 +65,32 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
         rv_members.setAdapter(memberAdapter);
 
         try {
-            FetchHousesTask fetchHousesTask = new FetchHousesTask(getContext());
-            fetchHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses");
-
-            FetchMembersTask fetchMembersTask = new FetchMembersTask(getContext(),memberAdapter);
-            fetchMembersTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/members");
+            FetchHouseTask fetchHouseTask = new FetchHouseTask(mContext, house_name, memberAdapter, user_id);
+            fetchHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        btn_add_member = view.findViewById(R.id.btn_add_member);
+        btn_add_member.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        mContext);
+
+                // set title
+                alertDialogBuilder.setTitle("Send the following code to the person you want to add.");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage(house_id)
+                        .setCancelable(true);
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                alertDialog.show();
+            }
+        });
 
         return view;
     }

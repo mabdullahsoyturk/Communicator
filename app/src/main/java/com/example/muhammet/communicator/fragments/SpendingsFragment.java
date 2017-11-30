@@ -34,10 +34,13 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
     SpendingAdapter spendingAdapter;
     private DividerItemDecoration mDividerItemDecoration;
 
+    private String user_id = "";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        user_id = getArguments().getString("user_id");
         View view = inflater.inflate(R.layout.fragment_spendings, container, false);
 
         rv_spendings = view.findViewById(R.id.rv_spendings);

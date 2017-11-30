@@ -92,7 +92,6 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
         try {
             JSONObject communicatorJson  = new JSONObject(communicatorJsonStr);
             success = communicatorJson.getString("success");
-            Log.i("success", success);
         } catch (JSONException e) {
             e.printStackTrace();
         }

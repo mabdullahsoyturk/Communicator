@@ -3,10 +3,10 @@ package com.example.muhammet.communicator.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 
-import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
-import com.example.muhammet.communicator.models.Member;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,18 +20,26 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
+public class FetchHouseTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
+
+    private TextView house_name;
+    private String user_id;
+    private String house_id;
+    private String name;
     MemberAdapter memberAdapter;
-    
-    public FetchMembersTask(Context context, MemberAdapter memberAdapter) throws MalformedURLException {
+
+    public FetchHouseTask(Context context, TextView house_name, MemberAdapter memberAdapter, String user_id) throws MalformedURLException {
         mContext = context;
+        this.house_name = house_name;
         this.memberAdapter = memberAdapter;
+        this.user_id = user_id;
     }
 
     @Override
-    protected Member[] doInBackground(String... strings) {
+    protected String doInBackground(String... strings) {
+
         HttpURLConnection urlConnection   = null;
         BufferedReader    reader          = null;
         String 		      communicatorJsonStr = null;
@@ -73,37 +81,30 @@ public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
             }
         }
 
+        return communicatorJsonStr;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+
+        JSONArray jsonArray = null;
+        JSONObject jsonObject = null;
         try {
-            return getMembersDataFromJson(communicatorJsonStr);
+            jsonArray = new JSONArray(s);
+            jsonObject = jsonArray.getJSONObject(0);
+            name = jsonObject.getString("name");
+            house_name.setText(name);
+            house_id = jsonObject.getString("_id");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return null;
-    }
-
-    private Member[] getMembersDataFromJson(String communicatorJsonStr)
-            throws JSONException {
-
-        JSONArray memberJson  = new JSONArray(communicatorJsonStr);
-
-        Member[] members = new Member[memberJson.length()];
-
-        for(int i = 0; i < memberJson.length(); i++) {
-
-            String first_name = memberJson.getJSONObject(i).getString("first_name");
-            String debt = memberJson.getJSONObject(i).getString("balance");
-            Member member = new Member(R.drawable.icon_profile_empty, first_name, debt);
-
-            members[i] = member;
+        try {
+            FetchMembersTask fetchMembersTask = new FetchMembersTask(mContext, memberAdapter);
+            fetchMembersTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/members");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
-        return members;
-    }
-
-    @Override
-    protected void onPostExecute(Member[] members) {
-        super.onPostExecute(members);
-
-        memberAdapter.setMemberData(members);
     }
 }

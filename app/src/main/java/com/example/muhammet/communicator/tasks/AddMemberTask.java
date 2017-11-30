@@ -1,18 +1,14 @@
 package com.example.muhammet.communicator.tasks;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 
-import com.example.muhammet.communicator.R;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,11 +16,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class FetchHousesTask extends AsyncTask<String, Void, String> {
+public class AddMemberTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
-    
-    public FetchHousesTask(Context context) throws MalformedURLException {
+
+    public AddMemberTask(Context context) throws MalformedURLException {
         mContext = context;
     }
 
@@ -32,14 +28,24 @@ public class FetchHousesTask extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... strings) {
 
         HttpURLConnection urlConnection   = null;
-        BufferedReader    reader          = null;
-        String 		      communicatorJsonStr = null;
+        BufferedReader reader          = null;
+        String 		      resultJsonStr = null;
 
         try {
             URL communicatorURL = new URL(strings[0]);
             urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            urlConnection.setRequestProperty("Accept","application/json");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+
+            JSONObject jsonParam = new JSONObject();
+
+            DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
+            os.writeBytes(jsonParam.toString());
+            os.flush();
+            os.close();
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer     = new StringBuffer();
@@ -52,42 +58,32 @@ public class FetchHousesTask extends AsyncTask<String, Void, String> {
                     buffer.append(line + "\n");
                 }
                 if (buffer.length() != 0) {
-                    communicatorJsonStr = buffer.toString();
+                    resultJsonStr = buffer.toString();
                 }
             }
 
-            Log.i("communicatorJsonStr", communicatorJsonStr);
+            Log.i("RESULT", resultJsonStr);
         } catch (IOException e) {
             Log.e("MainActivity", "Error ", e);
         } finally{
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e("MainActivity", "Error closing stream", e);
-                }
-            }
         }
 
-        return communicatorJsonStr;
+        String success = "";
+        try {
+            JSONObject resultJson  = new JSONObject(resultJsonStr);
+            success = resultJson.getString("success");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return success;
     }
 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = new JSONArray(s);
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-            String name = jsonObject.getString("name");
-            TextView txtView = ((Activity)mContext).findViewById(R.id.tv_house_name);
-            txtView.setText(name);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }

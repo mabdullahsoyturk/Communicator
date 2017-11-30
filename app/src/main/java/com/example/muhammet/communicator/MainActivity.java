@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
 
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
         loginButton.setReadPermissions("email");
@@ -63,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void launchHouseCheckActivity(String token, String id) {
+    private void launchHouseCheckActivity(String token, String facebook_id) {
         Context context = MainActivity.this;
         Class houseCheckActivity = HouseCheckActivity.class;
         Intent intent = new Intent(context, houseCheckActivity);
-        Log.i("id", id);
-        intent.putExtra("facebook_id", id);
+        Log.i("Main Id", facebook_id);
+        intent.putExtra("facebook_id", facebook_id);
         startActivity(intent);
         finish();
     }
