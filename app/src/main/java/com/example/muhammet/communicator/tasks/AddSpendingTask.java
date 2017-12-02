@@ -25,13 +25,11 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
     Context mContext;
     private String name;
     private String cost;
-    private String date;
-    
-    public AddSpendingTask(Context context,String name, String cost, String date) throws MalformedURLException {
+
+    public AddSpendingTask(Context context,String name, String cost) throws MalformedURLException {
         mContext = context;
         this.name = name;
         this.cost = cost;
-        this.date = date;
     }
 
     @Override
@@ -53,7 +51,6 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
             JSONObject jsonParam = new JSONObject();
             jsonParam.put("name", name);
             jsonParam.put("cost", cost);
-            jsonParam.put("date", date);
 
             Log.i("JSON", jsonParam.toString());
 

@@ -22,11 +22,18 @@ public class AddSpendingActivity extends AppCompatActivity {
     private EditText et_add_spending_name;
     private EditText et_add_spending_cost;
 
+    private String user_id;
+    private String house_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_spending);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Intent intent = getIntent();
+        user_id = intent.getStringExtra("user_id");
+        house_id = intent.getStringExtra("house_id");
 
         et_add_spending_name = findViewById(R.id.et_add_spending_name);
         et_add_spending_cost = findViewById(R.id.et_add_spending_cost);
@@ -36,14 +43,12 @@ public class AddSpendingActivity extends AppCompatActivity {
         String name = et_add_spending_name.getText().toString();
         String cost = et_add_spending_cost.getText().toString();
 
-        DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
-        String currentDateandTime = df.format(new Date());
-        Log.i("currentDateandTime", currentDateandTime);
-
-        AddSpendingTask addSpendingTask = new AddSpendingTask(this,name,cost,currentDateandTime);
-        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/spendings");
+        AddSpendingTask addSpendingTask = new AddSpendingTask(this,name,cost);
+        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/spendings");
 
         Intent intent = new Intent(this, BaseActivity.class);
+        intent.putExtra("user_id", user_id);
+        intent.putExtra("house_id", house_id);
         startActivity(intent);
     }
 }

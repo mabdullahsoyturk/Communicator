@@ -290,11 +290,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     public void sendToAddSpending(View view){
         Intent startAddSpendingActivity = new Intent(this,AddSpendingActivity.class);
+        startAddSpendingActivity.putExtra("user_id", user_id);
+        startAddSpendingActivity.putExtra("house_id", house_id);
         startActivity(startAddSpendingActivity);
     }
 
     public void sendToAddBuyMe(View view){
         Intent startAddBuyMeActivity = new Intent(this,AddBuyMeActivity.class);
+        startAddBuyMeActivity.putExtra("user_id", user_id);
+        startAddBuyMeActivity.putExtra("house_id", house_id);
         startActivity(startAddBuyMeActivity);
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////

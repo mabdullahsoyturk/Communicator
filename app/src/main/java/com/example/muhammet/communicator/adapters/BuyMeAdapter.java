@@ -79,6 +79,10 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
 
     @Override
     public int getItemCount() {
+        if(buyMes == null){
+            return 0;
+        }
+
         return buyMes.length;
     }
 

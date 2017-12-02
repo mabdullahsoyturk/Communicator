@@ -8,24 +8,24 @@ public class Spending {
 
     private String name;
     private String date;
-    private String amount;
+    private String cost;
     private String share;
     private int icon_id;
 
-    public Spending(String name, String date, String share, int icon_id, String amount) {
+    public Spending(String name, String date, String share, int icon_id, String cost) {
         this.name = name;
         this.date = date;
         this.share = share;
         this.icon_id = icon_id;
-        this.amount = amount;
+        this.cost = cost;
     }
 
     public String getAmount() {
-        return amount;
+        return cost;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public void setAmount(String cost) {
+        this.cost = cost;
     }
 
     public String getName() {

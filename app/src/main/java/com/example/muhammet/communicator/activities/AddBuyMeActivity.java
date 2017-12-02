@@ -23,11 +23,18 @@ public class AddBuyMeActivity extends AppCompatActivity {
     private TextView tv_name;
     private TextView tv_description;
 
+    private String user_id;
+    private String house_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_buy_me);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Intent intent = getIntent();
+        user_id = intent.getStringExtra("user_id");
+        house_id = intent.getStringExtra("house_id");
 
         tv_name = findViewById(R.id.activity_add_buy_me_name);
         tv_description = findViewById(R.id.activity_add_buy_me_description);
@@ -42,9 +49,11 @@ public class AddBuyMeActivity extends AppCompatActivity {
         }
 
         AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, name,description);
-        addBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/buy_mes");
+        addBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
 
         Intent intent = new Intent(this,BaseActivity.class);
+        intent.putExtra("user_id", user_id);
+        intent.putExtra("house_id", house_id);
         startActivity(intent);
 
     }

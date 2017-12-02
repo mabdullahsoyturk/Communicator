@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,21 +39,10 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
         try {
             URL communicatorURL = new URL(strings[0]);
             urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
-            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestMethod("GET");
             urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             urlConnection.setRequestProperty("Accept","application/json");
             urlConnection.setDoInput(true);
-            urlConnection.setDoOutput(true);
-
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("delete_all", "delete");
-
-            Log.i("JSON", jsonParam.toString());
-
-            DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
-            os.writeBytes(jsonParam.toString());
-            os.flush();
-            os.close();
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer     = new StringBuffer();
@@ -73,8 +63,6 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
 
         } catch (IOException e) {
             Log.e("MainActivity", "Error ", e);
-        } catch (JSONException e) {
-            e.printStackTrace();
         } finally{
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -83,8 +71,7 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
 
         String success = "";
         try {
-            JSONObject communicatorJson  = new JSONObject(communicatorJsonStr);
-            success = communicatorJson.getString("success");
+            JSONArray communicatorJson  = new JSONArray(communicatorJsonStr);
             Log.i("success", success);
         } catch (JSONException e) {
             e.printStackTrace();

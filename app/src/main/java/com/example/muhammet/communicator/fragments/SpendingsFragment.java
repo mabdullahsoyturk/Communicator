@@ -34,13 +34,15 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
     SpendingAdapter spendingAdapter;
     private DividerItemDecoration mDividerItemDecoration;
 
-    private String user_id = "";
+    private String user_id;
+    private String house_id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         user_id = getArguments().getString("user_id");
+        house_id = getArguments().getString("house_id");
         View view = inflater.inflate(R.layout.fragment_spendings, container, false);
 
         rv_spendings = view.findViewById(R.id.rv_spendings);
@@ -53,23 +55,30 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
         rv_spendings.setAdapter(spendingAdapter);
 
         try {
-            SharedPreferences prefs       = PreferenceManager.getDefaultSharedPreferences(getContext());
-            String            limit    = prefs.getString("time_period", "All");
-
-            String query = "";
-            if(limit.equals("Last Week")){
-                query = "7";
-            }else if(limit.equals("Last Month")){
-                query = "30";
-            }else if(limit.equals("Last Year")){
-                query = "365";
-            }
-
-            FetchSpendingsTask fetchSpendingsTask = new FetchSpendingsTask(getContext(),spendingAdapter);
-            fetchSpendingsTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/spendings?limit=" +query);
+            FetchSpendingsTask fetchSpendingsTask = new FetchSpendingsTask(getContext(), spendingAdapter);
+            fetchSpendingsTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/spendings");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+//        try {
+//            SharedPreferences prefs       = PreferenceManager.getDefaultSharedPreferences(getContext());
+//            String            limit    = prefs.getString("time_period", "All");
+//
+//            String query = "";
+//            if(limit.equals("Last Week")){
+//                query = "7";
+//            }else if(limit.equals("Last Month")){
+//                query = "30";
+//            }else if(limit.equals("Last Year")){
+//                query = "365";
+//            }
+//
+//            FetchSpendingsTask fetchSpendingsTask = new FetchSpendingsTask(getContext(),spendingAdapter);
+//            fetchSpendingsTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/spendings?limit=" +query);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
 
         return view;
     }
