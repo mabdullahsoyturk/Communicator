@@ -11,6 +11,7 @@ import com.example.muhammet.communicator.adapters.MemberAdapter;
 import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.models.Member;
 import com.example.muhammet.communicator.models.Spending;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,46 +41,7 @@ public class FetchSpendingsTask extends AsyncTask<String, Void, Spending[]> {
 
     @Override
     protected Spending[] doInBackground(String... strings) {
-        HttpURLConnection urlConnection   = null;
-        BufferedReader reader          = null;
-        String 		      communicatorJsonStr = null;
-
-        try {
-            URL communicatorURL = new URL(strings[0]);
-            urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer     = new StringBuffer();
-
-            if (inputStream != null) {
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line + "\n");
-                }
-                if (buffer.length() != 0) {
-                    communicatorJsonStr = buffer.toString();
-                }
-            }
-
-            Log.i("communicatorJsonStr", communicatorJsonStr);
-        } catch (IOException e) {
-            Log.e("MainActivity", "Error ", e);
-        } finally{
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e("MainActivity", "Error closing stream", e);
-                }
-            }
-        }
+        String 		      communicatorJsonStr = NetworkUtilities.getStringResponse(strings[0]);
 
         try {
             return getSpendingsDataFromJson(communicatorJsonStr);

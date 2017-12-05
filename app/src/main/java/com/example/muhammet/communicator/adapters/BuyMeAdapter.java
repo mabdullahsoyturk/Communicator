@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +38,8 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
         private ListItemClickListener mListener;
         private TextView buyMeName;
         private TextView buyMeDescription;
+        private Button editButton;
+        private Button deleteButton;
 
         public BuyMeAdapterViewHolder(View itemView, ListItemClickListener listener) {
             super(itemView);
@@ -44,6 +47,10 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
 
             buyMeName = itemView.findViewById(R.id.buy_me_name);
             buyMeDescription = itemView.findViewById(R.id.buy_me_description);
+            editButton = itemView.findViewById(R.id.buy_me_edit);
+            deleteButton = itemView.findViewById(R.id.buy_me_delete);
+            editButton.setOnClickListener(this);
+            deleteButton.setOnClickListener(this);
         }
 
         public void bind(BuyMe buyMe){

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.muhammet.communicator.adapters.BuyMeAdapter;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,16 +20,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by Muhammet on 26.11.2017.
- */
-
 public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
+    BuyMeAdapter toBuyAdapter;
+    String user_id;
+    String house_id;
     
-    public DeleteAllBuyMesTask(Context context) throws MalformedURLException {
+    public DeleteAllBuyMesTask(Context context, BuyMeAdapter buyMeAdapter, String user_id, String house_id) throws MalformedURLException {
         mContext = context;
+        toBuyAdapter = buyMeAdapter;
+        this.user_id = user_id;
+        this.house_id = house_id;
     }
 
     @Override
@@ -39,7 +44,7 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
         try {
             URL communicatorURL = new URL(strings[0]);
             urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod("DELETE");
             urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             urlConnection.setRequestProperty("Accept","application/json");
             urlConnection.setDoInput(true);
@@ -83,5 +88,13 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+
+        FetchBuyMeTask fetchBuyMeTask = null;
+        try {
+            fetchBuyMeTask = new FetchBuyMeTask(mContext, toBuyAdapter);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
     }
 }

@@ -3,13 +3,16 @@ package com.example.muhammet.communicator.utilities;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -71,6 +74,53 @@ public class NetworkUtilities {
         }
     }*/
 
+    public static String getStringResponse(String url){
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+        String communicatorJsonStr = null;
+
+        try {
+            URL communicatorURL = new URL(url);
+            urlConnection = (HttpURLConnection) communicatorURL.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            urlConnection.connect();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+
+            if (inputStream != null) {
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line + "\n");
+                }
+                if (buffer.length() != 0) {
+                    communicatorJsonStr = buffer.toString();
+                }
+            }
+
+            Log.i("communicatorJsonStr", communicatorJsonStr);
+        } catch (IOException e) {
+            Log.e("MainActivity", "Error ", e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e("MainActivity", "Error closing stream", e);
+                }
+            }
+        }
+
+        return communicatorJsonStr;
+
+    }
+
 
     public static URL buildUrlWithPath(String addedPath) {
         Uri weatherQueryUri = Uri.parse(USER_BASE_URL).buildUpon()
@@ -105,6 +155,8 @@ public class NetworkUtilities {
             urlConnection.disconnect();
         }
     }
+
+
 
 
 
