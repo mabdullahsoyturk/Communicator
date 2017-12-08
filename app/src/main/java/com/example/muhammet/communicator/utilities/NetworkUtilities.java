@@ -1,13 +1,7 @@
 package com.example.muhammet.communicator.utilities;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,52 +21,6 @@ public class NetworkUtilities {
     //        "https://warm-meadow-40773.herokuapp.com/";
 
     private static final String USER_BASE_URL = STATIC_COMMUNICATOR_URL;
-
-    /* The format we want our API to return */
-    private static final String format = "json";
-    /* The units we want our API to return */
-    private static final String units = "metric";
-    /* The number of days we want our API to return */
-    private static final int numDays = 14;
-
-    /* The query parameter allows us to provide a location string to the API */
-    private static final String QUERY_PARAM = "q";
-
-    private static final String LAT_PARAM = "lat";
-    private static final String LON_PARAM = "lon";
-
-    /* The format parameter allows us to designate whether we want JSON or XML from our API */
-    private static final String FORMAT_PARAM = "mode";
-    /* The units parameter allows us to designate whether we want metric units or imperial units */
-    private static final String UNITS_PARAM = "units";
-    /* The days parameter allows us to designate how many days of weather data we want */
-    private static final String DAYS_PARAM = "cnt";
-
-    /**
-     * Retrieves the proper URL to query for the weather data. The reason for both this method as
-     * well as {@link #buildUrlWithLocationQuery(String)} is two fold.
-     * <p>
-     * 1) You should be able to just use one method when you need to create the URL within the
-     * app instead of calling both methods.
-     * 2) Later in Sunshine, you are going to add an alternate method of allowing the user
-     * to select their preferred location. Once you do so, there will be another way to form
-     * the URL using a latitude and longitude rather than just a location String. This method
-     * will "decide" which URL to build and return it.
-     *
-     * @param context used to access other Utility methods
-     * @return URL to query weather service
-     */
-    /*public static URL getUrl(Context context) {
-        if (SunshinePreferences.isLocationLatLonAvailable(context)) {
-            double[] preferredCoordinates = SunshinePreferences.getLocationCoordinates(context);
-            double latitude = preferredCoordinates[0];
-            double longitude = preferredCoordinates[1];
-            return buildUrlWithLatitudeLongitude(latitude, longitude);
-        } else {
-            String locationQuery = SunshinePreferences.getPreferredWeatherLocation(context);
-            return buildUrlWithLocationQuery(locationQuery);
-        }
-    }*/
 
     public static String getStringResponse(String url){
         HttpURLConnection urlConnection = null;
@@ -118,7 +66,6 @@ public class NetworkUtilities {
         }
 
         return communicatorJsonStr;
-
     }
 
 
@@ -135,30 +82,6 @@ public class NetworkUtilities {
             return null;
         }
     }
-
-    public static String getResponseFromHttpUrl(URL url) throws IOException {
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        try {
-            InputStream in = urlConnection.getInputStream();
-
-            Scanner scanner = new Scanner(in);
-            scanner.useDelimiter("\\A");
-
-            boolean hasInput = scanner.hasNext();
-            String response = null;
-            if (hasInput) {
-                response = scanner.next();
-            }
-            scanner.close();
-            return response;
-        } finally {
-            urlConnection.disconnect();
-        }
-    }
-
-
-
-
 
     /*
     public static ContentValues[] getWeatherContentValuesFromJson(Context context, String forecastJsonStr)

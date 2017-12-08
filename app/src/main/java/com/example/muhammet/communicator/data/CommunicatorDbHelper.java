@@ -21,7 +21,10 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.BuyMeEntry._ID + " INTEGER PRIMARY KEY, " +
                 CommunicatorContract.UserEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
+                CommunicatorContract.UserEntry.COLUMN_EMAIL + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_BALANCE + " REAL, " +
+                CommunicatorContract.UserEntry.COLUMN_PHOTO_URL + " TEXT NOT NULL, " +
+                CommunicatorContract.UserEntry.COLUMN_STATUS + " INTEGER, " +
                 CommunicatorContract.UserEntry.COLUMN_CREATED_TIME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + " INTEGER, " +
                 "FOREIGN KEY (" + CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + ") " + "REFERENCES " +
@@ -40,14 +43,21 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.BuyMeEntry._ID                + " INTEGER PRIMARY KEY, " +
                 CommunicatorContract.BuyMeEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION    + " TEXT NOT NULL, " +
+                CommunicatorContract.BuyMeEntry.COLUMN_CREATED_TIME + " TEXT NOT NULL, " +
                 CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID + " INTEGER, " +
                 "FOREIGN KEY (" + CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID + ") " + "REFERENCES " +
-                CommunicatorContract.HouseEntry.TABLE_NAME + "(" + CommunicatorContract.HouseEntry._ID + "));";
+                CommunicatorContract.HouseEntry.TABLE_NAME + "(" + CommunicatorContract.HouseEntry._ID + ")" +
+                CommunicatorContract.BuyMeEntry.COLUMN_USER_ID + " INTEGER, " +
+                "FOREIGN KEY (" + CommunicatorContract.BuyMeEntry.COLUMN_USER_ID + ") " + "REFERENCES " +
+                CommunicatorContract.UserEntry.TABLE_NAME + "(" + CommunicatorContract.UserEntry._ID + ")" +
+                ");";
 
         final String CREATE_SPENDINGS_TABLE = "CREATE TABLE " + CommunicatorContract.SpendingEntry.TABLE_NAME + " (" +
                 CommunicatorContract.SpendingEntry._ID + " INTEGER PRIMARY KEY, " +
                 CommunicatorContract.SpendingEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.SpendingEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
+                CommunicatorContract.SpendingEntry.COLUMN_CREATED_TIME + " TEXT NOT NULL, " +
+                CommunicatorContract.SpendingEntry.COLUMN_COST + " REAL NOT NULL, " +
                 CommunicatorContract.SpendingEntry.COLUMN_USER_ID + " INTEGER, " +
                 CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID + " INTEGER, " +
                 "FOREIGN KEY (" + CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID + ") " + "REFERENCES " +
@@ -55,10 +65,15 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (" + CommunicatorContract.SpendingEntry.COLUMN_USER_ID + ") " + "REFERENCES " +
                 CommunicatorContract.UserEntry.TABLE_NAME + "(" + CommunicatorContract.UserEntry._ID + "));";
 
+        final String CREATE_HOUSE_MEMBERS_TABLE = "CREATE TABLE " + CommunicatorContract.HouseMemberEntry.TABLE_NAME + " (" +
+                CommunicatorContract.HouseMemberEntry.COLUMN_USER_ID + " INTEGER, " +
+                CommunicatorContract.HouseMemberEntry.COLUMN_HOUSE_ID + " INTEGER);";
+
         db.execSQL(CREATE_BUY_MES_TABLE);
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_HOUSES_TABLE);
         db.execSQL(CREATE_SPENDINGS_TABLE);
+        db.execSQL(CREATE_HOUSE_MEMBERS_TABLE);
     }
 
     @Override
@@ -67,6 +82,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + CommunicatorContract.HouseEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + CommunicatorContract.BuyMeEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + CommunicatorContract.SpendingEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + CommunicatorContract.HouseMemberEntry.TABLE_NAME);
 
         onCreate(db);
     }

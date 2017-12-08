@@ -70,6 +70,10 @@
             android:authorities="com.example.muhammet.communicator"
             android:exported="false" />
 
+        <service
+            android:name=".sync.CommunicatorSyncIntentService"
+            android:exported="false" />
+
         <activity android:name=".activities.HouseCheckActivity" />
         <activity android:name=".activities.AddNewHouseActivity"></activity>
     </application>
