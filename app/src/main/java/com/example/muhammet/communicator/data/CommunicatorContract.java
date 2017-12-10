@@ -32,7 +32,6 @@ public class CommunicatorContract {
         public static final String COLUMN_PHOTO_URL     = "photo_url";
         public static final String COLUMN_STATUS        = "status";
         public static final String COLUMN_FACEBOOK_ID   = "facebook_id";
-        public static final String COLUMN_HOUSE_ID      = "house_id";
         public static final String COLUMN_CREATED_TIME  = "created_time";
 
     }
@@ -42,8 +41,7 @@ public class CommunicatorContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_HOUSES).build();
 
         public static final String TABLE_NAME = "houses";
-        public static final String COLUMN_NAME = "name";   ///IMPLEMENT MANY TO MANY TABLE
-        public static final String COLUMN_USER_ID = "user_id";
+        public static final String COLUMN_NAME = "name";
         public static final String COLUMN_CREATED_TIME = "created_time";
     }
 
@@ -68,7 +66,6 @@ public class CommunicatorContract {
         public static final String TABLE_NAME = "spendings";
 
         public static final String COLUMN_NAME = "name";
-        public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_COST = "cost";
         public static final String COLUMN_USER_ID = "user_id";
         public static final String COLUMN_HOUSE_ID = "house_id";

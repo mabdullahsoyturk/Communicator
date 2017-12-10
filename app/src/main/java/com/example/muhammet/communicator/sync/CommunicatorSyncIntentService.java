@@ -15,7 +15,7 @@ public class CommunicatorSyncIntentService extends IntentService{
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent ıntent) {
-        CommunicatorSyncTask.syncWeather(this);
+    protected void onHandleIntent(@Nullable Intent intent) {
+        CommunicatorSyncTask.syncBuyMes(this, intent.getStringExtra("user_id"), intent.getStringExtra("house_id"));
     }
 }

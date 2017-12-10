@@ -84,7 +84,7 @@ public class FetchSpendingsTask extends AsyncTask<String, Void, Spending[]> {
                 costWithCurrency = costWithCurrency * 5.26;
             }
 
-            Spending spending = new Spending(name, formatted_created_time, String.valueOf(costWithCurrency), R.drawable.ic_utilities_black_24dp, "100");
+            Spending spending = new Spending(name, formatted_created_time, costWithCurrency, R.drawable.ic_utilities_black_24dp);
 
             spendings[i] = spending;
         }
@@ -95,6 +95,5 @@ public class FetchSpendingsTask extends AsyncTask<String, Void, Spending[]> {
     protected void onPostExecute(Spending[] spendings) {
         super.onPostExecute(spendings);
 
-        spendingAdapter.setSpendingData(spendings);
     }
 }

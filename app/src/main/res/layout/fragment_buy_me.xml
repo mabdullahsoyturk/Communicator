@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_buy_me"
     tools:context="com.example.muhammet.communicator.fragments.BuyMeFragment">
 
     <android.support.v7.widget.RecyclerView

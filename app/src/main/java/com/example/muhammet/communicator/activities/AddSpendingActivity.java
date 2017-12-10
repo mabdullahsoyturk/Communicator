@@ -1,5 +1,6 @@
 package com.example.muhammet.communicator.activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.muhammet.communicator.R;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.models.Spending;
 import com.example.muhammet.communicator.tasks.AddSpendingTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
@@ -43,8 +45,19 @@ public class AddSpendingActivity extends AppCompatActivity {
         String name = et_add_spending_name.getText().toString();
         String cost = et_add_spending_cost.getText().toString();
 
-        AddSpendingTask addSpendingTask = new AddSpendingTask(this,name,cost);
-        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/spendings");
+        java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", name);
+        contentValues.put("cost", cost);
+        contentValues.put("user_id", user_id);
+        contentValues.put("house_id", house_id);
+        contentValues.put("created_time", currentDate.toString());
+
+        getContentResolver().insert(CommunicatorContract.SpendingEntry.CONTENT_URI, contentValues);
+
+//        AddSpendingTask addSpendingTask = new AddSpendingTask(this,name,cost);
+//        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/spendings");
 
         Intent intent = new Intent(this, BaseActivity.class);
         intent.putExtra("user_id", user_id);

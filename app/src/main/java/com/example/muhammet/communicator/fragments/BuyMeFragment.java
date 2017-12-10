@@ -1,11 +1,21 @@
 package com.example.muhammet.communicator.fragments;
 
 
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +25,11 @@ import android.widget.ProgressBar;
 
 import com.example.muhammet.communicator.ListItemClickListener;
 import com.example.muhammet.communicator.R;
+import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.models.BuyMe;
+import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.DeleteAllBuyMesTask;
 import com.example.muhammet.communicator.tasks.FetchBuyMeTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
@@ -26,11 +39,14 @@ import java.net.MalformedURLException;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BuyMeFragment extends Fragment implements ListItemClickListener{
+public class BuyMeFragment extends Fragment implements ListItemClickListener, LoaderManager.LoaderCallbacks<Cursor>{
+
+    private static final String TAG = BaseActivity.class.getSimpleName();
+    private static final int BUY_ME_LOADER_ID = 0;
+    Context mContext;
 
     private Button deleteAllButton;
-    BuyMe[] buyMes = {new BuyMe("aaa", "bbb"), new BuyMe("ccc", "ddd")};
-    RecyclerView rv_buy_me;
+    RecyclerView mRecyclerView;
     BuyMeAdapter buyMeAdapter;
     private DividerItemDecoration mDividerItemDecoration;
 
@@ -45,6 +61,8 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener{
         house_id = getArguments().getString("house_id");
         View view = inflater.inflate(R.layout.fragment_buy_me, container, false);
 
+        mContext = getContext();
+
         deleteAllButton = view.findViewById(R.id.buy_me_delete);
         deleteAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,40 +75,123 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener{
                 }
             }
         });
-        rv_buy_me = view.findViewById(R.id.rv_buy_me);
+        mRecyclerView = view.findViewById(R.id.rv_buy_me);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
-        rv_buy_me.setLayoutManager(layoutManager);
-        mDividerItemDecoration = new DividerItemDecoration(rv_buy_me.getContext(), layoutManager.getOrientation());
-        rv_buy_me.addItemDecoration(mDividerItemDecoration);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mDividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), layoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(mDividerItemDecoration);
 
-        buyMeAdapter = new BuyMeAdapter(buyMes,this);
-        rv_buy_me.setAdapter(buyMeAdapter);
+        buyMeAdapter = new BuyMeAdapter(mContext, this);
+        mRecyclerView.setAdapter(buyMeAdapter);
 
-        try {
-            FetchBuyMeTask fetchBuyMeTask = new FetchBuyMeTask(getContext(), buyMeAdapter);
-            fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            // Called when a user swipes left or right on a ViewHolder
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                // Here is where you'll implement swipe to delete
+
+                // COMPLETED (1) Construct the URI for the item to delete
+                //[Hint] Use getTag (from the adapter code) to get the id of the swiped item
+                // Retrieve the id of the task to delete
+                int id = (int) viewHolder.itemView.getTag();
+
+                // Build appropriate uri with String row id appended
+                String stringId = Integer.toString(id);
+                Uri uri = CommunicatorContract.BuyMeEntry.CONTENT_URI;
+                uri = uri.buildUpon().appendPath(stringId).build();
+
+                // COMPLETED (2) Delete a single row of data using a ContentResolver
+                getActivity().getContentResolver().delete(uri, null, null);
+
+                // COMPLETED (3) Restart the loader to re-query for all tasks after a deletion
+                restartLoader();
+            }
+        }).attachToRecyclerView(mRecyclerView);
+
+//        try {
+//            FetchBuyMeTask fetchBuyMeTask = new FetchBuyMeTask(getContext(), buyMeAdapter);
+//            fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+
+        getActivity().getSupportLoaderManager().initLoader(BUY_ME_LOADER_ID, null, this);
+
+        CommunicatorSyncUtils.startImmediateSync(mContext,user_id, house_id);
 
         return view;
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//
-//        FetchBuyMeTask fetchBuyMeTask = null;
-//        try {
-//            fetchBuyMeTask = new FetchBuyMeTask(getContext(),buyMeAdapter);
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-//        fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/buy_mes");
-//    }
+    public void restartLoader(){
+        getActivity().getSupportLoaderManager().restartLoader(BUY_ME_LOADER_ID, null, this);
+    }
+
+    @Override
+   public void onResume() {
+        super.onResume();
+
+        getActivity().getSupportLoaderManager().restartLoader(BUY_ME_LOADER_ID, null, this);
+    }
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
         
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Cursor>(getContext()) {
+
+            Cursor mTaskData = null;
+
+            @Override
+            protected void onStartLoading() {
+                if (mTaskData != null) {
+                    // Delivers any previously loaded data immediately
+                    deliverResult(mTaskData);
+                } else {
+                    // Force a new load
+                    forceLoad();
+                }
+            }
+
+            @Nullable
+            @Override
+            public Cursor loadInBackground() {
+
+                try {
+                    return getActivity().getContentResolver().query(CommunicatorContract.BuyMeEntry.CONTENT_URI,
+                            null,
+                            null,
+                            null,
+                            null);
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to asynchronously load data.");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            public void deliverResult(Cursor data) {
+                mTaskData = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        buyMeAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        buyMeAdapter.swapCursor(null);
     }
 }

@@ -54,7 +54,7 @@ public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
         for(int i = 0; i < memberJson.length(); i++) {
 
             String first_name = memberJson.getJSONObject(i).getString("first_name");
-            String debt = memberJson.getJSONObject(i).getString("balance");
+            double debt = memberJson.getJSONObject(i).getDouble("balance");
             Member member = new Member(R.drawable.icon_profile_empty, first_name, debt);
 
             members[i] = member;

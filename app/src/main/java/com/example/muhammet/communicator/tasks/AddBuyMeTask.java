@@ -16,20 +16,24 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by Muhammet on 26.11.2017.
- */
-
 public class AddBuyMeTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
+    private int id;
     private String name;
     private String description;
+    private String user_id;
+    private String house_id;
+    private String created_time;
     
-    public AddBuyMeTask(Context context,String name, String description) throws MalformedURLException {
+    public AddBuyMeTask(Context context, int id, String name, String description, String user_id, String house_id, String created_time) throws MalformedURLException {
         mContext = context;
+        this.id = id;
         this.name = name;
         this.description = description;
+        this.user_id = user_id;
+        this.house_id = house_id;
+        this.created_time = created_time;
     }
 
     @Override
@@ -49,8 +53,12 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoOutput(true);
 
             JSONObject jsonParam = new JSONObject();
+            jsonParam.put("id", id);
             jsonParam.put("name", name);
             jsonParam.put("description", description);
+            jsonParam.put("user_id", user_id);
+            jsonParam.put("house_id", house_id);
+            jsonParam.put("created_time", created_time);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());

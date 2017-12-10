@@ -25,11 +25,12 @@ import java.util.List;
 
 public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapterViewHolder>{
 
-    BuyMe[] buyMes;
+    Context mContext;
+    Cursor mCursor;
     private ListItemClickListener mOnClickListener;
     
-    public BuyMeAdapter(BuyMe[] buyMes, ListItemClickListener listener){
-        this.buyMes = buyMes;
+    public BuyMeAdapter(Context context, ListItemClickListener listener){
+        mContext = context;
         mOnClickListener = listener;
     }
 
@@ -53,11 +54,6 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
             deleteButton.setOnClickListener(this);
         }
 
-        public void bind(BuyMe buyMe){
-            buyMeName.setText(buyMe.getName());
-            buyMeDescription.setText(buyMe.getDesc());
-        }
-
         @Override
         public void onClick(View view) {
             int clickedPosition = getAdapterPosition();
@@ -79,22 +75,48 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
 
     @Override
     public void onBindViewHolder(BuyMeAdapterViewHolder holder, int position) {
-        BuyMe buyMe = buyMes[position];
-        holder.bind(buyMe);
 
+        int idIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry._ID);
+        int nameIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_NAME);
+        int descriptionIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION);
+        int userIdIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_USER_ID);
+        int houseIdIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID);
+        int createdTimeIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_CREATED_TIME);
+
+        mCursor.moveToPosition(position);
+
+        final int id = mCursor.getInt(idIndex);
+        String name = mCursor.getString(nameIndex);
+        String description = mCursor.getString(descriptionIndex);
+        int userId = mCursor.getInt(userIdIndex);
+        int houseId = mCursor.getInt(houseIdIndex);
+        String createdTime = mCursor.getString(createdTimeIndex);
+
+        holder.itemView.setTag(id);
+        holder.buyMeName.setText(name);
+        holder.buyMeDescription.setText(description);
     }
 
     @Override
     public int getItemCount() {
-        if(buyMes == null){
+        if (mCursor == null) {
             return 0;
         }
-
-        return buyMes.length;
+        return mCursor.getCount();
     }
 
-    public void setBuyMeData(BuyMe[] buyMeData) {
-        buyMes = buyMeData;
-        notifyDataSetChanged();
+    public Cursor swapCursor(Cursor c) {
+        // check if this cursor is the same as the previous cursor (mCursor)
+        if (mCursor == c) {
+            return null; // bc nothing has changed
+        }
+        Cursor temp = mCursor;
+        this.mCursor = c; // new cursor value assigned
+
+        //check if this is a valid cursor, then update the cursor
+        if (c != null) {
+            this.notifyDataSetChanged();
+        }
+        return temp;
     }
 }

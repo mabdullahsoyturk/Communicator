@@ -1,42 +1,94 @@
 package com.example.muhammet.communicator.models;
 
-/**
- * Created by Muhammet on 1.11.2017.
- */
-
 public class Member {
 
-    private int member_icon_id;
-    private String member_name;
-    private String member_debt;
+    private int icon_id;
+    private int id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String facebookId;
+    private double balance;
+    private String photo_url;
+    private String created_time;
 
-    public Member(int member_icon_id, String member_name, String member_debt) {
-        this.member_icon_id = member_icon_id;
-        this.member_name = member_name;
-        this.member_debt = member_debt;
+    public Member(int icon_id, String firstName, double balance) {
+        this.icon_id = icon_id;
+        this.firstName = firstName;
+        this.balance = balance;
     }
 
-    public String getMember_debt() {
-        return member_debt;
+    public int getIcon_id() {
+        return icon_id;
     }
 
-    public void setMember_debt(String member_debt) {
-        this.member_debt = member_debt;
+    public void setIcon_id(int icon_id) {
+        this.icon_id = icon_id;
     }
 
-    public int getMember_icon_id() {
-        return member_icon_id;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setMember_icon_id(int member_icon_id) {
-        this.member_icon_id = member_icon_id;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getMember_name() {
-        return member_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setMember_name(String member_name) {
-        this.member_name = member_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPhoto_url() {
+        return photo_url;
+    }
+
+    public void setPhoto_url(String photo_url) {
+        this.photo_url = photo_url;
+    }
+
+    public String getCreated_time() {
+        return created_time;
+    }
+
+    public void setCreated_time(String created_time) {
+        this.created_time = created_time;
+    }
+
+
 }

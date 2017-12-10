@@ -23,7 +23,7 @@ public class FetchBuyMeTask extends AsyncTask<String, Void, BuyMe[]> {
 
     Context mContext;
     BuyMeAdapter buyMeAdapter;
-    
+
     public FetchBuyMeTask(Context context, BuyMeAdapter buyMeAdapter) throws MalformedURLException {
         mContext = context;
         this.buyMeAdapter = buyMeAdapter;
@@ -66,6 +66,5 @@ public class FetchBuyMeTask extends AsyncTask<String, Void, BuyMe[]> {
     protected void onPostExecute(BuyMe[] spendings) {
         super.onPostExecute(spendings);
 
-        buyMeAdapter.setBuyMeData(spendings);
     }
 }

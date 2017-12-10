@@ -26,10 +26,10 @@ import java.net.MalformedURLException;
 
 public class HomeFragment extends Fragment implements ListItemClickListener {
 
-    Member[] members = {new Member(R.drawable.icon_profile_empty, "Muhammet", "0.00 $"),
-            new Member(R.drawable.icon_profile_empty, "Yakup", "0.00 $"),
-            new Member(R.drawable.icon_profile_empty, "Burhan", "0.00 $"),
-            new Member(R.drawable.icon_profile_empty, "Mertcan", "0.00 $")
+    Member[] members = {new Member(R.drawable.icon_profile_empty, "Muhammet", 0.00),
+            new Member(R.drawable.icon_profile_empty, "Yakup", 0.00),
+            new Member(R.drawable.icon_profile_empty, "Burhan", 0.00),
+            new Member(R.drawable.icon_profile_empty, "Mertcan", 0.00 )
     };
     MemberAdapter memberAdapter;
     RecyclerView rv_members;
@@ -99,8 +99,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
     public void onListItemClick(int clickedItemIndex) {
         Intent intent = new Intent(getActivity(), MemberProfileActivity.class);
 
-        String member_name = members[clickedItemIndex].getMember_name();
-        String member_debt = members[clickedItemIndex].getMember_debt();
+        String member_name = members[clickedItemIndex].getFirstName();
+        double member_debt = members[clickedItemIndex].getBalance();
 
         intent.putExtra("member_name", member_name);
         intent.putExtra("member_debt", member_debt);

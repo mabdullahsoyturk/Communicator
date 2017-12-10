@@ -1,7 +1,15 @@
 package com.example.muhammet.communicator.utilities;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+
+import com.example.muhammet.communicator.data.CommunicatorContract;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -69,100 +77,45 @@ public class NetworkUtilities {
     }
 
 
-    public static URL buildUrlWithPath(String addedPath) {
-        Uri weatherQueryUri = Uri.parse(USER_BASE_URL).buildUpon()
-                .appendPath(addedPath)
-                .build();
-
-        try {
-            URL weatherQueryUrl = new URL(weatherQueryUri.toString());
-            return weatherQueryUrl;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /*
-    public static ContentValues[] getWeatherContentValuesFromJson(Context context, String forecastJsonStr)
+    public static ContentValues[] getBuyMeContentValuesFromJson(Context context, String buyMeStr)
             throws JSONException {
 
-        JSONObject forecastJson = new JSONObject(forecastJsonStr);
+        JSONObject buyMeJson = new JSONObject(buyMeStr);
+        
+        JSONArray jsonBuyMeArray = buyMeJson.getJSONArray("data");
 
-        if (forecastJson.has(OWM_MESSAGE_CODE)) {
-            int errorCode = forecastJson.getInt(OWM_MESSAGE_CODE);
+        ContentValues[] buyMeContentValues = new ContentValues[jsonBuyMeArray.length()];
 
-            switch (errorCode) {
-                case HttpURLConnection.HTTP_OK:
-                    break;
-                case HttpURLConnection.HTTP_NOT_FOUND:
-                    // Location invalid
-                    return null;
-                default:
-                    //Server probably down
-                    return null;
-            }
+        for (int i = 0; i < jsonBuyMeArray.length(); i++) {
+
+            int _id;
+            String name;
+            String description;
+            String user_id;
+            String house_id;
+            String created_time;
+
+            JSONObject item = jsonBuyMeArray.getJSONObject(i);
+            
+            _id = item.getInt("id");
+            name= item.getString("name");
+            description = item.getString("description");
+            user_id = item.getString("user_id");
+            house_id = item.getString("house_id");
+            created_time = item.getString("created_time");
+
+            ContentValues buyMeValues = new ContentValues();
+            buyMeValues.put(CommunicatorContract.BuyMeEntry._ID, _id);
+            buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_NAME, name);
+            buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION, description);
+            buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_USER_ID, user_id);
+            buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID, house_id);
+            buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_CREATED_TIME, created_time);
+
+            buyMeContentValues[i] = buyMeValues;
         }
 
-        JSONArray jsonWeatherArray = forecastJson.getJSONArray(OWM_LIST);
-
-        JSONObject cityJson = forecastJson.getJSONObject(OWM_CITY);
-
-        JSONObject cityCoord = cityJson.getJSONObject(OWM_COORD);
-        double cityLatitude = cityCoord.getDouble(OWM_LATITUDE);
-        double cityLongitude = cityCoord.getDouble(OWM_LONGITUDE);
-
-        SunshinePreferences.setLocationDetails(context, cityLatitude, cityLongitude);
-
-        ContentValues[] weatherContentValues = new ContentValues[jsonWeatherArray.length()];
-
-        long normalizedUtcStartDay = SunshineDateUtils.getNormalizedUtcDateForToday();
-
-        for (int i = 0; i < jsonWeatherArray.length(); i++) {
-
-            long dateTimeMillis;
-            double pressure;
-            int humidity;
-            double windSpeed;
-            double windDirection;
-
-            double high;
-            double low;
-
-            int weatherId;
-
-            JSONObject dayForecast = jsonWeatherArray.getJSONObject(i);
-
-            dateTimeMillis = normalizedUtcStartDay + SunshineDateUtils.DAY_IN_MILLIS * i;
-
-            pressure = dayForecast.getDouble(OWM_PRESSURE);
-            humidity = dayForecast.getInt(OWM_HUMIDITY);
-            windSpeed = dayForecast.getDouble(OWM_WINDSPEED);
-            windDirection = dayForecast.getDouble(OWM_WIND_DIRECTION);
-
-            JSONObject weatherObject =
-                    dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
-
-            weatherId = weatherObject.getInt(OWM_WEATHER_ID);
-
-            JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
-            high = temperatureObject.getDouble(OWM_MAX);
-            low = temperatureObject.getDouble(OWM_MIN);
-
-            ContentValues weatherValues = new ContentValues();
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATE, dateTimeMillis);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_HUMIDITY, humidity);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_PRESSURE, pressure);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WIND_SPEED, windSpeed);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DEGREES, windDirection);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP, high);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP, low);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WEATHER_ID, weatherId);
-
-            weatherContentValues[i] = weatherValues;
-        }
-
-        return weatherContentValues;
-    } */
+        return buyMeContentValues;
+    }
 
 }

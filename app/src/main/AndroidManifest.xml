@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.muhammet.communicator">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -73,6 +74,12 @@
         <service
             android:name=".sync.CommunicatorSyncIntentService"
             android:exported="false" />
+
+        <receiver android:name=".NetworkMonitor">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".activities.HouseCheckActivity" />
         <activity android:name=".activities.AddNewHouseActivity"></activity>

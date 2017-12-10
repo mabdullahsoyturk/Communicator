@@ -1,10 +1,12 @@
 package com.example.muhammet.communicator.tasks;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import org.json.JSONArray;
@@ -52,6 +54,12 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer     = new StringBuffer();
 
+            ContentResolver communicatorContentResolver = mContext.getContentResolver();
+            communicatorContentResolver.delete(
+                    CommunicatorContract.BuyMeEntry.CONTENT_URI,
+                    null,
+                    null);
+
             if (inputStream != null) {
                 reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -75,12 +83,7 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
         }
 
         String success = "";
-        try {
-            JSONArray communicatorJson  = new JSONArray(communicatorJsonStr);
-            Log.i("success", success);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Log.i("success", success);
 
         return success;
     }
@@ -88,13 +91,5 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-
-        FetchBuyMeTask fetchBuyMeTask = null;
-        try {
-            fetchBuyMeTask = new FetchBuyMeTask(mContext, toBuyAdapter);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
     }
 }

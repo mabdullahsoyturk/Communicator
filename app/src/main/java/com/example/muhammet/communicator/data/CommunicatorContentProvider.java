@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import static com.example.muhammet.communicator.data.CommunicatorContract.BuyMeEntry.TABLE_NAME;
 
@@ -75,6 +76,19 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null,
                         null);
                 break;
+
+            case BUY_MES_WITH_ID:
+                // Get the task ID from the URI path
+                String buyMeId = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+                retCursor = db.query(CommunicatorContract.BuyMeEntry.TABLE_NAME,
+                        null,
+                        "_id=?",
+                        new String[]{buyMeId},
+                        null,
+                        null,
+                        null);
+                break;
             case USERS:
                 retCursor = db.query(CommunicatorContract.UserEntry.TABLE_NAME,
                         null,
@@ -136,6 +150,7 @@ public class CommunicatorContentProvider extends ContentProvider{
                 // Insert new values into the database
                 // Inserting values into tasks table
                 long buy_me_id = db.insert(CommunicatorContract.BuyMeEntry.TABLE_NAME, null, contentValues);
+                Log.i("buy_me_id",""+ buy_me_id);
                 if ( buy_me_id > 0 ) {
                     returnUri = ContentUris.withAppendedId(CommunicatorContract.BuyMeEntry.CONTENT_URI, buy_me_id);
                 } else {

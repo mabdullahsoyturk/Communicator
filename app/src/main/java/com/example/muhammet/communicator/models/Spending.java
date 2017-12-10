@@ -1,31 +1,36 @@
 package com.example.muhammet.communicator.models;
 
-/**
- * Created by Muhammet on 1.11.2017.
- */
-
 public class Spending {
 
-    private String name;
-    private String date;
-    private String cost;
-    private String share;
     private int icon_id;
+    private int id;
+    private String name;
+    private double cost;
+    private int user_id;
+    private int house_id;
+    private String created_time;
 
-    public Spending(String name, String date, String share, int icon_id, String cost) {
+    public Spending(String name, String created_time,double cost, int icon_id) {
         this.name = name;
-        this.date = date;
-        this.share = share;
+        this.created_time = created_time;
+        this.cost = cost;
         this.icon_id = icon_id;
-        this.cost = cost;
     }
 
-    public String getAmount() {
-        return cost;
+    public int getIcon_id() {
+        return icon_id;
     }
 
-    public void setAmount(String cost) {
-        this.cost = cost;
+    public void setIcon_id(int icon_id) {
+        this.icon_id = icon_id;
+    }
+
+    public String getCreated_time() {
+        return created_time;
+    }
+
+    public void setCreated_time(String created_time) {
+        this.created_time = created_time;
     }
 
     public String getName() {
@@ -36,27 +41,36 @@ public class Spending {
         this.name = name;
     }
 
-    public String getDate() {
-        return date;
+    public int getId() {
+        return id;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getShare() {
-        return share;
+    public double getCost() {
+        return cost;
     }
 
-    public void setShare(String share) {
-        this.share = share;
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
-    public int getIcon_id() {
-        return icon_id;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setIcon_id(int icon_id) {
-        this.icon_id = icon_id;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
+
+    public int getHouse_id() {
+        return house_id;
+    }
+
+    public void setHouse_id(int house_id) {
+        this.house_id = house_id;
+    }
+
 }

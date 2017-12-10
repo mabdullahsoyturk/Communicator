@@ -2,21 +2,22 @@ package com.example.muhammet.communicator.activities;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.models.BuyMe;
 import com.example.muhammet.communicator.tasks.AddBuyMeTask;
-import com.example.muhammet.communicator.tasks.FetchBuyMeTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
+import java.sql.Date;
 
 public class AddBuyMeActivity extends AppCompatActivity {
 
@@ -48,8 +49,35 @@ public class AddBuyMeActivity extends AppCompatActivity {
             return;
         }
 
-        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, name,description);
+        Date currentDate = new Date(System.currentTimeMillis());
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", name);
+        contentValues.put("description", description);
+        contentValues.put("user_id", user_id);
+        contentValues.put("house_id", house_id);
+        contentValues.put("created_time", currentDate.toString());
+
+        Uri uri = getContentResolver().insert(CommunicatorContract.BuyMeEntry.CONTENT_URI, contentValues);
+        Cursor cursor = getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+
+        cursor.moveToPosition(0);
+
+        int idIndex = cursor.getColumnIndex(CommunicatorContract.BuyMeEntry._ID);
+        final int id = cursor.getInt(idIndex);
+
+        if(uri != null){
+            Toast.makeText(getBaseContext(), "Buy me has been added!", Toast.LENGTH_LONG).show();
+        }
+
+        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, id, name,description, user_id, house_id, currentDate.toString());
         addBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
+
+        cursor.close();
 
         Intent intent = new Intent(this,BaseActivity.class);
         intent.putExtra("user_id", user_id);

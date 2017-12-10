@@ -43,9 +43,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
         }
 
         public void bind(Member member){
-            member_img.setImageResource(member.getMember_icon_id());
-            member_name.setText(member.getMember_name());
-            member_debt.setText(member.getMember_debt());
+            member_img.setImageResource(member.getIcon_id());
+            member_name.setText(member.getFirstName());
+            member_debt.setText(String.valueOf(member.getBalance()));
         }
 
         @Override
