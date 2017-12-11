@@ -6,15 +6,13 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * Created by Muhammet on 10.12.2017.
- */
+import com.example.muhammet.communicator.data.CommunicatorContract;
 
 public class NetworkMonitor extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent ıntent) {
         if(checkNetworkConnectivity(context)){
-
+            context.sendBroadcast(new Intent(CommunicatorContract.UI_UPDATE_BROADCAST));
         }
     }
 

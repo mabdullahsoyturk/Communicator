@@ -5,6 +5,8 @@ import android.provider.BaseColumns;
 
 public class CommunicatorContract {
 
+    public static final String UI_UPDATE_BROADCAST = "com.example.muhammet.communicator.uiupdatebroadcast";
+
     public static final String AUTHORITY = "com.example.muhammet.communicator";
 
     // The base content URI = "content://" + <authority>

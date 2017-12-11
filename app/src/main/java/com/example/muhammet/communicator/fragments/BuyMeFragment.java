@@ -1,7 +1,10 @@
 package com.example.muhammet.communicator.fragments;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +47,7 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
     private static final String TAG = BaseActivity.class.getSimpleName();
     private static final int BUY_ME_LOADER_ID = 0;
     Context mContext;
+    BroadcastReceiver broadcastReceiver;
 
     private Button deleteAllButton;
     RecyclerView mRecyclerView;
@@ -70,6 +74,7 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
                 try {
                     DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, user_id,house_id);
                     deleteAllBuyMesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
+                    buyMeAdapter.notifyDataSetChanged();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -124,11 +129,30 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
 
         CommunicatorSyncUtils.startImmediateSync(mContext,user_id, house_id);
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent ıntent) {
+                CommunicatorSyncUtils.startImmediateSync(mContext, user_id, house_id);
+            }
+        };
+
         return view;
     }
 
     public void restartLoader(){
         getActivity().getSupportLoaderManager().restartLoader(BUY_ME_LOADER_ID, null, this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.UI_UPDATE_BROADCAST));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mContext.unregisterReceiver(broadcastReceiver);
     }
 
     @Override

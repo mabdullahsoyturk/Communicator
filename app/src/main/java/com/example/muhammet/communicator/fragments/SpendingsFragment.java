@@ -1,5 +1,6 @@
 package com.example.muhammet.communicator.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -40,8 +41,9 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
     private static final int SPENDING_LOADER_ID = 1;
     Context mContext = getContext();
     ProgressBar progressBar;
+    BroadcastReceiver broadcastReceiver;
 
-    RecyclerView rv_spendings;
+    RecyclerView mRecyclerView;
     SpendingAdapter spendingAdapter;
     private DividerItemDecoration mDividerItemDecoration;
 
@@ -56,40 +58,14 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
         house_id = getArguments().getString("house_id");
         View view = inflater.inflate(R.layout.fragment_spendings, container, false);
 
-        rv_spendings = view.findViewById(R.id.rv_spendings);
+        mRecyclerView = view.findViewById(R.id.rv_spendings);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
-        rv_spendings.setLayoutManager(layoutManager);
-        mDividerItemDecoration = new DividerItemDecoration(rv_spendings.getContext(), layoutManager.getOrientation());
-        rv_spendings.addItemDecoration(mDividerItemDecoration);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mDividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), layoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(mDividerItemDecoration);
 
         spendingAdapter = new SpendingAdapter(getContext(),this);
-        rv_spendings.setAdapter(spendingAdapter);
-
-//        try {
-//            FetchSpendingsTask fetchSpendingsTask = new FetchSpendingsTask(getContext(), spendingAdapter);
-//            fetchSpendingsTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/spendings");
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-
-//        try {
-//            SharedPreferences prefs       = PreferenceManager.getDefaultSharedPreferences(getContext());
-//            String            limit    = prefs.getString("time_period", "All");
-//
-//            String query = "";
-//            if(limit.equals("Last Week")){
-//                query = "7";
-//            }else if(limit.equals("Last Month")){
-//                query = "30";
-//            }else if(limit.equals("Last Year")){
-//                query = "365";
-//            }
-//
-//            FetchSpendingsTask fetchSpendingsTask = new FetchSpendingsTask(getContext(),spendingAdapter);
-//            fetchSpendingsTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/5a1b0d816058c0001439ae35/houses/5a1b12128351e60014b50505/spendings?limit=" +query);
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
+        mRecyclerView.setAdapter(spendingAdapter);
 
         getActivity().getSupportLoaderManager().initLoader(SPENDING_LOADER_ID, null, this);
 
