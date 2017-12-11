@@ -59,6 +59,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
         contentValues.put("created_time", currentDate.toString());
 
         Uri uri = getContentResolver().insert(CommunicatorContract.BuyMeEntry.CONTENT_URI, contentValues);
+
         Cursor cursor = getContentResolver().query(uri,
                 null,
                 null,

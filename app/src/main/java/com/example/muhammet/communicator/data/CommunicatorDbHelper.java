@@ -34,7 +34,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.HouseEntry.COLUMN_CREATED_TIME + " TEXT);";
 
         final String CREATE_BUY_MES_TABLE = "CREATE TABLE "  + CommunicatorContract.BuyMeEntry.TABLE_NAME + " (" +
-                CommunicatorContract.BuyMeEntry._ID                + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                CommunicatorContract.BuyMeEntry._ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CommunicatorContract.BuyMeEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION    + " TEXT NOT NULL, " +
                 CommunicatorContract.BuyMeEntry.COLUMN_CREATED_TIME + " TEXT, " +

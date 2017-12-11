@@ -98,7 +98,7 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null,
                         null
                         );
-
+                break;
             case HOUSES:
                 retCursor = db.query(CommunicatorContract.HouseEntry.TABLE_NAME,
                         null,
@@ -108,7 +108,7 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null,
                         null
                 );
-
+                break;
             case SPENDINGS:
                 retCursor = db.query(CommunicatorContract.SpendingEntry.TABLE_NAME,
                         null,
@@ -118,6 +118,19 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null,
                         null
                 );
+                break;
+            case SPENDINGS_WITH_ID:
+                // Get the task ID from the URI path
+                String spendingId = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+                retCursor = db.query(CommunicatorContract.SpendingEntry.TABLE_NAME,
+                        null,
+                        "_id=?",
+                        new String[]{spendingId},
+                        null,
+                        null,
+                        null);
+                break;
             // Default exception
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

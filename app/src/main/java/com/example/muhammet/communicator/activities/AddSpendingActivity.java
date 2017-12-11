@@ -2,11 +2,14 @@ package com.example.muhammet.communicator.activities;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
@@ -54,10 +57,25 @@ public class AddSpendingActivity extends AppCompatActivity {
         contentValues.put("house_id", house_id);
         contentValues.put("created_time", currentDate.toString());
 
-        getContentResolver().insert(CommunicatorContract.SpendingEntry.CONTENT_URI, contentValues);
+        Uri uri = getContentResolver().insert(CommunicatorContract.SpendingEntry.CONTENT_URI, contentValues);
 
-//        AddSpendingTask addSpendingTask = new AddSpendingTask(this,name,cost);
-//        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/spendings");
+        Cursor cursor = getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+
+        cursor.moveToPosition(0);
+
+        int idIndex = cursor.getColumnIndex(CommunicatorContract.SpendingEntry._ID);
+        final int id = cursor.getInt(idIndex);
+
+        if(uri != null){
+            Toast.makeText(getBaseContext(), "Spending has been added!", Toast.LENGTH_LONG).show();
+        }
+
+        AddSpendingTask addSpendingTask = new AddSpendingTask(this,id, name,cost, user_id, house_id, currentDate.toString());
+        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/spendings");
 
         Intent intent = new Intent(this, BaseActivity.class);
         intent.putExtra("user_id", user_id);

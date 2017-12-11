@@ -23,13 +23,21 @@ import java.net.URL;
 public class AddSpendingTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
+    private int id;
     private String name;
     private String cost;
+    private String user_id;
+    private String house_id;
+    private String created_time;
 
-    public AddSpendingTask(Context context,String name, String cost) throws MalformedURLException {
+    public AddSpendingTask(Context context, int id, String name, String cost, String user_id, String house_id, String created_time) throws MalformedURLException {
         mContext = context;
+        this.id = id;
         this.name = name;
         this.cost = cost;
+        this.user_id = user_id;
+        this.house_id = house_id;
+        this.created_time = created_time;
     }
 
     @Override
@@ -49,8 +57,12 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoOutput(true);
 
             JSONObject jsonParam = new JSONObject();
+            jsonParam.put("id", id);
             jsonParam.put("name", name);
             jsonParam.put("cost", cost);
+            jsonParam.put("user_id", user_id);
+            jsonParam.put("house_id", house_id);
+            jsonParam.put("created_time", created_time);
 
             Log.i("JSON", jsonParam.toString());
 
