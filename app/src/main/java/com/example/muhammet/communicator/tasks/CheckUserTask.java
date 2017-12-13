@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.muhammet.communicator.AsyncResponse;
 import com.example.muhammet.communicator.activities.BaseActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,25 +21,20 @@ import java.net.URL;
 
 public class CheckUserTask extends AsyncTask<String, Void, String> {
 
-    public AsyncResponse delegate = null;
-
     Context mContext;
 
     private String first_name;
     private String last_name;
     private String photo_url;
-    private String email;
     private String facebook_id;
     private String user_id;
 
     public CheckUserTask(Context context, String first_name, String last_name,
-                         String photo_url, String email, String facebook_id, AsyncResponse delegate) throws MalformedURLException {
+                         String photo_url, String facebook_id) throws MalformedURLException {
         this.first_name = first_name;
         this.last_name = last_name;
         this.photo_url = photo_url;
-        this.email = email;
         this.facebook_id = facebook_id;
-        this.delegate = delegate;
         mContext = context;
     }
 
@@ -65,7 +58,6 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
             jsonParam.put("first_name", first_name);
             jsonParam.put("last_name", last_name);
             jsonParam.put("photo_url", photo_url);
-            jsonParam.put("email", email);
             jsonParam.put("facebook_id", facebook_id);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
@@ -125,13 +117,10 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
         if (success.equals("false")){
             try {
                 jsonObject1 = communicatorJson.getJSONObject("data");
-                user_id     = jsonObject1.getString("_id");
                 houses      = jsonObject1.getString("houses");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            delegate.processFinish(user_id);
 
             if(houses.length() != 2){
                 house_id = houses.substring(2, houses.length()-2);
@@ -143,8 +132,6 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
         }else{
             try{
                 jsonObject1 = communicatorJson.getJSONObject("data");
-                user_id     = jsonObject1.getString("_id");
-                delegate.processFinish(user_id);
             }catch (JSONException e){
                 e.printStackTrace();
             }

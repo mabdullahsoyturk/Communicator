@@ -1,17 +1,12 @@
 package com.example.muhammet.communicator.fragments;
 
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -24,17 +19,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
 import com.example.muhammet.communicator.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.models.BuyMe;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.DeleteAllBuyMesTask;
-import com.example.muhammet.communicator.tasks.FetchBuyMeTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
@@ -47,23 +39,24 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
     private static final String TAG = BaseActivity.class.getSimpleName();
     private static final int BUY_ME_LOADER_ID = 0;
     Context mContext;
-    BroadcastReceiver broadcastReceiver;
+    //BroadcastReceiver broadcastReceiver;
 
     private Button deleteAllButton;
     RecyclerView mRecyclerView;
     BuyMeAdapter buyMeAdapter;
     private DividerItemDecoration mDividerItemDecoration;
 
-    private String user_id;
+    private String facebook_id;
     private String house_id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        user_id = getArguments().getString("user_id");
-        house_id = getArguments().getString("house_id");
         View view = inflater.inflate(R.layout.fragment_buy_me, container, false);
+
+        facebook_id = getArguments().getString("facebook_id");
+        house_id = getArguments().getString("house_id");
 
         mContext = getContext();
 
@@ -72,8 +65,8 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
             @Override
             public void onClick(View view) {
                 try {
-                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, user_id,house_id);
-                    deleteAllBuyMesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
+                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id,house_id);
+                    deleteAllBuyMesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes");
                     buyMeAdapter.notifyDataSetChanged();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -95,46 +88,31 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
                 return false;
             }
 
-            // Called when a user swipes left or right on a ViewHolder
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                // Here is where you'll implement swipe to delete
 
-                // COMPLETED (1) Construct the URI for the item to delete
-                //[Hint] Use getTag (from the adapter code) to get the id of the swiped item
-                // Retrieve the id of the task to delete
                 int id = (int) viewHolder.itemView.getTag();
 
-                // Build appropriate uri with String row id appended
                 String stringId = Integer.toString(id);
                 Uri uri = CommunicatorContract.BuyMeEntry.CONTENT_URI;
                 uri = uri.buildUpon().appendPath(stringId).build();
 
-                // COMPLETED (2) Delete a single row of data using a ContentResolver
                 getActivity().getContentResolver().delete(uri, null, null);
 
-                // COMPLETED (3) Restart the loader to re-query for all tasks after a deletion
                 restartLoader();
             }
         }).attachToRecyclerView(mRecyclerView);
 
 //        try {
 //            FetchBuyMeTask fetchBuyMeTask = new FetchBuyMeTask(getContext(), buyMeAdapter);
-//            fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
+//            fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes");
 //        } catch (MalformedURLException e) {
 //            e.printStackTrace();
 //        }
 
         getActivity().getSupportLoaderManager().initLoader(BUY_ME_LOADER_ID, null, this);
 
-        CommunicatorSyncUtils.startImmediateSync(mContext,user_id, house_id);
-
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent ıntent) {
-                CommunicatorSyncUtils.startImmediateSync(mContext, user_id, house_id);
-            }
-        };
+        CommunicatorSyncUtils.startImmediateSyncForBuyMes(mContext,facebook_id, house_id);
 
         return view;
     }
@@ -144,15 +122,8 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.UI_UPDATE_BROADCAST));
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
-        mContext.unregisterReceiver(broadcastReceiver);
     }
 
     @Override

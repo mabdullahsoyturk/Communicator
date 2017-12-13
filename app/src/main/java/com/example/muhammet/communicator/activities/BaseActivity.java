@@ -52,7 +52,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private String last_name;
     private String photo_url;
     private String facebook_id;
-    private String user_id;
     private String house_id;
 
     private TextView name;
@@ -68,7 +67,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         house_name = findViewById(R.id.tv_house_name);
 
         Intent intent = getIntent();
-        user_id = intent.getStringExtra("user_id");
+        facebook_id = intent.getStringExtra("facebook_id");
         house_id = intent.getStringExtra("house_id");
 
         //////////////////////////TOOLBAR CONFIGS///////////////////////////////////////////////////
@@ -86,21 +85,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     case R.id.navigation_home:
                         fragment = new HomeFragment();
                         Bundle bundleHome = new Bundle();
-                        bundleHome.putString("user_id", user_id);
+                        bundleHome.putString("facebook_id", facebook_id);
                         bundleHome.putString("house_id", house_id);
                         fragment.setArguments(bundleHome);
                         break;
                     case R.id.navigation_buy_me:
                         fragment = new BuyMeFragment();
                         Bundle bundleBuyMe = new Bundle();
-                        bundleBuyMe.putString("user_id", user_id);
+                        bundleBuyMe.putString("facebook_id", facebook_id);
                         bundleBuyMe.putString("house_id", house_id);
                         fragment.setArguments(bundleBuyMe);
                         break;
                     case R.id.navigation_spendings:
                         fragment = new SpendingsFragment();
                         Bundle bundleSpendings = new Bundle();
-                        bundleSpendings.putString("user_id", user_id);
+                        bundleSpendings.putString("facebook_id", facebook_id);
                         bundleSpendings.putString("house_id", house_id);
                         fragment.setArguments(bundleSpendings);
                         break;
@@ -130,10 +129,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             protected void onCurrentProfileChanged (Profile oldProfile, Profile currentProfile) {
                 if (currentProfile != null) {
                     fetchMail();
-                    first_name = currentProfile.getFirstName();
-                    last_name = currentProfile.getLastName();
-                    photo_url = currentProfile.getProfilePictureUri(100,100).toString();
-                    name.setText(currentProfile.getFirstName() + currentProfile.getLastName());
+                    displayProfileInfo(currentProfile);
                 }
             }
         };
@@ -144,22 +140,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
             Profile currentProfile = Profile.getCurrentProfile();
             if (currentProfile != null) {
-                first_name = currentProfile.getFirstName();
-                last_name = currentProfile.getLastName();
-                photo_url = currentProfile.getProfilePictureUri(100,100).toString();
-                facebook_id = currentProfile.getId();
-                name.setText(first_name + " " + last_name);
                 displayProfileInfo(currentProfile);
-                Log.i("Link uri:", currentProfile.getLinkUri().toString());
-                Log.i("Photo:", currentProfile.getProfilePictureUri(100,100).toString());
             }
             else {
                 // Fetch the profile, which will trigger the onCurrentProfileChanged receiver
                 Profile.fetchProfileForCurrentAccessToken();
             }
         }
-
-
     }
 
     @Override
@@ -180,12 +167,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent startSettingsActivity = new Intent(this,SettingsActivity.class);
             startActivity(startSettingsActivity);
@@ -213,7 +196,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void addLandingFragment(){
         fragment = new HomeFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("user_id", user_id);
+        bundle.putString("facebook_id", facebook_id);
         bundle.putString("house_id",house_id);
         fragment.setArguments(bundle);
         fragmentManager = getSupportFragmentManager();
@@ -240,6 +223,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void displayProfileInfo(Profile profile) {
+        first_name = profile.getFirstName();
+        last_name = profile.getLastName();
+        photo_url = profile.getProfilePictureUri(100,100).toString();
+        facebook_id = profile.getId();
+        name.setText(first_name + " " + last_name);
         Uri profilePicUri = profile.getProfilePictureUri(100, 100);
         displayProfilePic(profilePicUri);
     }
@@ -290,14 +278,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     public void sendToAddSpending(View view){
         Intent startAddSpendingActivity = new Intent(this,AddSpendingActivity.class);
-        startAddSpendingActivity.putExtra("user_id", user_id);
+        startAddSpendingActivity.putExtra("facebook_id", facebook_id);
         startAddSpendingActivity.putExtra("house_id", house_id);
         startActivity(startAddSpendingActivity);
     }
 
     public void sendToAddBuyMe(View view){
         Intent startAddBuyMeActivity = new Intent(this,AddBuyMeActivity.class);
-        startAddBuyMeActivity.putExtra("user_id", user_id);
+        startAddBuyMeActivity.putExtra("facebook_id", facebook_id);
         startAddBuyMeActivity.putExtra("house_id", house_id);
         startActivity(startAddBuyMeActivity);
     }

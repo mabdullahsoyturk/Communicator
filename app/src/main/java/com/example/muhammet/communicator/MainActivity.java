@@ -27,17 +27,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
+        loginButton = findViewById(R.id.facebook_login_button);
         loginButton.setReadPermissions("email");
 
-        // Login Button callback registration
         callbackManager = CallbackManager.Factory.create();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String token = loginResult.getAccessToken().getToken();
-                String id = loginResult.getAccessToken().getUserId();
-                launchHouseCheckActivity(token,id);
+                String facebook_id = loginResult.getAccessToken().getUserId();
+                launchHouseCheckActivity(facebook_id);
             }
 
             @Override
@@ -45,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException exception) {
-                // display error
                 String toastMessage = exception.getMessage();
                 Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_LONG).show();
             }
@@ -53,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         com.facebook.AccessToken loginToken = com.facebook.AccessToken.getCurrentAccessToken();
         if (loginToken != null) {
-            // if previously logged in, proceed to the account activity
-            launchHouseCheckActivity(loginToken.getCurrentAccessToken().getToken(), loginToken.getUserId());
+            launchHouseCheckActivity(loginToken.getUserId());
         }
     }
 
@@ -64,13 +60,11 @@ public class MainActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void launchHouseCheckActivity(String token, String facebook_id) {
+    private void launchHouseCheckActivity(String facebook_id) {
         Context context = MainActivity.this;
         Class houseCheckActivity = HouseCheckActivity.class;
         Intent intent = new Intent(context, houseCheckActivity);
-        Log.i("Main Id", facebook_id);
         intent.putExtra("facebook_id", facebook_id);
         startActivity(intent);
-        finish();
     }
 }

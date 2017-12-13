@@ -118,4 +118,45 @@ public class NetworkUtilities {
         return buyMeContentValues;
     }
 
+    public static ContentValues[] getSpendingContentValuesFromJson(Context context, String spendingStr)
+            throws JSONException {
+
+        JSONObject spendingJson = new JSONObject(spendingStr);
+
+        JSONArray jsonSpendingArray = spendingJson.getJSONArray("data");
+
+        ContentValues[] spendingContentValues = new ContentValues[jsonSpendingArray.length()];
+
+        for (int i = 0; i < jsonSpendingArray.length(); i++) {
+
+            int _id;
+            String name;
+            String created_time;
+            double cost;
+            String user_id;
+            String house_id;
+
+            JSONObject item = jsonSpendingArray.getJSONObject(i);
+
+            _id = item.getInt("id");
+            name= item.getString("name");
+            created_time = item.getString("description");
+            cost = item.getDouble("cost");
+            user_id = item.getString("user_id");
+            house_id = item.getString("house_id");
+
+            ContentValues spendingValues = new ContentValues();
+            spendingValues.put(CommunicatorContract.SpendingEntry._ID, _id);
+            spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_NAME, name);
+            spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_CREATED_TIME, created_time);
+            spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_COST, cost);
+            spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_USER_ID, user_id);
+            spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID, house_id);
+
+            spendingContentValues[i] = spendingValues;
+        }
+
+        return spendingContentValues;
+    }
+
 }

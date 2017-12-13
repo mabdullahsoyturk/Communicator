@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,17 +40,17 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
     private TextView house_name;
     private Button btn_add_member;
 
-    private String user_id;
+    private String facebook_id;
     private String house_id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        user_id = getArguments().getString("user_id");
-        house_id = getArguments().getString("house_id");
-
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        facebook_id = getArguments().getString("facebook_id");
+        house_id = getArguments().getString("house_id");
 
         mContext = getContext();
         house_name = view.findViewById(R.id.tv_house_name);
@@ -65,8 +66,9 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
         rv_members.setAdapter(memberAdapter);
 
         try {
-            FetchHouseTask fetchHouseTask = new FetchHouseTask(mContext, house_name, memberAdapter, user_id);
-            fetchHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses");
+            Log.i("home", "" + facebook_id);
+            FetchHouseTask fetchHouseTask = new FetchHouseTask(mContext, house_name, memberAdapter, facebook_id);
+            fetchHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

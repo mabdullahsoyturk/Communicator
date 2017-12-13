@@ -27,6 +27,7 @@ import com.example.muhammet.communicator.adapters.MemberAdapter;
 import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.models.Spending;
+import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.FetchMembersTask;
 import com.example.muhammet.communicator.tasks.FetchSpendingsTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
@@ -41,22 +42,23 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
     private static final int SPENDING_LOADER_ID = 1;
     Context mContext = getContext();
     ProgressBar progressBar;
-    BroadcastReceiver broadcastReceiver;
+    //BroadcastReceiver broadcastReceiver;
 
     RecyclerView mRecyclerView;
     SpendingAdapter spendingAdapter;
     private DividerItemDecoration mDividerItemDecoration;
 
-    private String user_id;
+    private String facebook_id;
     private String house_id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        user_id = getArguments().getString("user_id");
-        house_id = getArguments().getString("house_id");
         View view = inflater.inflate(R.layout.fragment_spendings, container, false);
+
+        facebook_id = getArguments().getString("facebook_id");
+        house_id = getArguments().getString("house_id");
 
         mRecyclerView = view.findViewById(R.id.rv_spendings);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
@@ -68,6 +70,8 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
         mRecyclerView.setAdapter(spendingAdapter);
 
         getActivity().getSupportLoaderManager().initLoader(SPENDING_LOADER_ID, null, this);
+
+        CommunicatorSyncUtils.startImmediateSyncForSpendings(mContext,facebook_id, house_id);
 
         return view;
     }

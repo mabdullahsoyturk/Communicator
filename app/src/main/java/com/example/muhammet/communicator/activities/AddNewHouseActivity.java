@@ -23,7 +23,7 @@ public class AddNewHouseActivity extends AppCompatActivity {
 
     Context mContext;
 
-    private String user_id;
+    private String facebook_id;
 
     private EditText et_house_name;
     private Button btn_confirm;
@@ -36,7 +36,7 @@ public class AddNewHouseActivity extends AppCompatActivity {
         mContext = this;
 
         Intent intent = getIntent();
-        user_id = intent.getStringExtra("user_id");
+        facebook_id = intent.getStringExtra("facebook_id");
 
         et_house_name = findViewById(R.id.et_add_new_house);
         btn_confirm = findViewById(R.id.activity_add_new_house_confirm);
@@ -57,12 +57,12 @@ public class AddNewHouseActivity extends AppCompatActivity {
                 Intent intent = new Intent(mContext, BaseActivity.class);
                 mContext.startActivity(intent);
 
-//                try {
-//                    AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, user_id, house_name);
-//                    addNewHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses");
-//                } catch (MalformedURLException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, facebook_id, house_name);
+                    addNewHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

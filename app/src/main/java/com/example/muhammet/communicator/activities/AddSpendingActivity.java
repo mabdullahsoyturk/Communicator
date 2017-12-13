@@ -27,7 +27,7 @@ public class AddSpendingActivity extends AppCompatActivity {
     private EditText et_add_spending_name;
     private EditText et_add_spending_cost;
 
-    private String user_id;
+    private String facebook_id;
     private String house_id;
 
     @Override
@@ -37,7 +37,7 @@ public class AddSpendingActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        user_id = intent.getStringExtra("user_id");
+        facebook_id = intent.getStringExtra("facebook_id");
         house_id = intent.getStringExtra("house_id");
 
         et_add_spending_name = findViewById(R.id.et_add_spending_name);
@@ -53,7 +53,7 @@ public class AddSpendingActivity extends AppCompatActivity {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("cost", cost);
-        contentValues.put("user_id", user_id);
+        contentValues.put("facebook_id", facebook_id);
         contentValues.put("house_id", house_id);
         contentValues.put("created_time", currentDate.toString());
 
@@ -74,11 +74,11 @@ public class AddSpendingActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), "Spending has been added!", Toast.LENGTH_LONG).show();
         }
 
-        AddSpendingTask addSpendingTask = new AddSpendingTask(this,id, name,cost, user_id, house_id, currentDate.toString());
-        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/spendings");
+        AddSpendingTask addSpendingTask = new AddSpendingTask(this,id, name,cost, facebook_id, house_id, currentDate.toString());
+        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/spendings");
 
         Intent intent = new Intent(this, BaseActivity.class);
-        intent.putExtra("user_id", user_id);
+        intent.putExtra("facebook_id", facebook_id);
         intent.putExtra("house_id", house_id);
         startActivity(intent);
     }

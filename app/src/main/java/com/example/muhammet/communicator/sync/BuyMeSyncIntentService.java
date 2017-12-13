@@ -8,10 +8,10 @@ import android.support.annotation.Nullable;
  * Created by Muhammet on 8.12.2017.
  */
 
-public class CommunicatorSyncIntentService extends IntentService{
+public class BuyMeSyncIntentService extends IntentService{
 
-    public CommunicatorSyncIntentService() {
-        super("CommunicatorSyncIntentService");
+    public BuyMeSyncIntentService() {
+        super("BuyMeSyncIntentService");
     }
 
     @Override

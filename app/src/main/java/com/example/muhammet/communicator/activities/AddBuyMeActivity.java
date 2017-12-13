@@ -24,7 +24,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
     private TextView tv_name;
     private TextView tv_description;
 
-    private String user_id;
+    private String facebook_id;
     private String house_id;
 
     @Override
@@ -34,7 +34,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        user_id = intent.getStringExtra("user_id");
+        facebook_id = intent.getStringExtra("facebook_id");
         house_id = intent.getStringExtra("house_id");
 
         tv_name = findViewById(R.id.activity_add_buy_me_name);
@@ -54,7 +54,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("description", description);
-        contentValues.put("user_id", user_id);
+        contentValues.put("facebook_id", facebook_id);
         contentValues.put("house_id", house_id);
         contentValues.put("created_time", currentDate.toString());
 
@@ -75,13 +75,13 @@ public class AddBuyMeActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), "Buy me has been added!", Toast.LENGTH_LONG).show();
         }
 
-        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, id, name,description, user_id, house_id, currentDate.toString());
-        addBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes");
+        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, id, name,description, facebook_id, house_id, currentDate.toString());
+        addBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes");
 
         cursor.close();
 
         Intent intent = new Intent(this,BaseActivity.class);
-        intent.putExtra("user_id", user_id);
+        intent.putExtra("facebook_id", facebook_id);
         intent.putExtra("house_id", house_id);
         startActivity(intent);
 
