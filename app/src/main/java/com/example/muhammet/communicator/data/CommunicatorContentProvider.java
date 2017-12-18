@@ -82,7 +82,7 @@ public class CommunicatorContentProvider extends ContentProvider{
                 String buyMeId = uri.getPathSegments().get(1);
                 // Use selections/selectionArgs to filter for this ID
                 retCursor = db.query(CommunicatorContract.BuyMeEntry.TABLE_NAME,
-                        null,
+                                null,
                         "_id=?",
                         new String[]{buyMeId},
                         null,

@@ -26,16 +26,16 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
     private int id;
     private String name;
     private String cost;
-    private String user_id;
+    private String facebook_id;
     private String house_id;
     private String created_time;
 
-    public AddSpendingTask(Context context, int id, String name, String cost, String user_id, String house_id, String created_time) throws MalformedURLException {
+    public AddSpendingTask(Context context, int id, String name, String cost, String facebook_id, String house_id, String created_time) throws MalformedURLException {
         mContext = context;
         this.id = id;
         this.name = name;
         this.cost = cost;
-        this.user_id = user_id;
+        this.facebook_id = facebook_id;
         this.house_id = house_id;
         this.created_time = created_time;
     }
@@ -60,7 +60,7 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
             jsonParam.put("id", id);
             jsonParam.put("name", name);
             jsonParam.put("cost", cost);
-            jsonParam.put("user_id", user_id);
+            jsonParam.put("facebook_id", facebook_id);
             jsonParam.put("house_id", house_id);
             jsonParam.put("created_time", created_time);
 

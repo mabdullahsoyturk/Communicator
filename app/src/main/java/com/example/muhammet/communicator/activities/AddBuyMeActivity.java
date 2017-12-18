@@ -1,5 +1,6 @@
 package com.example.muhammet.communicator.activities;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -60,22 +61,26 @@ public class AddBuyMeActivity extends AppCompatActivity {
 
         Uri uri = getContentResolver().insert(CommunicatorContract.BuyMeEntry.CONTENT_URI, contentValues);
 
+        long buyMeId;
+
         Cursor cursor = getContentResolver().query(uri,
                 null,
                 null,
                 null,
                 null);
 
-        cursor.moveToPosition(0);
-
-        int idIndex = cursor.getColumnIndex(CommunicatorContract.BuyMeEntry._ID);
-        final int id = cursor.getInt(idIndex);
+        if(cursor.moveToFirst()){
+            int buyMeIndex = cursor.getColumnIndex(CommunicatorContract.BuyMeEntry._ID);
+            buyMeId = cursor.getInt(buyMeIndex);
+        }else{
+            buyMeId = ContentUris.parseId(uri);
+        }
 
         if(uri != null){
             Toast.makeText(getBaseContext(), "Buy me has been added!", Toast.LENGTH_LONG).show();
         }
 
-        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, id, name,description, facebook_id, house_id, currentDate.toString());
+        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, buyMeId, name,description, facebook_id, house_id, currentDate.toString());
         addBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes");
 
         cursor.close();

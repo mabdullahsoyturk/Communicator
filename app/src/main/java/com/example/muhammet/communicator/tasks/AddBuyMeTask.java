@@ -19,19 +19,19 @@ import java.net.URL;
 public class AddBuyMeTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
-    private int id;
+    private long id;
     private String name;
     private String description;
-    private String user_id;
+    private String facebook_id;
     private String house_id;
     private String created_time;
     
-    public AddBuyMeTask(Context context, int id, String name, String description, String user_id, String house_id, String created_time) throws MalformedURLException {
+    public AddBuyMeTask(Context context, long id, String name, String description, String facebook_id, String house_id, String created_time) throws MalformedURLException {
         mContext = context;
         this.id = id;
         this.name = name;
         this.description = description;
-        this.user_id = user_id;
+        this.facebook_id = facebook_id;
         this.house_id = house_id;
         this.created_time = created_time;
     }
@@ -56,7 +56,7 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
             jsonParam.put("id", id);
             jsonParam.put("name", name);
             jsonParam.put("description", description);
-            jsonParam.put("user_id", user_id);
+            jsonParam.put("facebook_id", facebook_id);
             jsonParam.put("house_id", house_id);
             jsonParam.put("created_time", created_time);
 

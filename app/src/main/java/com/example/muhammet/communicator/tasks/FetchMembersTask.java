@@ -47,7 +47,8 @@ public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
     private Member[] getMembersDataFromJson(String communicatorJsonStr)
             throws JSONException {
 
-        JSONArray memberJson  = new JSONArray(communicatorJsonStr);
+        JSONObject jsonObject = new JSONObject(communicatorJsonStr);
+        JSONArray memberJson  = jsonObject.getJSONArray("data");
 
         Member[] members = new Member[memberJson.length()];
 

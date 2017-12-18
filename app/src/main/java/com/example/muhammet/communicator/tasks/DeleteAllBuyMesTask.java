@@ -26,13 +26,13 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
     BuyMeAdapter toBuyAdapter;
-    String user_id;
+    String facebook_id;
     String house_id;
     
-    public DeleteAllBuyMesTask(Context context, BuyMeAdapter buyMeAdapter, String user_id, String house_id) throws MalformedURLException {
+    public DeleteAllBuyMesTask(Context context, BuyMeAdapter buyMeAdapter, String facebook_id, String house_id) throws MalformedURLException {
         mContext = context;
         toBuyAdapter = buyMeAdapter;
-        this.user_id = user_id;
+        this.facebook_id = facebook_id;
         this.house_id = house_id;
     }
 

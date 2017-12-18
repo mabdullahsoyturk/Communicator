@@ -1,6 +1,5 @@
 package com.example.muhammet.communicator.fragments;
 
-
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.muhammet.communicator.ListItemClickListener;
+import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;

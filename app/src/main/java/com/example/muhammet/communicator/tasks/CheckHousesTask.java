@@ -22,12 +22,12 @@ import java.net.URL;
 public class CheckHousesTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
-    private String user_id;
+    private String facebook_id;
     private String house_id;
     
-    public CheckHousesTask(Context context, String user_id) throws MalformedURLException {
+    public CheckHousesTask(Context context, String facebook_id) throws MalformedURLException {
         mContext = context;
-        this.user_id = user_id;
+        this.facebook_id = facebook_id;
     }
 
     @Override
@@ -94,10 +94,10 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
             if(success.equals("true")){
 
                 AddMemberTask addMemberTask = new AddMemberTask(mContext);
-                addMemberTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/members");
+                addMemberTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/members");
 
                 Intent intent = new Intent(mContext, BaseActivity.class);
-                intent.putExtra("user_id", user_id);
+                intent.putExtra("facebook_id", facebook_id);
                 intent.putExtra("house_id", house_id);
                 mContext.startActivity(intent);
             }

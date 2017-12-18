@@ -27,7 +27,6 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
     private String last_name;
     private String photo_url;
     private String facebook_id;
-    private String user_id;
 
     public CheckUserTask(Context context, String first_name, String last_name,
                          String photo_url, String facebook_id) throws MalformedURLException {
@@ -125,7 +124,7 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
             if(houses.length() != 2){
                 house_id = houses.substring(2, houses.length()-2);
                 Intent intent = new Intent(mContext, BaseActivity.class);
-                intent.putExtra("user_id", user_id);
+                intent.putExtra("facebook_id", facebook_id);
                 intent.putExtra("house_id", house_id);
                 mContext.startActivity(intent);
             }

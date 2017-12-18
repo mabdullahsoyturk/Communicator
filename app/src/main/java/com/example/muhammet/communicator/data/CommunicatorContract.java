@@ -55,7 +55,7 @@ public class CommunicatorContract {
         public static final String TABLE_NAME = "buy_mes";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
-        public static final String COLUMN_USER_ID = "user_id";
+        public static final String COLUMN_FACEBOOK_ID = "facebook_id";
         public static final String COLUMN_HOUSE_ID = "house_id";
         public static final String COLUMN_CREATED_TIME = "created_time";
     }
@@ -69,7 +69,7 @@ public class CommunicatorContract {
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_COST = "cost";
-        public static final String COLUMN_USER_ID = "user_id";
+        public static final String COLUMN_FACEBOOK_ID = "facebook_id";
         public static final String COLUMN_HOUSE_ID = "house_id";
         public static final String COLUMN_CREATED_TIME = "created_time";
     }
@@ -81,6 +81,6 @@ public class CommunicatorContract {
         public static final String TABLE_NAME = "house_members";
 
         public static final String COLUMN_HOUSE_ID = "house_id";
-        public static final String COLUMN_USER_ID = "user_id";
+        public static final String COLUMN_FACEBOOK_ID = "facebook_id";
     }
 }

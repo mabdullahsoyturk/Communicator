@@ -2,18 +2,15 @@ package com.example.muhammet.communicator.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.muhammet.communicator.ListItemClickListener;
+import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.models.Member;
-
-import java.util.List;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdapterViewHolder> {
 
@@ -31,6 +28,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
         private ImageView member_img;
         private TextView member_name;
         private TextView member_debt;
+        private long id;
 
         public MemberAdapterViewHolder(View itemView, ListItemClickListener listener) {
             super(itemView);

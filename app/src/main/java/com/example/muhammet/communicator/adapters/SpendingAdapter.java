@@ -10,13 +10,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.muhammet.communicator.ListItemClickListener;
+import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.models.Member;
-import com.example.muhammet.communicator.models.Spending;
-
-import java.util.List;
 
 public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.SpendingAdapterViewHolder> {
 
@@ -38,6 +34,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
         private TextView spendingShare;
         private ImageView spendingIcon;
         private Button button;
+        private long id;
 
         public SpendingAdapterViewHolder(View itemView, ListItemClickListener listener) {
             super(itemView);
@@ -48,6 +45,10 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
             spendingShare = itemView.findViewById(R.id.spending_share);
             spendingIcon = itemView.findViewById(R.id.spending_icon);
             button = itemView.findViewById(R.id.spending_button);
+        }
+
+        public void bind(long id){
+            this.id = id;
         }
 
         @Override
@@ -73,19 +74,20 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
         int idIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry._ID);
         int nameIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_NAME);
         int costIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_COST);
-        int userIdIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_USER_ID);
+        int facebookIdIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_FACEBOOK_ID);
         int houseIdIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID);
         int createdTimeIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_CREATED_TIME);
 
         mCursor.moveToPosition(position);
 
-        final int id = mCursor.getInt(idIndex);
+        final long id = mCursor.getLong(idIndex);
         String name = mCursor.getString(nameIndex);
         double cost = mCursor.getDouble(costIndex);
-        int userId = mCursor.getInt(userIdIndex);
+        int facebookId = mCursor.getInt(facebookIdIndex);
         int houseId = mCursor.getInt(houseIdIndex);
         String createdTime = mCursor.getString(createdTimeIndex);
 
+        holder.bind(id);
         holder.itemView.setTag(id);
         holder.spendingName.setText(name);
         holder.spendingShare.setText(String.valueOf(cost));

@@ -15,6 +15,6 @@ public class SpendingSyncIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        CommunicatorSyncTask.syncSpendings(this, intent.getStringExtra("user_id"), intent.getStringExtra("house_id"));
+        CommunicatorSyncTask.syncSpendings(this, intent.getStringExtra("facebook_id"), intent.getStringExtra("house_id"));
     }
 }

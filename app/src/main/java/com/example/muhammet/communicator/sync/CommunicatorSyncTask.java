@@ -13,10 +13,10 @@ import java.net.URL;
 
 public class CommunicatorSyncTask {
 
-    synchronized public static void syncBuyMes(Context context, String user_id, String house_id) {
+    synchronized public static void syncBuyMes(Context context, String facebook_id, String house_id) {
 
         try {
-            String buyMeUrl = NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/buy_mes";
+            String buyMeUrl = NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes";
             
             String jsonWeatherResponse = NetworkUtilities.getStringResponse(buyMeUrl);
 
@@ -51,10 +51,10 @@ public class CommunicatorSyncTask {
 
     }
 
-    synchronized public static void syncSpendings(Context context, String user_id, String house_id) {
+    synchronized public static void syncSpendings(Context context, String facebook_id, String house_id) {
 
         try {
-            String spendingUrl = NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + user_id + "/houses/" + house_id + "/spendings";
+            String spendingUrl = NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/spendings";
 
             String jsonWeatherResponse = NetworkUtilities.getStringResponse(spendingUrl);
 

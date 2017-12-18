@@ -91,7 +91,7 @@ public class NetworkUtilities {
             int _id;
             String name;
             String description;
-            String user_id;
+            String facebook_id;
             String house_id;
             String created_time;
 
@@ -100,7 +100,7 @@ public class NetworkUtilities {
             _id = item.getInt("id");
             name= item.getString("name");
             description = item.getString("description");
-            user_id = item.getString("user_id");
+            facebook_id = item.getString("facebook_id");
             house_id = item.getString("house_id");
             created_time = item.getString("created_time");
 
@@ -108,7 +108,7 @@ public class NetworkUtilities {
             buyMeValues.put(CommunicatorContract.BuyMeEntry._ID, _id);
             buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_NAME, name);
             buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION, description);
-            buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_USER_ID, user_id);
+            buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_FACEBOOK_ID, facebook_id);
             buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID, house_id);
             buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_CREATED_TIME, created_time);
 
@@ -133,7 +133,7 @@ public class NetworkUtilities {
             String name;
             String created_time;
             double cost;
-            String user_id;
+            String facebook_id;
             String house_id;
 
             JSONObject item = jsonSpendingArray.getJSONObject(i);
@@ -142,7 +142,7 @@ public class NetworkUtilities {
             name= item.getString("name");
             created_time = item.getString("description");
             cost = item.getDouble("cost");
-            user_id = item.getString("user_id");
+            facebook_id = item.getString("facebook_id");
             house_id = item.getString("house_id");
 
             ContentValues spendingValues = new ContentValues();
@@ -150,7 +150,7 @@ public class NetworkUtilities {
             spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_NAME, name);
             spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_CREATED_TIME, created_time);
             spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_COST, cost);
-            spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_USER_ID, user_id);
+            spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_FACEBOOK_ID, facebook_id);
             spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID, house_id);
 
             spendingContentValues[i] = spendingValues;

@@ -68,6 +68,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         Intent intent = getIntent();
         facebook_id = intent.getStringExtra("facebook_id");
+        Log.i("fidBase", "id is " + facebook_id);
         house_id = intent.getStringExtra("house_id");
 
         //////////////////////////TOOLBAR CONFIGS///////////////////////////////////////////////////

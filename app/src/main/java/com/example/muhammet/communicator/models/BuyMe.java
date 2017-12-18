@@ -5,7 +5,7 @@ public class BuyMe {
     private int id;
     private String name;
     private String desc;
-    private String user_id;
+    private String facebook_id;
     private String house_id;
     private String created_time;
 
@@ -14,12 +14,12 @@ public class BuyMe {
         this.desc = desc;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public String getFacebook_id() {
+        return facebook_id;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setFacebook_id(String facebook_id) {
+        this.facebook_id = facebook_id;
     }
 
     public String getHouse_id() {

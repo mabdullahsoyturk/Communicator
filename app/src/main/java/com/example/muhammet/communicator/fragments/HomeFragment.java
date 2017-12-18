@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.muhammet.communicator.ListItemClickListener;
+import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.MemberProfileActivity;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
@@ -80,10 +80,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         mContext);
 
-                // set title
                 alertDialogBuilder.setTitle("Send the following code to the person you want to add.");
 
-                // set dialog message
                 alertDialogBuilder
                         .setMessage(house_id)
                         .setCancelable(true);

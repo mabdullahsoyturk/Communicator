@@ -7,17 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.muhammet.communicator.ListItemClickListener;
+import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.models.BuyMe;
-import com.example.muhammet.communicator.models.Member;
-import com.example.muhammet.communicator.models.Spending;
-
-import java.util.List;
 
 /**
  * Created by Muhammet on 12.11.2017.
@@ -41,6 +35,7 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
         private TextView buyMeDescription;
         private Button editButton;
         private Button deleteButton;
+        private long id;
 
         public BuyMeAdapterViewHolder(View itemView, ListItemClickListener listener) {
             super(itemView);
@@ -54,10 +49,13 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
             deleteButton.setOnClickListener(this);
         }
 
+        public void bind(long id){
+            this.id = id;
+        }
+
         @Override
         public void onClick(View view) {
-            int clickedPosition = getAdapterPosition();
-            mListener.onListItemClick(clickedPosition);
+            mListener.onListItemClick(id);
         }
     }
 
@@ -79,19 +77,20 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
         int idIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry._ID);
         int nameIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_NAME);
         int descriptionIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION);
-        int userIdIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_USER_ID);
+        int facebookIdIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_FACEBOOK_ID);
         int houseIdIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID);
         int createdTimeIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_CREATED_TIME);
 
         mCursor.moveToPosition(position);
 
-        final int id = mCursor.getInt(idIndex);
+        final long id = mCursor.getLong(idIndex);
         String name = mCursor.getString(nameIndex);
         String description = mCursor.getString(descriptionIndex);
-        int userId = mCursor.getInt(userIdIndex);
+        int facebookId = mCursor.getInt(facebookIdIndex);
         int houseId = mCursor.getInt(houseIdIndex);
         String createdTime = mCursor.getString(createdTimeIndex);
 
+        holder.bind(id);
         holder.itemView.setTag(id);
         holder.buyMeName.setText(name);
         holder.buyMeDescription.setText(description);

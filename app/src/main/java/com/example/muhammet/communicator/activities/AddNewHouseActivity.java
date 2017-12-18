@@ -46,17 +46,6 @@ public class AddNewHouseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String house_name = et_house_name.getText().toString();
 
-                Date currentDate = new Date(System.currentTimeMillis());
-
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("name", house_name);
-                contentValues.put("created_time", currentDate.toString());
-
-                getContentResolver().insert(CommunicatorContract.HouseEntry.CONTENT_URI, contentValues);
-
-                Intent intent = new Intent(mContext, BaseActivity.class);
-                mContext.startActivity(intent);
-
                 try {
                     AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, facebook_id, house_name);
                     addNewHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses");

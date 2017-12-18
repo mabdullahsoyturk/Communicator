@@ -1,11 +1,8 @@
 package com.example.muhammet.communicator.fragments;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -20,27 +17,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.muhammet.communicator.ListItemClickListener;
+import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
-import com.example.muhammet.communicator.adapters.MemberAdapter;
 import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.models.Spending;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
-import com.example.muhammet.communicator.tasks.FetchMembersTask;
-import com.example.muhammet.communicator.tasks.FetchSpendingsTask;
-import com.example.muhammet.communicator.utilities.NetworkUtilities;
-
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SpendingsFragment extends Fragment implements ListItemClickListener,LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = BaseActivity.class.getSimpleName();
     private static final int SPENDING_LOADER_ID = 1;
-    Context mContext = getContext();
+    Context mContext;
     ProgressBar progressBar;
     //BroadcastReceiver broadcastReceiver;
 
@@ -56,6 +44,8 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_spendings, container, false);
+
+        mContext = getContext();
 
         facebook_id = getArguments().getString("facebook_id");
         house_id = getArguments().getString("house_id");

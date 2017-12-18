@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +47,17 @@ public class HouseCheckActivity extends AppCompatActivity{
 
         invitation = findViewById(R.id.activity_house_check_invitation);
 
-        trackProfileChange();
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged (Profile oldProfile, Profile currentProfile) {
+                if (currentProfile != null) {
+                    first_name = currentProfile.getFirstName();
+                    last_name = currentProfile.getLastName();
+                    photo_url = currentProfile.getProfilePictureUri(100,100).toString();
+                    facebook_id = currentProfile.getId();
+                }
+            }
+        };
 
         checkIfUserHasToken();
 
@@ -65,6 +76,7 @@ public class HouseCheckActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, AddNewHouseActivity.class);
                 intent.putExtra("facebook_id", facebook_id);
+                Log.i("fidHouseCheck", "id is " + facebook_id);
                 startActivity(intent);
             }
         });
@@ -94,20 +106,6 @@ public class HouseCheckActivity extends AppCompatActivity{
                 Profile.fetchProfileForCurrentAccessToken();
             }
         }
-    }
-
-    public void trackProfileChange(){
-        profileTracker = new ProfileTracker() {
-            @Override
-            protected void onCurrentProfileChanged (Profile oldProfile, Profile currentProfile) {
-                if (currentProfile != null) {
-                    first_name = currentProfile.getFirstName();
-                    last_name = currentProfile.getLastName();
-                    photo_url = currentProfile.getProfilePictureUri(100,100).toString();
-                    facebook_id = currentProfile.getId();
-                }
-            }
-        };
     }
 
     private void checkIfInvitationCodeValid(String invitation_code){
