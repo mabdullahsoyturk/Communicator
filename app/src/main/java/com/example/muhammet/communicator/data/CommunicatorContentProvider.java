@@ -211,6 +211,61 @@ public class CommunicatorContentProvider extends ContentProvider{
     }
 
     @Override
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
+        final SQLiteDatabase db = mCommunicatorDbHelper.getWritableDatabase();
+
+        switch (sUriMatcher.match(uri)) {
+
+            case BUY_MES:
+                db.beginTransaction();
+                int buyMeRowsInserted = 0;
+                try {
+                    for (ContentValues value : values) {
+
+                        long _id = db.insert(CommunicatorContract.BuyMeEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            buyMeRowsInserted++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                if (buyMeRowsInserted > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+
+                return buyMeRowsInserted;
+
+            case SPENDINGS:
+                db.beginTransaction();
+                int spendingsRowInserted = 0;
+                try {
+                    for (ContentValues value : values) {
+
+                        long _id = db.insert(CommunicatorContract.SpendingEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            spendingsRowInserted++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                if (spendingsRowInserted > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+
+                return spendingsRowInserted;
+
+            default:
+                return super.bulkInsert(uri, values);
+        }
+    }
+
+    @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         final SQLiteDatabase db = mCommunicatorDbHelper.getWritableDatabase();
 
@@ -253,6 +308,10 @@ public class CommunicatorContentProvider extends ContentProvider{
                 tasksDeleted = db.delete(CommunicatorContract.SpendingEntry.TABLE_NAME, "_id=?", new String[]{spending_id});
                 break;
 
+            case SPENDINGS:
+                tasksDeleted = db.delete(CommunicatorContract.SpendingEntry.TABLE_NAME, null, null);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -277,10 +336,19 @@ public class CommunicatorContentProvider extends ContentProvider{
         switch (match) {
             case BUY_MES_WITH_ID:
                 //update a single task by getting the id
-                String id = uri.getPathSegments().get(1);
+                String buy_me_id = uri.getPathSegments().get(1);
                 //using selections
-                tasksUpdated = mCommunicatorDbHelper.getWritableDatabase().update(TABLE_NAME, contentValues, "_id=?", new String[]{id});
+                tasksUpdated = mCommunicatorDbHelper.getWritableDatabase().update(TABLE_NAME, contentValues, "_id=?", new String[]{buy_me_id});
                 break;
+
+            case SPENDINGS_WITH_ID:
+                //update a single task by getting the id
+                String spending_id = uri.getPathSegments().get(1);
+                //using selections
+                tasksUpdated = mCommunicatorDbHelper.getWritableDatabase().update(TABLE_NAME, contentValues, "_id=?", new String[]{spending_id});
+                break;
+
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

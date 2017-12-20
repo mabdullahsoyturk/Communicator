@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.muhammet.communicator.DeleteObserver;
 import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
@@ -64,9 +65,13 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
             @Override
             public void onClick(View view) {
                 try {
-                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id,house_id);
+                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id, house_id, new DeleteObserver() {
+                        @Override
+                        public void isFinished(String s) {
+                            restartLoader();
+                        }
+                    });
                     deleteAllBuyMesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes");
-                    buyMeAdapter.notifyDataSetChanged();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -90,9 +95,9 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
 
-                int id = (int) viewHolder.itemView.getTag();
+                long id = (long)viewHolder.itemView.getTag();
 
-                String stringId = Integer.toString(id);
+                String stringId = Long.toString(id);
                 Uri uri = CommunicatorContract.BuyMeEntry.CONTENT_URI;
                 uri = uri.buildUpon().appendPath(stringId).build();
 
@@ -102,38 +107,29 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
             }
         }).attachToRecyclerView(mRecyclerView);
 
-//        try {
-//            FetchBuyMeTask fetchBuyMeTask = new FetchBuyMeTask(getContext(), buyMeAdapter);
-//            fetchBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes");
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-
         getActivity().getSupportLoaderManager().initLoader(BUY_ME_LOADER_ID, null, this);
 
         CommunicatorSyncUtils.startImmediateSyncForBuyMes(mContext,facebook_id, house_id);
+
+        restartLoader();
 
         return view;
     }
 
     public void restartLoader(){
         getActivity().getSupportLoaderManager().restartLoader(BUY_ME_LOADER_ID, null, this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
+        buyMeAdapter.notifyDataSetChanged();
     }
 
     @Override
    public void onResume() {
         super.onResume();
 
-        getActivity().getSupportLoaderManager().restartLoader(BUY_ME_LOADER_ID, null, this);
+        restartLoader();
     }
 
     @Override
-    public void onListItemClick(int clickedItemIndex) {
+    public void onListItemClick(long clickedItemIndex) {
         
     }
 
@@ -188,4 +184,5 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
     public void onLoaderReset(Loader<Cursor> loader) {
         buyMeAdapter.swapCursor(null);
     }
+
 }

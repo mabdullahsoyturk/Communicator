@@ -16,6 +16,6 @@ public class BuyMeSyncIntentService extends IntentService{
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        CommunicatorSyncTask.syncBuyMes(this, intent.getStringExtra("user_id"), intent.getStringExtra("house_id"));
+        CommunicatorSyncTask.syncBuyMes(this, intent.getStringExtra("facebook_id"), intent.getStringExtra("house_id"));
     }
 }

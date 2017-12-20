@@ -140,7 +140,7 @@ public class NetworkUtilities {
 
             _id = item.getInt("id");
             name= item.getString("name");
-            created_time = item.getString("description");
+            created_time = item.getString("created_time");
             cost = item.getDouble("cost");
             facebook_id = item.getString("facebook_id");
             house_id = item.getString("house_id");
@@ -157,6 +157,56 @@ public class NetworkUtilities {
         }
 
         return spendingContentValues;
+    }
+
+    public static ContentValues[] getMemberContentValuesFromJson(Context context, String buyMeStr)
+            throws JSONException {
+
+        JSONObject memberJson = new JSONObject(buyMeStr);
+
+        JSONArray jsonMemberArray = memberJson.getJSONArray("data");
+
+        ContentValues[] memberContentValues = new ContentValues[jsonMemberArray.length()];
+
+        for (int i = 0; i < jsonMemberArray.length(); i++) {
+
+            int _id;
+            String first_name;
+            String last_name;
+            double balance;
+            String photo_url;
+            int status;
+            String created_time;
+            String house_id;
+            String facebook_id;
+
+            JSONObject item = jsonMemberArray.getJSONObject(i);
+
+            _id = item.getInt("id");
+            first_name = item.getString("first_name");
+            last_name = item.getString("last_name");
+            balance = item.getDouble("balance");
+            photo_url = item.getString("photo_url");
+            status = item.getInt("status");
+            house_id = item.getString("house_id");
+            facebook_id = item.getString("facebook_id");
+            created_time = item.getString("created_time");
+
+            ContentValues memberValues = new ContentValues();
+            memberValues.put(CommunicatorContract.UserEntry._ID, _id);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME, first_name);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_LAST_NAME, last_name);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_BALANCE, balance);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_PHOTO_URL, photo_url);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_STATUS, status);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID, facebook_id);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_HOUSE_ID, house_id);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME, created_time);
+
+            memberContentValues[i] = memberValues;
+        }
+
+        return memberContentValues;
     }
 
 }

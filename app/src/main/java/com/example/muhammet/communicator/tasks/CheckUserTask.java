@@ -123,16 +123,11 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
 
             if(houses.length() != 2){
                 house_id = houses.substring(2, houses.length()-2);
+                Log.i("CheckUserTask", house_id);
                 Intent intent = new Intent(mContext, BaseActivity.class);
                 intent.putExtra("facebook_id", facebook_id);
                 intent.putExtra("house_id", house_id);
                 mContext.startActivity(intent);
-            }
-        }else{
-            try{
-                jsonObject1 = communicatorJson.getJSONObject("data");
-            }catch (JSONException e){
-                e.printStackTrace();
             }
         }
     }

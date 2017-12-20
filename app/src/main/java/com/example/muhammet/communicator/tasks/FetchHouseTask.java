@@ -26,14 +26,11 @@ public class FetchHouseTask extends AsyncTask<String, Void, String> {
 
     private TextView house_name;
     private String facebook_id;
-    private String house_id;
     private String name;
-    MemberAdapter memberAdapter;
 
-    public FetchHouseTask(Context context, TextView house_name, MemberAdapter memberAdapter, String facebook_id) throws MalformedURLException {
+    public FetchHouseTask(Context context, TextView house_name, String facebook_id) throws MalformedURLException {
         mContext = context;
         this.house_name = house_name;
-        this.memberAdapter = memberAdapter;
         this.facebook_id = facebook_id;
     }
 
@@ -53,17 +50,10 @@ public class FetchHouseTask extends AsyncTask<String, Void, String> {
         try {
             jsonObject = new JSONObject(s);
             jsonArray = jsonObject.getJSONArray("data");
+            Log.i("data", jsonArray.toString());
             name = jsonArray.getJSONObject(0).getString("name");
             house_name.setText(name);
-            house_id = jsonArray.getJSONObject(0).getString("_id");
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            FetchMembersTask fetchMembersTask = new FetchMembersTask(mContext, memberAdapter);
-            fetchMembersTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/members");
-        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }

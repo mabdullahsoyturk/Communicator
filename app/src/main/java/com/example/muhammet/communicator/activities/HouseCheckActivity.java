@@ -55,6 +55,7 @@ public class HouseCheckActivity extends AppCompatActivity{
                     last_name = currentProfile.getLastName();
                     photo_url = currentProfile.getProfilePictureUri(100,100).toString();
                     facebook_id = currentProfile.getId();
+                    checkIfUserExists();
                 }
             }
         };
@@ -80,8 +81,6 @@ public class HouseCheckActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
-
-        checkIfUserExists();
     }
 
     public void checkIfUserExists(){
@@ -100,6 +99,7 @@ public class HouseCheckActivity extends AppCompatActivity{
                 last_name = currentProfile.getLastName();
                 photo_url = currentProfile.getProfilePictureUri(100,100).toString();
                 facebook_id = currentProfile.getId();
+                checkIfUserExists();
             }
             else {
                 // Fetch the profile, which will trigger the onCurrentProfileChanged receiver

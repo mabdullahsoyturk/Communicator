@@ -20,11 +20,11 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
         final String CREATE_USERS_TABLE = "CREATE TABLE " + CommunicatorContract.UserEntry.TABLE_NAME + " (" +
                 CommunicatorContract.UserEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
-                CommunicatorContract.UserEntry.COLUMN_EMAIL + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_BALANCE + " REAL, " +
                 CommunicatorContract.UserEntry.COLUMN_PHOTO_URL + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_STATUS + " INTEGER, " +
                 CommunicatorContract.UserEntry.COLUMN_CREATED_TIME + " TEXT, " +
+                CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + " TEXT, " +
                 CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + " TEXT NOT NULL UNIQUE);";
 
         final String CREATE_HOUSES_TABLE = "CREATE TABLE " + CommunicatorContract.HouseEntry.TABLE_NAME + " (" +

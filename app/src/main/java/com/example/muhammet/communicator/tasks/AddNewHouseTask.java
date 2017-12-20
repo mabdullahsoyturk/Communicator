@@ -53,6 +53,7 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
 
             JSONObject jsonParam = new JSONObject();
             jsonParam.put("name", house_name);
+            jsonParam.put("facebook_id", facebook_id);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());

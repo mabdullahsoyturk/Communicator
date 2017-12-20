@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.muhammet.communicator.DeleteObserver;
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
@@ -24,16 +25,18 @@ import java.net.URL;
 
 public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
 
+    DeleteObserver observer;
     Context mContext;
     BuyMeAdapter toBuyAdapter;
     String facebook_id;
     String house_id;
     
-    public DeleteAllBuyMesTask(Context context, BuyMeAdapter buyMeAdapter, String facebook_id, String house_id) throws MalformedURLException {
+    public DeleteAllBuyMesTask(Context context, BuyMeAdapter buyMeAdapter, String facebook_id, String house_id, DeleteObserver observer) throws MalformedURLException {
         mContext = context;
         toBuyAdapter = buyMeAdapter;
         this.facebook_id = facebook_id;
         this.house_id = house_id;
+        this.observer = observer;
     }
 
     @Override
@@ -54,8 +57,7 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer     = new StringBuffer();
 
-            ContentResolver communicatorContentResolver = mContext.getContentResolver();
-            communicatorContentResolver.delete(
+            mContext.getContentResolver().delete(
                     CommunicatorContract.BuyMeEntry.CONTENT_URI,
                     null,
                     null);
@@ -91,5 +93,7 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+        toBuyAdapter.swapCursor(null);
+        observer.isFinished(s);
     }
 }

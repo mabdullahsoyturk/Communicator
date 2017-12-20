@@ -1,8 +1,17 @@
 package com.example.muhammet.communicator.tasks;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.muhammet.communicator.activities.BaseActivity;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +24,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Muhammet on 26.11.2017.
@@ -23,21 +35,17 @@ import java.net.URL;
 public class AddSpendingTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
-    private int id;
     private String name;
     private String cost;
     private String facebook_id;
     private String house_id;
-    private String created_time;
 
-    public AddSpendingTask(Context context, int id, String name, String cost, String facebook_id, String house_id, String created_time) throws MalformedURLException {
+    public AddSpendingTask(Context context, String name, String cost, String facebook_id, String house_id) throws MalformedURLException {
         mContext = context;
-        this.id = id;
         this.name = name;
         this.cost = cost;
         this.facebook_id = facebook_id;
         this.house_id = house_id;
-        this.created_time = created_time;
     }
 
     @Override
@@ -56,13 +64,7 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("id", id);
-            jsonParam.put("name", name);
-            jsonParam.put("cost", cost);
-            jsonParam.put("facebook_id", facebook_id);
-            jsonParam.put("house_id", house_id);
-            jsonParam.put("created_time", created_time);
+            JSONObject jsonParam = addSpendingToSqlite();
 
             Log.i("JSON", jsonParam.toString());
 
@@ -88,7 +90,7 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
 
             Log.i("RESULT", communicatorJsonStr);
         } catch (IOException e) {
-            Log.e("MainActivity", "Error ", e);
+            Log.e("SpendingTask", "Error ", e);
         } catch (JSONException e) {
             e.printStackTrace();
         } finally{
@@ -108,8 +110,58 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
         return success;
     }
 
+    public JSONObject addSpendingToSqlite() throws JSONException{
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        String formattedDate = dateFormat.format(date);
+        Log.i("currentDate", formattedDate);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", name);
+        contentValues.put("cost", cost);
+        contentValues.put("facebook_id", facebook_id);
+        contentValues.put("house_id", house_id);
+        contentValues.put("created_time", formattedDate);
+
+        Uri uri = mContext.getContentResolver().insert(CommunicatorContract.SpendingEntry.CONTENT_URI, contentValues);
+
+        long spendingId;
+
+        Cursor cursor = mContext.getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            int idIndex = cursor.getColumnIndex(CommunicatorContract.SpendingEntry._ID);
+            spendingId = cursor.getLong(idIndex);
+        }else{
+            spendingId = ContentUris.parseId(uri);
+        }
+
+        cursor.close();
+
+        Log.i("AddSpendingTask", house_id);
+
+        JSONObject jsonParam = new JSONObject();
+        jsonParam.put("id", spendingId);
+        jsonParam.put("name", name);
+        jsonParam.put("cost", cost);
+        jsonParam.put("facebook_id", facebook_id);
+        jsonParam.put("house_id", house_id);
+        jsonParam.put("created_time", formattedDate);
+
+        return jsonParam;
+    }
+
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+
+        Intent intent = new Intent(mContext, BaseActivity.class);
+        intent.putExtra("facebook_id", facebook_id);
+        intent.putExtra("house_id", house_id);
+        mContext.startActivity(intent);
     }
 }

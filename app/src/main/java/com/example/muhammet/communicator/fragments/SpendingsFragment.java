@@ -62,6 +62,7 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
         getActivity().getSupportLoaderManager().initLoader(SPENDING_LOADER_ID, null, this);
 
         CommunicatorSyncUtils.startImmediateSyncForSpendings(mContext,facebook_id, house_id);
+        restartLoader();
 
         return view;
     }
@@ -74,12 +75,13 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
     public void onResume() {
         super.onResume();
 
+        CommunicatorSyncUtils.startImmediateSyncForSpendings(mContext,facebook_id, house_id);
         getActivity().getSupportLoaderManager().restartLoader(SPENDING_LOADER_ID, null, this);
 
     }
 
     @Override
-    public void onListItemClick(int clickedItemIndex) {
+    public void onListItemClick(long clickedItemIndex) {
 
     }
 

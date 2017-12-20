@@ -2,8 +2,13 @@ package com.example.muhammet.communicator.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,23 +20,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.muhammet.communicator.activities.BaseActivity;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.MemberProfileActivity;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
-import com.example.muhammet.communicator.models.Member;
 import com.example.muhammet.communicator.tasks.FetchHouseTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
 
-public class HomeFragment extends Fragment implements ListItemClickListener {
+public class HomeFragment extends Fragment implements ListItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    Member[] members = {new Member(R.drawable.icon_profile_empty, "Muhammet", 0.00),
-            new Member(R.drawable.icon_profile_empty, "Yakup", 0.00),
-            new Member(R.drawable.icon_profile_empty, "Burhan", 0.00),
-            new Member(R.drawable.icon_profile_empty, "Mertcan", 0.00 )
-    };
+    private static final String TAG = BaseActivity.class.getSimpleName();
+    private static final int MEMBER_LOADER_ID = 2;
+
     MemberAdapter memberAdapter;
     RecyclerView rv_members;
     private DividerItemDecoration mDividerItemDecoration;
@@ -62,12 +66,12 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
         mDividerItemDecoration = new DividerItemDecoration(rv_members.getContext(), layoutManager.getOrientation());
         rv_members.addItemDecoration(mDividerItemDecoration);
 
-        memberAdapter = new MemberAdapter(members, this);
+        memberAdapter = new MemberAdapter(mContext, this);
         rv_members.setAdapter(memberAdapter);
 
         try {
             Log.i("home", "" + facebook_id);
-            FetchHouseTask fetchHouseTask = new FetchHouseTask(mContext, house_name, memberAdapter, facebook_id);
+            FetchHouseTask fetchHouseTask = new FetchHouseTask(mContext, house_name, facebook_id);
             fetchHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses");
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -92,19 +96,82 @@ public class HomeFragment extends Fragment implements ListItemClickListener {
             }
         });
 
+        getActivity().getSupportLoaderManager().initLoader(MEMBER_LOADER_ID, null, this);
+
+
+
+        restartLoader();
+
         return view;
     }
 
     @Override
-    public void onListItemClick(int clickedItemIndex) {
+    public void onListItemClick(long clickedItemIndex) {
         Intent intent = new Intent(getActivity(), MemberProfileActivity.class);
 
-        String member_name = members[clickedItemIndex].getFirstName();
-        double member_debt = members[clickedItemIndex].getBalance();
+        //String member_name = members[(int)clickedItemIndex].getFirstName();
+        //double member_debt = members[(int)clickedItemIndex].getBalance();
 
-        intent.putExtra("member_name", member_name);
-        intent.putExtra("member_debt", member_debt);
+        //intent.putExtra("member_name", member_name);
+        //intent.putExtra("member_debt", member_debt);
 
         startActivity(intent);
+    }
+
+    public void restartLoader(){
+        getActivity().getSupportLoaderManager().restartLoader(MEMBER_LOADER_ID, null, this);
+        memberAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Cursor>(getContext()) {
+
+            Cursor mTaskData = null;
+
+            @Override
+            protected void onStartLoading() {
+                if (mTaskData != null) {
+                    // Delivers any previously loaded data immediately
+                    deliverResult(mTaskData);
+                } else {
+                    // Force a new load
+                    forceLoad();
+                }
+            }
+
+            @Nullable
+            @Override
+            public Cursor loadInBackground() {
+
+                try {
+                    return getActivity().getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
+                            null,
+                            "house_id=?",
+                            new String[]{house_id},
+                            null);
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to asynchronously load data.");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            public void deliverResult(Cursor data) {
+                mTaskData = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        memberAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        memberAdapter.swapCursor(null);
     }
 }

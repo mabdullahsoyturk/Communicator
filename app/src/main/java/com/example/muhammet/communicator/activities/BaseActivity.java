@@ -279,6 +279,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     public void sendToAddSpending(View view){
         Intent startAddSpendingActivity = new Intent(this,AddSpendingActivity.class);
+        Log.i("Base'de fid", facebook_id);
         startAddSpendingActivity.putExtra("facebook_id", facebook_id);
         startAddSpendingActivity.putExtra("house_id", house_id);
         startActivity(startAddSpendingActivity);

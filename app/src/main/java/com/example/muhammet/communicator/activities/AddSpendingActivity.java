@@ -40,6 +40,9 @@ public class AddSpendingActivity extends AppCompatActivity {
         facebook_id = intent.getStringExtra("facebook_id");
         house_id = intent.getStringExtra("house_id");
 
+        Log.i("Spending'de fid", facebook_id);
+        Log.i("Spending'de hid", house_id);
+
         et_add_spending_name = findViewById(R.id.et_add_spending_name);
         et_add_spending_cost = findViewById(R.id.et_add_spending_cost);
     }
@@ -48,33 +51,7 @@ public class AddSpendingActivity extends AppCompatActivity {
         String name = et_add_spending_name.getText().toString();
         String cost = et_add_spending_cost.getText().toString();
 
-        java.sql.Date currentDate = new java.sql.Date(System.currentTimeMillis());
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("cost", cost);
-        contentValues.put("facebook_id", facebook_id);
-        contentValues.put("house_id", house_id);
-        contentValues.put("created_time", currentDate.toString());
-
-        Uri uri = getContentResolver().insert(CommunicatorContract.SpendingEntry.CONTENT_URI, contentValues);
-
-        Cursor cursor = getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-
-        cursor.moveToPosition(0);
-
-        int idIndex = cursor.getColumnIndex(CommunicatorContract.SpendingEntry._ID);
-        final int id = cursor.getInt(idIndex);
-
-        if(uri != null){
-            Toast.makeText(getBaseContext(), "Spending has been added!", Toast.LENGTH_LONG).show();
-        }
-
-        AddSpendingTask addSpendingTask = new AddSpendingTask(this,id, name,cost, facebook_id, house_id, currentDate.toString());
+        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,cost, facebook_id, house_id);
         addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/spendings");
 
         Intent intent = new Intent(this, BaseActivity.class);

@@ -18,8 +18,6 @@ public class CommunicatorContract {
     public static final String PATH_HOUSES = "houses";
     public static final String PATH_SPENDINGS = "spendings";
     public static final String PATH_HOUSE_MEMBERS = "house_members";
-    public static final String PATH_HOUSE_SPENDINGS = "house_spendings";
-    public static final String PATH_HOUSE_BUY_MES = "house_buy_mes";
 
     public static final class UserEntry implements BaseColumns{
 
@@ -29,11 +27,11 @@ public class CommunicatorContract {
         public static final String TABLE_NAME           = "users";
         public static final String COLUMN_FIRST_NAME    = "first_name";
         public static final String COLUMN_LAST_NAME     = "last_name";
-        public static final String COLUMN_EMAIL         = "email";
         public static final String COLUMN_BALANCE       = "balance";
         public static final String COLUMN_PHOTO_URL     = "photo_url";
         public static final String COLUMN_STATUS        = "status";
         public static final String COLUMN_FACEBOOK_ID   = "facebook_id";
+        public static final String COLUMN_HOUSE_ID      = "house_id";
         public static final String COLUMN_CREATED_TIME  = "created_time";
 
     }

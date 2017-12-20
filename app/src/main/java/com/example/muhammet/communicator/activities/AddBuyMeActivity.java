@@ -50,45 +50,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
             return;
         }
 
-        Date currentDate = new Date(System.currentTimeMillis());
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("description", description);
-        contentValues.put("facebook_id", facebook_id);
-        contentValues.put("house_id", house_id);
-        contentValues.put("created_time", currentDate.toString());
-
-        Uri uri = getContentResolver().insert(CommunicatorContract.BuyMeEntry.CONTENT_URI, contentValues);
-
-        long buyMeId;
-
-        Cursor cursor = getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-
-        if(cursor.moveToFirst()){
-            int buyMeIndex = cursor.getColumnIndex(CommunicatorContract.BuyMeEntry._ID);
-            buyMeId = cursor.getInt(buyMeIndex);
-        }else{
-            buyMeId = ContentUris.parseId(uri);
-        }
-
-        if(uri != null){
-            Toast.makeText(getBaseContext(), "Buy me has been added!", Toast.LENGTH_LONG).show();
-        }
-
-        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this, buyMeId, name,description, facebook_id, house_id, currentDate.toString());
+        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this,name,description, facebook_id, house_id);
         addBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes");
-
-        cursor.close();
-
-        Intent intent = new Intent(this,BaseActivity.class);
-        intent.putExtra("facebook_id", facebook_id);
-        intent.putExtra("house_id", house_id);
-        startActivity(intent);
-
     }
 }

@@ -33,18 +33,20 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
         private TextView spendingDate;
         private TextView spendingShare;
         private ImageView spendingIcon;
-        private Button button;
+        private Button spendingEdit;
+        private Button spendingDelete;
         private long id;
 
         public SpendingAdapterViewHolder(View itemView, ListItemClickListener listener) {
             super(itemView);
             mListener = listener;
 
-            spendingName = itemView.findViewById(R.id.spending_name);
-            spendingDate = itemView.findViewById(R.id.spending_date);
-            spendingShare = itemView.findViewById(R.id.spending_share);
-            spendingIcon = itemView.findViewById(R.id.spending_icon);
-            button = itemView.findViewById(R.id.spending_button);
+            spendingName    = itemView.findViewById(R.id.spending_name);
+            spendingDate    = itemView.findViewById(R.id.spending_date);
+            spendingShare   = itemView.findViewById(R.id.spending_share);
+            spendingIcon    = itemView.findViewById(R.id.spending_icon);
+            spendingEdit    = itemView.findViewById(R.id.spending_edit);
+            spendingDelete  = itemView.findViewById(R.id.spending_delete);
         }
 
         public void bind(long id){

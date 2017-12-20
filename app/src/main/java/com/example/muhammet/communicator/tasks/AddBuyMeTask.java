@@ -1,8 +1,17 @@
 package com.example.muhammet.communicator.tasks;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.muhammet.communicator.activities.BaseActivity;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,25 +24,24 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class AddBuyMeTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
-    private long id;
     private String name;
     private String description;
     private String facebook_id;
     private String house_id;
-    private String created_time;
-    
-    public AddBuyMeTask(Context context, long id, String name, String description, String facebook_id, String house_id, String created_time) throws MalformedURLException {
+
+    public AddBuyMeTask(Context context, String name, String description, String facebook_id, String house_id) throws MalformedURLException {
         mContext = context;
-        this.id = id;
         this.name = name;
         this.description = description;
         this.facebook_id = facebook_id;
         this.house_id = house_id;
-        this.created_time = created_time;
     }
 
     @Override
@@ -52,13 +60,7 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("id", id);
-            jsonParam.put("name", name);
-            jsonParam.put("description", description);
-            jsonParam.put("facebook_id", facebook_id);
-            jsonParam.put("house_id", house_id);
-            jsonParam.put("created_time", created_time);
+            JSONObject jsonParam = addBuyMeToSqlite();
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
@@ -102,8 +104,56 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
         return success;
     }
 
+
+    public JSONObject addBuyMeToSqlite() throws JSONException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        java.util.Date date = new java.util.Date();
+        String formattedDate = dateFormat.format(date);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", name);
+        contentValues.put("description", description);
+        contentValues.put("facebook_id", facebook_id);
+        contentValues.put("house_id", house_id);
+        contentValues.put("created_time", formattedDate);
+
+        Uri uri = mContext.getContentResolver().insert(CommunicatorContract.BuyMeEntry.CONTENT_URI, contentValues);
+
+        long buyMeId;
+
+        Cursor cursor = mContext.getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            int buyMeIndex = cursor.getColumnIndex(CommunicatorContract.BuyMeEntry._ID);
+            buyMeId = cursor.getLong(buyMeIndex);
+        }else{
+            buyMeId = ContentUris.parseId(uri);
+        }
+
+        cursor.close();
+
+        JSONObject jsonParam = new JSONObject();
+        jsonParam.put("id", buyMeId);
+        jsonParam.put("name", name);
+        jsonParam.put("description", description);
+        jsonParam.put("facebook_id", facebook_id);
+        jsonParam.put("house_id", house_id);
+        jsonParam.put("created_time", formattedDate);
+
+        return jsonParam;
+    }
+
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+
+        Intent intent = new Intent(mContext,BaseActivity.class);
+        intent.putExtra("facebook_id", facebook_id);
+        intent.putExtra("house_id", house_id);
+        mContext.startActivity(intent);
     }
 }

@@ -79,6 +79,10 @@
             android:name=".sync.SpendingSyncIntentService"
             android:exported="false" />
 
+        <service
+            android:name=".sync.MemberSyncIntentService"
+            android:exported="false" />
+
         <receiver android:name=".NetworkMonitor">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>

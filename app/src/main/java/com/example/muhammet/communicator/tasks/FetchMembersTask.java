@@ -66,7 +66,5 @@ public class FetchMembersTask extends AsyncTask<String, Void, Member[]> {
     @Override
     protected void onPostExecute(Member[] members) {
         super.onPostExecute(members);
-
-        memberAdapter.setMemberData(members);
     }
 }

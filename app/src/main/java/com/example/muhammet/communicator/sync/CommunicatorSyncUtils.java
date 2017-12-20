@@ -20,4 +20,11 @@ public class CommunicatorSyncUtils {
         context.startService(intentToSyncImmediately);
     }
 
+    public static void startImmediateSyncForMembers(final Context context, String facebook_id, String house_id){
+        Intent intentToSyncImmediately = new Intent(context, MemberSyncIntentService.class);
+        intentToSyncImmediately.putExtra("facebook_id", facebook_id);
+        intentToSyncImmediately.putExtra("house_id", house_id);
+        context.startService(intentToSyncImmediately);
+    }
+
 }
