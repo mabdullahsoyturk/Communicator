@@ -12,6 +12,8 @@ public class MemberProfileActivity extends AppCompatActivity {
     TextView memberProfileName;
     TextView memberProfileDebt;
 
+    private long id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,11 +25,9 @@ public class MemberProfileActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        String member_name = intent.getStringExtra("member_name");
-        String member_debt = intent.getStringExtra("member_debt");
+        id = intent.getLongExtra("id", 0);
 
-        memberProfileName.setText(member_name);
-        memberProfileDebt.setText(member_debt);
+
 
     }
 

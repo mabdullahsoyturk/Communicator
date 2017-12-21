@@ -23,11 +23,17 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
     private String facebook_id;
+    private String first_name;
+    private String last_name;
+    private String photo_url;
     private String house_id;
     
-    public CheckHousesTask(Context context, String facebook_id) throws MalformedURLException {
+    public CheckHousesTask(Context context, String facebook_id, String first_name, String last_name, String photo_url) throws MalformedURLException {
         mContext = context;
         this.facebook_id = facebook_id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.photo_url = photo_url;
     }
 
     @Override

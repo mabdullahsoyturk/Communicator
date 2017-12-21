@@ -159,10 +159,10 @@ public class NetworkUtilities {
         return spendingContentValues;
     }
 
-    public static ContentValues[] getMemberContentValuesFromJson(Context context, String buyMeStr)
+    public static ContentValues[] getMemberContentValuesFromJson(Context context, String memberStr)
             throws JSONException {
 
-        JSONObject memberJson = new JSONObject(buyMeStr);
+        JSONObject memberJson = new JSONObject(memberStr);
 
         JSONArray jsonMemberArray = memberJson.getJSONArray("data");
 
@@ -170,7 +170,6 @@ public class NetworkUtilities {
 
         for (int i = 0; i < jsonMemberArray.length(); i++) {
 
-            int _id;
             String first_name;
             String last_name;
             double balance;
@@ -182,18 +181,16 @@ public class NetworkUtilities {
 
             JSONObject item = jsonMemberArray.getJSONObject(i);
 
-            _id = item.getInt("id");
             first_name = item.getString("first_name");
             last_name = item.getString("last_name");
             balance = item.getDouble("balance");
             photo_url = item.getString("photo_url");
             status = item.getInt("status");
-            house_id = item.getString("house_id");
+            house_id = item.getString("_id");
             facebook_id = item.getString("facebook_id");
             created_time = item.getString("created_time");
 
             ContentValues memberValues = new ContentValues();
-            memberValues.put(CommunicatorContract.UserEntry._ID, _id);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME, first_name);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_LAST_NAME, last_name);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_BALANCE, balance);

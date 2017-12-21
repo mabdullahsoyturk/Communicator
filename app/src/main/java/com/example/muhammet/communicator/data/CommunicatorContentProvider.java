@@ -109,6 +109,19 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null
                 );
                 break;
+
+            case HOUSES_WITH_ID:
+                // Get the task ID from the URI path
+                String houseId = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+                retCursor = db.query(CommunicatorContract.HouseEntry.TABLE_NAME,
+                        null,
+                        "_id=?",
+                        new String[]{houseId},
+                        null,
+                        null,
+                        null);
+                break;
             case SPENDINGS:
                 retCursor = db.query(CommunicatorContract.SpendingEntry.TABLE_NAME,
                         null,
@@ -310,6 +323,9 @@ public class CommunicatorContentProvider extends ContentProvider{
 
             case SPENDINGS:
                 tasksDeleted = db.delete(CommunicatorContract.SpendingEntry.TABLE_NAME, null, null);
+                break;
+            case USERS:
+                tasksDeleted = db.delete(CommunicatorContract.UserEntry.TABLE_NAME, null,null);
                 break;
 
             default:

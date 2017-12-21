@@ -8,7 +8,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "communicator2.db";
 
-    private static final int VERSION = 5;
+    private static final int VERSION = 7;
 
     public CommunicatorDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -18,6 +18,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         final String CREATE_USERS_TABLE = "CREATE TABLE " + CommunicatorContract.UserEntry.TABLE_NAME + " (" +
+                CommunicatorContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CommunicatorContract.UserEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_BALANCE + " REAL, " +

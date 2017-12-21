@@ -110,7 +110,7 @@ public class HouseCheckActivity extends AppCompatActivity{
 
     private void checkIfInvitationCodeValid(String invitation_code){
         try {
-            CheckHousesTask checkHousesTask = new CheckHousesTask(mContext, facebook_id);
+            CheckHousesTask checkHousesTask = new CheckHousesTask(mContext, facebook_id, first_name, last_name, photo_url);
             checkHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + invitation_code);
         } catch (MalformedURLException e) {e.printStackTrace();}
     }

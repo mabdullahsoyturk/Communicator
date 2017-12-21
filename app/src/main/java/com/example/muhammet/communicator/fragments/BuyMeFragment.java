@@ -19,7 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.muhammet.communicator.DeleteObserver;
+import com.example.muhammet.communicator.AsyncTaskFinishedObserver;
+import com.example.muhammet.communicator.listeners.BuyMeSpendingItemClickListener;
 import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
@@ -34,7 +35,9 @@ import java.net.MalformedURLException;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BuyMeFragment extends Fragment implements ListItemClickListener, LoaderManager.LoaderCallbacks<Cursor>{
+public class BuyMeFragment extends Fragment implements
+        LoaderManager.LoaderCallbacks<Cursor>,
+        BuyMeSpendingItemClickListener{
 
     private static final String TAG = BaseActivity.class.getSimpleName();
     private static final int BUY_ME_LOADER_ID = 0;
@@ -65,7 +68,7 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
             @Override
             public void onClick(View view) {
                 try {
-                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id, house_id, new DeleteObserver() {
+                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id, house_id, new AsyncTaskFinishedObserver() {
                         @Override
                         public void isFinished(String s) {
                             restartLoader();
@@ -129,11 +132,6 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
     }
 
     @Override
-    public void onListItemClick(long clickedItemIndex) {
-        
-    }
-
-    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new AsyncTaskLoader<Cursor>(getContext()) {
 
@@ -185,4 +183,18 @@ public class BuyMeFragment extends Fragment implements ListItemClickListener, Lo
         buyMeAdapter.swapCursor(null);
     }
 
+    @Override
+    public void onItemClick(long id) {
+
+    }
+
+    @Override
+    public void onDeleteClicked(long id) {
+
+    }
+
+    @Override
+    public void onEditClicked(long id) {
+
+    }
 }

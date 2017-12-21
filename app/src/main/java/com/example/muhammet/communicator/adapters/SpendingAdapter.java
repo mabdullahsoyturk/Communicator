@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.muhammet.communicator.listeners.ListItemClickListener;
+import com.example.muhammet.communicator.listeners.BuyMeSpendingItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 
@@ -19,16 +19,16 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
     Context mContext;
     Cursor mCursor;
     
-    private ListItemClickListener mOnClickListener;
+    private BuyMeSpendingItemClickListener mOnClickListener;
 
-    public SpendingAdapter(Context context, ListItemClickListener listener){
+    public SpendingAdapter(Context context, BuyMeSpendingItemClickListener listener){
         mOnClickListener = listener;
         mContext = context;
     }
 
     class SpendingAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private ListItemClickListener mListener;
+        private BuyMeSpendingItemClickListener mListener;
         private TextView spendingName;
         private TextView spendingDate;
         private TextView spendingShare;
@@ -37,7 +37,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
         private Button spendingDelete;
         private long id;
 
-        public SpendingAdapterViewHolder(View itemView, ListItemClickListener listener) {
+        public SpendingAdapterViewHolder(View itemView, BuyMeSpendingItemClickListener listener) {
             super(itemView);
             mListener = listener;
 
@@ -55,8 +55,8 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
 
         @Override
         public void onClick(View view) {
-            int clickedPosition = getAdapterPosition();
-            mListener.onListItemClick(clickedPosition);
+            mListener.onEditClicked(id);
+            mListener.onDeleteClicked(id);
         }
     }
 

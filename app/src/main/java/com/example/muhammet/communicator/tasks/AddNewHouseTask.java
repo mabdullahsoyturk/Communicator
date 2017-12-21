@@ -1,11 +1,16 @@
 package com.example.muhammet.communicator.tasks;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +23,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Muhammet on 29.11.2017.
@@ -51,9 +58,7 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("name", house_name);
-            jsonParam.put("facebook_id", facebook_id);
+            JSONObject jsonParam = addMembersToSqlite();
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
@@ -87,6 +92,42 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
         }
 
         return resultJsonStr;
+    }
+
+    public JSONObject addMembersToSqlite() throws JSONException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        java.util.Date date = new java.util.Date();
+        String formattedDate = dateFormat.format(date);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", house_name);
+        contentValues.put("created_time", formattedDate);
+
+        Uri uri = mContext.getContentResolver().insert(CommunicatorContract.HouseEntry.CONTENT_URI, contentValues);
+
+        long houseId;
+
+        Cursor cursor = mContext.getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            int buyMeIndex = cursor.getColumnIndex(CommunicatorContract.HouseEntry._ID);
+            houseId = cursor.getLong(buyMeIndex);
+        }else{
+            houseId = ContentUris.parseId(uri);
+        }
+
+        cursor.close();
+
+        JSONObject jsonParam = new JSONObject();
+        jsonParam.put("id",houseId);
+        jsonParam.put("name", house_name);
+        jsonParam.put("created_time", formattedDate);
+
+        return jsonParam;
     }
 
     @Override

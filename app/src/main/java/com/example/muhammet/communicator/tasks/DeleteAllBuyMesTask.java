@@ -1,21 +1,14 @@
 package com.example.muhammet.communicator.tasks;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.muhammet.communicator.DeleteObserver;
+import com.example.muhammet.communicator.AsyncTaskFinishedObserver;
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.utilities.NetworkUtilities;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,13 +18,13 @@ import java.net.URL;
 
 public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
 
-    DeleteObserver observer;
+    AsyncTaskFinishedObserver observer;
     Context mContext;
     BuyMeAdapter toBuyAdapter;
     String facebook_id;
     String house_id;
     
-    public DeleteAllBuyMesTask(Context context, BuyMeAdapter buyMeAdapter, String facebook_id, String house_id, DeleteObserver observer) throws MalformedURLException {
+    public DeleteAllBuyMesTask(Context context, BuyMeAdapter buyMeAdapter, String facebook_id, String house_id, AsyncTaskFinishedObserver observer) throws MalformedURLException {
         mContext = context;
         toBuyAdapter = buyMeAdapter;
         this.facebook_id = facebook_id;

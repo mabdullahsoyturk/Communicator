@@ -92,6 +92,8 @@ public class CommunicatorSyncTask {
 
     synchronized public static void syncMembers(Context context, String facebook_id, String house_id) {
 
+        Log.i("HouseOnSync", house_id);
+
         try {
             String memberUrl = NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/members";
 

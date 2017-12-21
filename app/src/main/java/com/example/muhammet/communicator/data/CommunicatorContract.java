@@ -1,7 +1,10 @@
 package com.example.muhammet.communicator.data;
 
+import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
+
+import static com.example.muhammet.communicator.data.CommunicatorContract.UserEntry.CONTENT_URI;
 
 public class CommunicatorContract {
 
@@ -18,6 +21,18 @@ public class CommunicatorContract {
     public static final String PATH_HOUSES = "houses";
     public static final String PATH_SPENDINGS = "spendings";
     public static final String PATH_HOUSE_MEMBERS = "house_members";
+
+    public static Uri buildMemberUri(long id) {
+        return ContentUris.withAppendedId(UserEntry.CONTENT_URI, id);
+    }
+
+    public static Uri buildSpendingUri(long id){
+        return ContentUris.withAppendedId(SpendingEntry.CONTENT_URI, id);
+    }
+
+    public static Uri buildBuyMeUri(long id){
+        return ContentUris.withAppendedId(BuyMeEntry.CONTENT_URI, id);
+    }
 
     public static final class UserEntry implements BaseColumns{
 

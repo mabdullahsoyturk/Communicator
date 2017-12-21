@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.muhammet.communicator.listeners.BuyMeSpendingItemClickListener;
 import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
@@ -21,23 +22,23 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
 
     Context mContext;
     Cursor mCursor;
-    private ListItemClickListener mOnClickListener;
+    private BuyMeSpendingItemClickListener mOnClickListener;
     
-    public BuyMeAdapter(Context context, ListItemClickListener listener){
+    public BuyMeAdapter(Context context, BuyMeSpendingItemClickListener listener){
         mContext = context;
         mOnClickListener = listener;
     }
 
     class BuyMeAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private ListItemClickListener mListener;
+        private BuyMeSpendingItemClickListener mListener;
         private TextView buyMeName;
         private TextView buyMeDescription;
         private Button editButton;
         private Button deleteButton;
         private long id;
 
-        public BuyMeAdapterViewHolder(View itemView, ListItemClickListener listener) {
+        public BuyMeAdapterViewHolder(View itemView, BuyMeSpendingItemClickListener listener) {
             super(itemView);
             mListener = listener;
 
@@ -55,7 +56,8 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
 
         @Override
         public void onClick(View view) {
-            mListener.onListItemClick(id);
+            mListener.onDeleteClicked(id);
+            mListener.onEditClicked(id);
         }
     }
 

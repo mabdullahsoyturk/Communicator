@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.example.muhammet.communicator.listeners.BuyMeSpendingItemClickListener;
 import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
@@ -24,7 +25,9 @@ import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 
-public class SpendingsFragment extends Fragment implements ListItemClickListener,LoaderManager.LoaderCallbacks<Cursor> {
+public class SpendingsFragment extends Fragment implements
+        BuyMeSpendingItemClickListener
+        ,LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = BaseActivity.class.getSimpleName();
     private static final int SPENDING_LOADER_ID = 1;
@@ -81,11 +84,6 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
     }
 
     @Override
-    public void onListItemClick(long clickedItemIndex) {
-
-    }
-
-    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new AsyncTaskLoader<Cursor>(getContext()) {
 
@@ -135,5 +133,20 @@ public class SpendingsFragment extends Fragment implements ListItemClickListener
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         spendingAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onItemClick(long id) {
+
+    }
+
+    @Override
+    public void onDeleteClicked(long id) {
+
+    }
+
+    @Override
+    public void onEditClicked(long id) {
+
     }
 }

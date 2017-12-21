@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,19 +76,18 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
         int idIndex          = mCursor.getColumnIndex(CommunicatorContract.UserEntry._ID);
         int firstNameIndex   = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME);
         int lastNameIndex    = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_LAST_NAME);
-        int emailIndex       = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_EMAIL);
         int balanceIndex     = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_BALANCE);
         int photoIndex       = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_PHOTO_URL);
         int statusIndex      = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_STATUS);
         int createdTımeIndex = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME);
         int facebookIdIndex  = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID);
 
+        Log.i("Position", "" + position);
         mCursor.moveToPosition(position);
 
         long id = mCursor.getLong(idIndex);
         String firstName = mCursor.getString(firstNameIndex);
         String lastName = mCursor.getString(lastNameIndex);
-        String emailName = mCursor.getString(emailIndex);
         double balance = mCursor.getDouble(balanceIndex);
         String photo   = mCursor.getString(photoIndex);
         int status     = mCursor.getInt(statusIndex);
