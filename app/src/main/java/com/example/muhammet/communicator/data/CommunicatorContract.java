@@ -4,8 +4,6 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import static com.example.muhammet.communicator.data.CommunicatorContract.UserEntry.CONTENT_URI;
-
 public class CommunicatorContract {
 
     public static final String UI_UPDATE_BROADCAST = "com.example.muhammet.communicator.uiupdatebroadcast";
@@ -57,6 +55,7 @@ public class CommunicatorContract {
 
         public static final String TABLE_NAME = "houses";
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_FACEBOOK_ID = "facebook_id";
         public static final String COLUMN_CREATED_TIME = "created_time";
     }
 

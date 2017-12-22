@@ -26,10 +26,6 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-/**
- * Created by Muhammet on 29.11.2017.
- */
-
 public class AddNewHouseTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
@@ -101,6 +97,7 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", house_name);
+        contentValues.put("facebook_id", facebook_id);
         contentValues.put("created_time", formattedDate);
 
         Uri uri = mContext.getContentResolver().insert(CommunicatorContract.HouseEntry.CONTENT_URI, contentValues);
@@ -125,6 +122,7 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
         JSONObject jsonParam = new JSONObject();
         jsonParam.put("id",houseId);
         jsonParam.put("name", house_name);
+        jsonParam.put("facebook_id", facebook_id);
         jsonParam.put("created_time", formattedDate);
 
         return jsonParam;

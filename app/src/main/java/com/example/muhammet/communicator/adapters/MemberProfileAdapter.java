@@ -1,59 +1,42 @@
 package com.example.muhammet.communicator.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
-import com.example.muhammet.communicator.models.Member;
-
-import java.util.List;
-
-/**
- * Created by Muhammet on 13.11.2017.
- */
+import com.example.muhammet.communicator.data.CommunicatorContract;
 
 public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdapter.MemberProfileAdapterViewHolder> {
 
-    List<Member> memberProfiles;
-    private ListItemClickListener mOnClickListener;
+    Context mContext;
+    Cursor mCursor;
 
-    public MemberProfileAdapter(List<Member> memberProfiles, ListItemClickListener listener){
-        this.memberProfiles = memberProfiles;
-        mOnClickListener = listener;
+    public MemberProfileAdapter(Context context){
+        mContext         = context;
     }
 
-    class MemberProfileAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class MemberProfileAdapterViewHolder extends RecyclerView.ViewHolder{
 
-        private ListItemClickListener mListener;
-        private ImageView member_photo;
-        private TextView member_name;
-        private TextView member_debt;
+        private TextView spendingName;
+        private TextView spendingDate;
+        private TextView spendingShare;
+        private long id;
 
-        public MemberProfileAdapterViewHolder(View itemView, ListItemClickListener listener) {
+        public MemberProfileAdapterViewHolder(View itemView) {
             super(itemView);
 
-            member_photo = itemView.findViewById(R.id.iv_member_photo);
-            member_name = itemView.findViewById(R.id.tv_member_name);
-            member_debt = itemView.findViewById(R.id.tv_member_debt);
-            mListener = listener;
+            spendingName = itemView.findViewById(R.id.member_spending_name);
+            spendingDate = itemView.findViewById(R.id.member_spending_date);
+            spendingShare = itemView.findViewById(R.id.member_spending_share);
         }
 
-        public void bind(Member member){
-            member_photo.setImageResource(member.getIcon_id());
-            member_name.setText(member.getFirstName());
-            member_debt.setText(String.valueOf(member.getBalance()));
-        }
-
-        @Override
-        public void onClick(View view) {
-            int clickedPosition = getAdapterPosition();
-            mListener.onListItemClick(clickedPosition);
+        public void bind(long id){
+            this.id = id;
         }
     }
 
@@ -65,23 +48,54 @@ public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdap
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
-        return new MemberProfileAdapterViewHolder(view, mOnClickListener);
+        return new MemberProfileAdapterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MemberProfileAdapterViewHolder holder, int position) {
-        Member member = memberProfiles.get(position);
-        holder.bind(member);
+        int idIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry._ID);
+        int nameIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_NAME);
+        int costIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_COST);
+        int facebookIdIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_FACEBOOK_ID);
+        int houseIdIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID);
+        int createdTimeIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_CREATED_TIME);
+
+        mCursor.moveToPosition(position);
+
+        final long id = mCursor.getLong(idIndex);
+        String name = mCursor.getString(nameIndex);
+        double cost = mCursor.getDouble(costIndex);
+        int facebookId = mCursor.getInt(facebookIdIndex);
+        int houseId = mCursor.getInt(houseIdIndex);
+        String createdTime = mCursor.getString(createdTimeIndex);
+
+        holder.bind(id);
+        holder.itemView.setTag(id);
+        holder.spendingName.setText(name);
+        holder.spendingShare.setText(String.valueOf(cost));
+        holder.spendingDate.setText(createdTime);
     }
 
     @Override
     public int getItemCount() {
-        return memberProfiles.size();
+        if (mCursor == null) {
+            return 0;
+        }
+        return mCursor.getCount();
     }
 
-    public void setMemberData(List<Member> memberData) {
-        memberProfiles = memberData;
-        notifyDataSetChanged();
+    public Cursor swapCursor(Cursor c) {
+        // check if this cursor is the same as the previous cursor (mCursor)
+        if (mCursor == c) {
+            return null; // bc nothing has changed
+        }
+        Cursor temp = mCursor;
+        this.mCursor = c; // new cursor value assigned
+
+        if (c != null) {
+            this.notifyDataSetChanged();
+        }
+        return temp;
     }
 
 }

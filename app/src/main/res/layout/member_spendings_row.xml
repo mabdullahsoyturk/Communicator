@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/list_item_selector">
+
+    <ImageView android:id="@+id/member_spending_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_account_box_black_24dp" />
+
+    <TextView android:id="@+id/member_spending_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="100dp"
+        android:text="@string/spending_row_name"
+        android:textStyle="bold"
+        android:layout_toRightOf="@id/member_spending_icon"/>
+
+    <TextView android:id="@+id/member_spending_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/spending_row_date"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView android:id="@+id/member_spending_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/spending_row_your_share"
+        android:layout_below="@id/member_spending_name"
+        android:layout_toRightOf="@id/member_spending_icon"/>
+
+
+</RelativeLayout>

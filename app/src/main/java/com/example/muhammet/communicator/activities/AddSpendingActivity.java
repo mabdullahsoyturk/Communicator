@@ -1,26 +1,17 @@
 package com.example.muhammet.communicator.activities;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.muhammet.communicator.R;
-import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.models.Spending;
 import com.example.muhammet.communicator.tasks.AddSpendingTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class AddSpendingActivity extends AppCompatActivity {
 

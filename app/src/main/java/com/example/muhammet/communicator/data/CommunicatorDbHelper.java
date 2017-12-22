@@ -31,6 +31,9 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
         final String CREATE_HOUSES_TABLE = "CREATE TABLE " + CommunicatorContract.HouseEntry.TABLE_NAME + " (" +
                 CommunicatorContract.HouseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CommunicatorContract.HouseEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                CommunicatorContract.HouseEntry.COLUMN_FACEBOOK_ID + " TEXT, " +
+                "FOREIGN KEY (" + CommunicatorContract.HouseEntry.COLUMN_FACEBOOK_ID + ") " + "REFERENCES " +
+                CommunicatorContract.UserEntry.TABLE_NAME + "(" + CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + ")" +
                 CommunicatorContract.HouseEntry.COLUMN_CREATED_TIME + " TEXT);";
 
         final String CREATE_BUY_MES_TABLE = "CREATE TABLE "  + CommunicatorContract.BuyMeEntry.TABLE_NAME + " (" +

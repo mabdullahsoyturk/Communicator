@@ -72,7 +72,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         rv_members.setAdapter(memberAdapter);
 
         try {
-            Log.i("home", "" + facebook_id);
             FetchHouseTask fetchHouseTask = new FetchHouseTask(mContext, house_name, facebook_id);
             fetchHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses");
         } catch (MalformedURLException e) {
@@ -111,7 +110,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     @Override
     public void onListItemClick(long clickedItemIndex) {
         Intent intent = new Intent(getActivity(), MemberProfileActivity.class);
-
         intent.putExtra("id", clickedItemIndex);
 
         startActivity(intent);
