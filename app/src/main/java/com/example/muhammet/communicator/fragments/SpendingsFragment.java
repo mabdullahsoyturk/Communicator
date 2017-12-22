@@ -23,6 +23,7 @@ import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 
 public class SpendingsFragment extends Fragment implements
@@ -64,7 +65,7 @@ public class SpendingsFragment extends Fragment implements
 
         getActivity().getSupportLoaderManager().initLoader(SPENDING_LOADER_ID, null, this);
 
-        CommunicatorSyncUtils.startImmediateSyncForSpendings(mContext,facebook_id, house_id);
+        CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_SPENDINGS,facebook_id, house_id);
         restartLoader();
 
         return view;
@@ -78,7 +79,7 @@ public class SpendingsFragment extends Fragment implements
     public void onResume() {
         super.onResume();
 
-        CommunicatorSyncUtils.startImmediateSyncForSpendings(mContext,facebook_id, house_id);
+        CommunicatorSyncUtils.startImmediateSync(mContext,CommunicatorSyncTask.ACTION_UPDATE_SPENDINGS, facebook_id, house_id);
         getActivity().getSupportLoaderManager().restartLoader(SPENDING_LOADER_ID, null, this);
 
     }

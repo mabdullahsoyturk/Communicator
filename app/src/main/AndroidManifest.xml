@@ -72,15 +72,7 @@
             android:exported="false" />
 
         <service
-            android:name=".sync.BuyMeSyncIntentService"
-            android:exported="false" />
-
-        <service
-            android:name=".sync.SpendingSyncIntentService"
-            android:exported="false" />
-
-        <service
-            android:name=".sync.MemberSyncIntentService"
+            android:name=".sync.CommunicatorSyncIntentService"
             android:exported="false" />
 
         <receiver android:name=".NetworkMonitor">

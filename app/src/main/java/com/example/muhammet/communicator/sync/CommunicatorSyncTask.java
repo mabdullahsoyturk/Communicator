@@ -13,6 +13,25 @@ import java.net.URL;
 
 public class CommunicatorSyncTask {
 
+    public static final String ACTION_UPDATE_BUY_MES = "update-buy-mes";
+    public static final String ACTION_UPDATE_SPENDINGS = "update-spendings";
+    public static final String ACTION_UPDATE_MEMBERS = "update-members";
+
+    public static void syncTask(Context context, String action, String facebook_id, String house_id){
+
+        if(ACTION_UPDATE_BUY_MES.equals(action)){
+            syncBuyMes(context, facebook_id, house_id);
+        }
+
+        if(ACTION_UPDATE_MEMBERS.equals(action)){
+            syncMembers(context, facebook_id, house_id);
+        }
+
+        if(ACTION_UPDATE_SPENDINGS.equals(action)){
+            syncSpendings(context, facebook_id, house_id);
+        }
+    }
+
     synchronized public static void syncBuyMes(Context context, String facebook_id, String house_id) {
 
         try {

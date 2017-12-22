@@ -66,5 +66,8 @@
     <string name="spending_row_your_share">Your Share: </string>
     <string name="spending_row_edit">Edit</string>
 
+    <string name="spending_added_notification_title">A spending added!</string>
+    <string name="spending_added_notification_body">Somebody in your house added a new spending</string>
+    <string name="main_notification_channel_name">Primary</string>
 
 </resources>

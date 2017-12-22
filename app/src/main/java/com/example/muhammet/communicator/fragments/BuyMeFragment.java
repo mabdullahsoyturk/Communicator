@@ -26,6 +26,7 @@ import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.DeleteAllBuyMesTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
@@ -112,7 +113,7 @@ public class BuyMeFragment extends Fragment implements
 
         getActivity().getSupportLoaderManager().initLoader(BUY_ME_LOADER_ID, null, this);
 
-        CommunicatorSyncUtils.startImmediateSyncForBuyMes(mContext,facebook_id, house_id);
+        CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_BUY_MES, facebook_id, house_id);
 
         restartLoader();
 

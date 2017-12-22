@@ -26,6 +26,7 @@ import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.MemberProfileActivity;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
+import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.FetchHouseTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
@@ -100,7 +101,7 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         getActivity().getSupportLoaderManager().initLoader(MEMBER_LOADER_ID, null, this);
 
         Log.i("HouseOnHome", house_id);
-        CommunicatorSyncUtils.startImmediateSyncForMembers(mContext, facebook_id, house_id);
+        CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
 
         restartLoader();
 
@@ -125,7 +126,7 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     public void onResume() {
         super.onResume();
 
-        CommunicatorSyncUtils.startImmediateSyncForMembers(mContext,facebook_id, house_id);
+        CommunicatorSyncUtils.startImmediateSync(mContext,CommunicatorSyncTask.ACTION_UPDATE_MEMBERS,facebook_id, house_id);
         getActivity().getSupportLoaderManager().restartLoader(MEMBER_LOADER_ID, null, this);
     }
 
