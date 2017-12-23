@@ -8,7 +8,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "communicator2.db";
 
-    private static final int VERSION = 7;
+    private static final int VERSION = 14;
 
     public CommunicatorDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -26,15 +26,16 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.UserEntry.COLUMN_STATUS + " INTEGER, " +
                 CommunicatorContract.UserEntry.COLUMN_CREATED_TIME + " TEXT, " +
                 CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + " TEXT, " +
-                CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + " TEXT NOT NULL UNIQUE);";
+                CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + " TEXT NOT NULL UNIQUE ON CONFLICT REPLACE);";
 
         final String CREATE_HOUSES_TABLE = "CREATE TABLE " + CommunicatorContract.HouseEntry.TABLE_NAME + " (" +
                 CommunicatorContract.HouseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CommunicatorContract.HouseEntry.COLUMN_NAME + " TEXT NOT NULL, " +
-                CommunicatorContract.HouseEntry.COLUMN_FACEBOOK_ID + " TEXT, " +
+                CommunicatorContract.HouseEntry.COLUMN_FACEBOOK_ID + " TEXT UNIQUE ON CONFLICT REPLACE, " +
+                CommunicatorContract.HouseEntry.COLUMN_CREATED_TIME + " TEXT, " +
                 "FOREIGN KEY (" + CommunicatorContract.HouseEntry.COLUMN_FACEBOOK_ID + ") " + "REFERENCES " +
-                CommunicatorContract.UserEntry.TABLE_NAME + "(" + CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + ")" +
-                CommunicatorContract.HouseEntry.COLUMN_CREATED_TIME + " TEXT);";
+                CommunicatorContract.UserEntry.TABLE_NAME + "(" + CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID  +
+                "));";
 
         final String CREATE_BUY_MES_TABLE = "CREATE TABLE "  + CommunicatorContract.BuyMeEntry.TABLE_NAME + " (" +
                 CommunicatorContract.BuyMeEntry._ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

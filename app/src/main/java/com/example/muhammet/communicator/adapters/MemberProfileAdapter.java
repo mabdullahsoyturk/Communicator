@@ -43,7 +43,7 @@ public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdap
     @Override
     public MemberProfileAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        int layoutIdForListItem = R.layout.member_row;
+        int layoutIdForListItem = R.layout.member_spendings_row;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 

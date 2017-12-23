@@ -1,11 +1,16 @@
 package com.example.muhammet.communicator.tasks;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +23,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class CheckUserTask extends AsyncTask<String, Void, String> {
 
@@ -27,6 +34,8 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
     private String last_name;
     private String photo_url;
     private String facebook_id;
+    private long id;
+    private String house_id;
 
     public CheckUserTask(Context context, String first_name, String last_name,
                          String photo_url, String facebook_id) throws MalformedURLException {
@@ -53,11 +62,7 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.put("first_name", first_name);
-            jsonParam.put("last_name", last_name);
-            jsonParam.put("photo_url", photo_url);
-            jsonParam.put("facebook_id", facebook_id);
+            JSONObject jsonParam = addMemberToSqlite();
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
@@ -94,6 +99,47 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
         return communicatorJsonStr;
     }
 
+    public JSONObject addMemberToSqlite() throws JSONException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        java.util.Date date = new java.util.Date();
+        String formattedDate = dateFormat.format(date);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("first_name", first_name);
+        contentValues.put("last_name", last_name);
+        contentValues.put("balance", 0);
+        contentValues.put("photo_url", photo_url);
+        contentValues.put("status", 1);
+        contentValues.put("created_time", formattedDate);
+        contentValues.put("facebook_id", facebook_id);
+
+        Uri uri = mContext.getContentResolver().insert(CommunicatorContract.UserEntry.CONTENT_URI, contentValues);
+
+        Cursor cursor = mContext.getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            int userIndex = cursor.getColumnIndex(CommunicatorContract.UserEntry._ID);
+            id = cursor.getLong(userIndex);
+        }else{
+            id = ContentUris.parseId(uri);
+        }
+
+        cursor.close();
+
+        JSONObject jsonParam = new JSONObject();
+        jsonParam.put("first_name", first_name);
+        jsonParam.put("last_name", last_name);
+        jsonParam.put("photo_url", photo_url);
+        jsonParam.put("facebook_id", facebook_id);
+        jsonParam.put("id", String.valueOf(id));
+
+        return jsonParam;
+    }
+
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
@@ -111,9 +157,22 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
         }
 
         String houses = "12";
-        String house_id = "deneme";
 
         if (success.equals("false")){
+
+            Cursor cursor = mContext.getContentResolver().query(CommunicatorContract.HouseEntry.CONTENT_URI,
+                    null,
+                    "facebook_id",
+                    new String[]{facebook_id},
+                    null
+            );
+
+            if(cursor.moveToFirst()){
+                cursor.moveToFirst();
+                house_id = cursor.getString(cursor.getColumnIndex(CommunicatorContract.HouseEntry._ID));
+                Log.i("CheckUserHouseId", house_id);
+            }
+
             try {
                 jsonObject1 = communicatorJson.getJSONObject("data");
                 houses      = jsonObject1.getString("houses");
@@ -122,8 +181,6 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
             }
 
             if(houses.length() != 2){
-                house_id = houses.substring(2, houses.length()-2);
-                Log.i("CheckUserTask", house_id);
                 Intent intent = new Intent(mContext, BaseActivity.class);
                 intent.putExtra("facebook_id", facebook_id);
                 intent.putExtra("house_id", house_id);

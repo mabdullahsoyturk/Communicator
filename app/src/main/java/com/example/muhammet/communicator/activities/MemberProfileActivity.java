@@ -31,7 +31,7 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
     TextView memberProfileName;
     TextView memberProfileDebt;
 
-    private long member_id;
+    private String member_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +53,9 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
         memberProfileAdapter = new MemberProfileAdapter(mContext);
         mRecyclerView.setAdapter(memberProfileAdapter);
 
-
         Intent intent = getIntent();
 
-        member_id = intent.getLongExtra("id", 0);
+        member_id = intent.getStringExtra("id");
 
         getSupportLoaderManager().initLoader(MEMBER_SPENDING_LOADER_ID, null, this);
 

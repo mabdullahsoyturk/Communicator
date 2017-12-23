@@ -26,11 +26,14 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import javax.security.auth.login.LoginException;
+
 public class AddNewHouseTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
     private String facebook_id;
     private String house_name;
+    private long house_id;
 
     public AddNewHouseTask(Context context, String facebook_id, String house_name) throws MalformedURLException {
         mContext = context;
@@ -102,8 +105,6 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
 
         Uri uri = mContext.getContentResolver().insert(CommunicatorContract.HouseEntry.CONTENT_URI, contentValues);
 
-        long houseId;
-
         Cursor cursor = mContext.getContentResolver().query(uri,
                 null,
                 null,
@@ -111,16 +112,18 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
                 null);
 
         if(cursor.moveToFirst()){
-            int buyMeIndex = cursor.getColumnIndex(CommunicatorContract.HouseEntry._ID);
-            houseId = cursor.getLong(buyMeIndex);
+            int houseIndex = cursor.getColumnIndex(CommunicatorContract.HouseEntry._ID);
+            house_id = cursor.getLong(houseIndex);
+            String face = cursor.getString(cursor.getColumnIndex(CommunicatorContract.HouseEntry.COLUMN_FACEBOOK_ID));
+            Log.i("face", face);
         }else{
-            houseId = ContentUris.parseId(uri);
+            house_id = ContentUris.parseId(uri);
         }
 
         cursor.close();
 
         JSONObject jsonParam = new JSONObject();
-        jsonParam.put("id",houseId);
+        jsonParam.put("id",house_id);
         jsonParam.put("name", house_name);
         jsonParam.put("facebook_id", facebook_id);
         jsonParam.put("created_time", formattedDate);
@@ -133,25 +136,18 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
         super.onPostExecute(s);
 
         String success = "";
-        String house_id = "";
 
         JSONObject resultJson = null;
-        JSONObject jsonObject = null;
         try {
             resultJson  = new JSONObject(s);
-            jsonObject = resultJson.getJSONObject("data");
-            house_id = jsonObject.getString("_id");
             success = resultJson.getString("success");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        } catch (JSONException e) {e.printStackTrace();}
 
         if(success.equals("true")){
             Intent intent = new Intent(mContext, BaseActivity.class);
             intent.putExtra("facebook_id", facebook_id);
-            intent.putExtra("house_id", house_id);
+            intent.putExtra("house_id", String.valueOf(house_id));
             mContext.startActivity(intent);
         }
-
     }
 }

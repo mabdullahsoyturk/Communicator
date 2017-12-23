@@ -2,6 +2,7 @@ package com.example.muhammet.communicator.fragments;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,12 +12,14 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.example.muhammet.communicator.AsyncTaskFinishedObserver;
 import com.example.muhammet.communicator.listeners.BuyMeSpendingItemClickListener;
 import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
@@ -25,6 +28,8 @@ import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
+import com.example.muhammet.communicator.tasks.DeleteSpendingTask;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 public class SpendingsFragment extends Fragment implements
         BuyMeSpendingItemClickListener
@@ -62,6 +67,29 @@ public class SpendingsFragment extends Fragment implements
 
         spendingAdapter = new SpendingAdapter(getContext(),this);
         mRecyclerView.setAdapter(spendingAdapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+
+                long id = (long)viewHolder.itemView.getTag();
+
+                String stringId = Long.toString(id);
+
+                DeleteSpendingTask deleteSpendingTask = new DeleteSpendingTask(getContext(), facebook_id, house_id, stringId, new AsyncTaskFinishedObserver() {
+                    @Override
+                    public void isFinished(String s) {
+                        restartLoader();
+                    }
+                });
+                deleteSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/spendings/" + stringId);
+            }
+        }).attachToRecyclerView(mRecyclerView);
 
         getActivity().getSupportLoaderManager().initLoader(SPENDING_LOADER_ID, null, this);
 
@@ -108,8 +136,8 @@ public class SpendingsFragment extends Fragment implements
                 try {
                     return getActivity().getContentResolver().query(CommunicatorContract.SpendingEntry.CONTENT_URI,
                             null,
-                            null,
-                            null,
+                            "house_id",
+                            new String[]{house_id},
                             null);
 
                 } catch (Exception e) {

@@ -37,6 +37,7 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
 
     private static final String TAG = BaseActivity.class.getSimpleName();
     private static final int MEMBER_LOADER_ID = 2;
+    private static final int HOUSE_LOADER_ID = 20;
 
     MemberAdapter memberAdapter;
     RecyclerView rv_members;
@@ -71,13 +72,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         memberAdapter = new MemberAdapter(mContext, this);
         rv_members.setAdapter(memberAdapter);
 
-        try {
-            FetchHouseTask fetchHouseTask = new FetchHouseTask(mContext, house_name, facebook_id);
-            fetchHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
         btn_add_member = view.findViewById(R.id.btn_add_member);
         btn_add_member.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +91,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
             }
         });
 
+        getActivity().getSupportLoaderManager().initLoader(HOUSE_LOADER_ID, null, this);
+
         getActivity().getSupportLoaderManager().initLoader(MEMBER_LOADER_ID, null, this);
 
         Log.i("HouseOnHome", house_id);
@@ -110,13 +106,15 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     @Override
     public void onListItemClick(long clickedItemIndex) {
         Intent intent = new Intent(getActivity(), MemberProfileActivity.class);
-        intent.putExtra("id", clickedItemIndex);
+        Log.i("clickedItemIndex", "" + clickedItemIndex);
+        intent.putExtra("id", String.valueOf(clickedItemIndex));
 
         startActivity(intent);
     }
 
     public void restartLoader(){
         getActivity().getSupportLoaderManager().restartLoader(MEMBER_LOADER_ID, null, this);
+        getActivity().getSupportLoaderManager().restartLoader(HOUSE_LOADER_ID, null,this);
         memberAdapter.notifyDataSetChanged();
     }
 
@@ -130,53 +128,110 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<Cursor>(getContext()) {
 
-            Cursor mTaskData = null;
+        if(id == MEMBER_LOADER_ID){
+            return new AsyncTaskLoader<Cursor>(getContext()) {
 
-            @Override
-            protected void onStartLoading() {
-                if (mTaskData != null) {
-                    // Delivers any previously loaded data immediately
-                    deliverResult(mTaskData);
-                } else {
-                    // Force a new load
-                    forceLoad();
+                Cursor mTaskData = null;
+
+                @Override
+                protected void onStartLoading() {
+                    if (mTaskData != null) {
+                        // Delivers any previously loaded data immediately
+                        deliverResult(mTaskData);
+                    } else {
+                        // Force a new load
+                        forceLoad();
+                    }
                 }
-            }
 
-            @Nullable
-            @Override
-            public Cursor loadInBackground() {
+                @Nullable
+                @Override
+                public Cursor loadInBackground() {
 
-                try {
-                    return getActivity().getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
-                            null,
-                            "house_id=?",
-                            new String[]{house_id},
-                            null);
+                    try {
+                        return getActivity().getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
+                                null,
+                                "house_id=?",
+                                new String[]{house_id},
+                                null);
 
-                } catch (Exception e) {
-                    Log.e(TAG, "Failed to asynchronously load data.");
-                    e.printStackTrace();
-                    return null;
+                    } catch (Exception e) {
+                        Log.e(TAG, "Failed to asynchronously load data.");
+                        e.printStackTrace();
+                        return null;
+                    }
                 }
-            }
 
-            public void deliverResult(Cursor data) {
-                mTaskData = data;
-                super.deliverResult(data);
-            }
-        };
+                public void deliverResult(Cursor data) {
+                    mTaskData = data;
+                    super.deliverResult(data);
+                }
+            };
+        }
+
+        if(id == HOUSE_LOADER_ID){
+            return new AsyncTaskLoader<Cursor>(getContext()) {
+
+                Cursor mTaskData = null;
+
+                @Override
+                protected void onStartLoading() {
+                    if (mTaskData != null) {
+                        // Delivers any previously loaded data immediately
+                        deliverResult(mTaskData);
+                    } else {
+                        // Force a new load
+                        forceLoad();
+                    }
+                }
+
+                @Nullable
+                @Override
+                public Cursor loadInBackground() {
+
+                    try {
+                        return getActivity().getContentResolver().query(CommunicatorContract.HouseEntry.CONTENT_URI,
+                                null,
+                                "_id=?",
+                                new String[]{house_id},
+                                null);
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "Failed to asynchronously load data.");
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
+                public void deliverResult(Cursor data) {
+                    mTaskData = data;
+                    super.deliverResult(data);
+                }
+            };
+
+        }
+
+        return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        memberAdapter.swapCursor(data);
+        if(loader.getId() == MEMBER_LOADER_ID){
+            memberAdapter.swapCursor(data);
+        }
+        if(loader.getId() == HOUSE_LOADER_ID){
+            if(data.moveToFirst()){
+                String nameOfHouse = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry.COLUMN_NAME));
+                house_name.setText(nameOfHouse);
+            }
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        memberAdapter.swapCursor(null);
+        if(loader.getId() == MEMBER_LOADER_ID){
+            memberAdapter.swapCursor(null);
+        }
     }
 }

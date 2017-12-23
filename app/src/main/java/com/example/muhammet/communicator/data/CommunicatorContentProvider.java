@@ -99,6 +99,18 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null
                         );
                 break;
+
+            case USERS_WITH_ID:
+                String userId = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+                retCursor = db.query(CommunicatorContract.SpendingEntry.TABLE_NAME,
+                        null,
+                        "_id=?",
+                        new String[]{userId},
+                        null,
+                        null,
+                        null);
+                break;
             case HOUSES:
                 retCursor = db.query(CommunicatorContract.HouseEntry.TABLE_NAME,
                         null,

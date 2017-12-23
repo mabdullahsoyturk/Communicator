@@ -29,6 +29,7 @@ import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.DeleteAllBuyMesTask;
+import com.example.muhammet.communicator.tasks.DeleteBuyMeTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
@@ -102,12 +103,14 @@ public class BuyMeFragment extends Fragment implements
                 long id = (long)viewHolder.itemView.getTag();
 
                 String stringId = Long.toString(id);
-                Uri uri = CommunicatorContract.BuyMeEntry.CONTENT_URI;
-                uri = uri.buildUpon().appendPath(stringId).build();
 
-                getActivity().getContentResolver().delete(uri, null, null);
-
-                restartLoader();
+                DeleteBuyMeTask deleteBuyMeTask = new DeleteBuyMeTask(getContext(), facebook_id, house_id, stringId,new AsyncTaskFinishedObserver() {
+                    @Override
+                    public void isFinished(String s) {
+                        restartLoader();
+                    }
+                });
+                deleteBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes/" + stringId);
             }
         }).attachToRecyclerView(mRecyclerView);
 
@@ -156,8 +159,8 @@ public class BuyMeFragment extends Fragment implements
                 try {
                     return getActivity().getContentResolver().query(CommunicatorContract.BuyMeEntry.CONTENT_URI,
                             null,
-                            null,
-                            null,
+                            "house_id",
+                            new String[]{house_id},
                             null);
 
                 } catch (Exception e) {

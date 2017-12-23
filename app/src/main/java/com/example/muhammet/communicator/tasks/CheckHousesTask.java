@@ -95,7 +95,7 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
             String success = jsonObject.getString("success");
 
             jsonObject1 = jsonObject.getJSONObject("data");
-            house_id = jsonObject1.getString("_id");
+            house_id = jsonObject1.getString("id");
 
             if(success.equals("true")){
 
