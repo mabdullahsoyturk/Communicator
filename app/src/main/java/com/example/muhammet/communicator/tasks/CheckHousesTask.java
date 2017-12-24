@@ -100,7 +100,7 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
             if(success.equals("true")){
 
                 AddMemberTask addMemberTask = new AddMemberTask(mContext);
-                addMemberTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/members");
+                addMemberTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/members");
 
                 Intent intent = new Intent(mContext, BaseActivity.class);
                 intent.putExtra("facebook_id", facebook_id);

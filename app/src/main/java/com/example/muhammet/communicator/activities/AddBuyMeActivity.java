@@ -1,6 +1,7 @@
 package com.example.muhammet.communicator.activities;
 
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -43,6 +44,6 @@ public class AddBuyMeActivity extends AppCompatActivity {
         }
 
         AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this,name,description, facebook_id, house_id);
-        addBuyMeTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/buy_mes");
+        addBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/buy_mes");
     }
 }

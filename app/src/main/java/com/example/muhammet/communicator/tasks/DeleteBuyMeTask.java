@@ -16,10 +16,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Muhammet on 23.12.2017.
- */
-
 public class DeleteBuyMeTask extends AsyncTask<String, Void, String> {
 
     AsyncTaskFinishedObserver observer;

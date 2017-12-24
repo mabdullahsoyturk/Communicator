@@ -13,10 +13,6 @@ import android.support.v4.content.ContextCompat;
 import com.example.muhammet.communicator.MainActivity;
 import com.example.muhammet.communicator.R;
 
-/**
- * Created by Muhammet on 22.12.2017.
- */
-
 public class NotificationUtilities {
 
     private static final int SPENDING_NOTIFICATION_ID = 1000;

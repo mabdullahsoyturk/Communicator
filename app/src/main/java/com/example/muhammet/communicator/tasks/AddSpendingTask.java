@@ -1,6 +1,5 @@
 package com.example.muhammet.communicator.tasks;
 
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,10 +26,6 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-/**
- * Created by Muhammet on 26.11.2017.
- */
 
 public class AddSpendingTask extends AsyncTask<String, Void, String> {
 
@@ -141,8 +136,6 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
         }
 
         cursor.close();
-
-        Log.i("AddSpendingTask", house_id);
 
         JSONObject jsonParam = new JSONObject();
         jsonParam.put("id", spendingId);

@@ -25,10 +25,20 @@ public class NetworkUtilities {
     public static final String STATIC_COMMUNICATOR_URL =
             "http://10.0.2.2:3000/";
 
+    public static final String STATIC_AUTHENTICATED_COMMUNICATOR_URL = "http://10.0.2.2:3000/api/users/";
+
     //private static final String STATIC_COMMUNICATOR_URL =
     //        "https://warm-meadow-40773.herokuapp.com/";
 
     private static final String USER_BASE_URL = STATIC_COMMUNICATOR_URL;
+
+    public static String buildWithFacebookId(String facebook_id){
+        return STATIC_AUTHENTICATED_COMMUNICATOR_URL.concat(facebook_id);
+    }
+
+    public static String buildWithFacebookIdAndHouseId(String facebook_id, String house_id){
+        return STATIC_AUTHENTICATED_COMMUNICATOR_URL.concat(facebook_id).concat("/houses/").concat(house_id);
+    }
 
     public static String getStringResponse(String url){
         HttpURLConnection urlConnection = null;

@@ -87,7 +87,7 @@ public class SpendingsFragment extends Fragment implements
                         restartLoader();
                     }
                 });
-                deleteSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/spendings/" + stringId);
+                deleteSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/spendings/" + stringId);
             }
         }).attachToRecyclerView(mRecyclerView);
 

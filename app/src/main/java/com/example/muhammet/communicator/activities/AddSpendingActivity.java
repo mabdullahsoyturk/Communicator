@@ -31,9 +31,6 @@ public class AddSpendingActivity extends AppCompatActivity {
         facebook_id = intent.getStringExtra("facebook_id");
         house_id = intent.getStringExtra("house_id");
 
-        Log.i("Spending'de fid", facebook_id);
-        Log.i("Spending'de hid", house_id);
-
         et_add_spending_name = findViewById(R.id.et_add_spending_name);
         et_add_spending_cost = findViewById(R.id.et_add_spending_cost);
     }
@@ -43,7 +40,7 @@ public class AddSpendingActivity extends AppCompatActivity {
         String cost = et_add_spending_cost.getText().toString();
 
         AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,cost, facebook_id, house_id);
-        addSpendingTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + house_id + "/spendings");
+        addSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/spendings");
 
         Intent intent = new Intent(this, BaseActivity.class);
         intent.putExtra("facebook_id", facebook_id);

@@ -43,7 +43,7 @@ public class AddNewHouseActivity extends AppCompatActivity {
 
                 try {
                     AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, facebook_id, house_name);
-                    addNewHouseTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses");
+                    addNewHouseTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/houses");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }

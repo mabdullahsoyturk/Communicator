@@ -28,10 +28,6 @@ import com.example.muhammet.communicator.activities.MemberProfileActivity;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
-import com.example.muhammet.communicator.tasks.FetchHouseTask;
-import com.example.muhammet.communicator.utilities.NetworkUtilities;
-
-import java.net.MalformedURLException;
 
 public class HomeFragment extends Fragment implements ListItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 

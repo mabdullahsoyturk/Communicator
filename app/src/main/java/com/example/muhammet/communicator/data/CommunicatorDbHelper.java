@@ -21,7 +21,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CommunicatorContract.UserEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
-                CommunicatorContract.UserEntry.COLUMN_BALANCE + " REAL, " +
+                CommunicatorContract.UserEntry.COLUMN_BALANCE + " DECIMAL(6,2), " +
                 CommunicatorContract.UserEntry.COLUMN_PHOTO_URL + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_STATUS + " INTEGER, " +
                 CommunicatorContract.UserEntry.COLUMN_CREATED_TIME + " TEXT, " +
@@ -54,7 +54,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.SpendingEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CommunicatorContract.SpendingEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.SpendingEntry.COLUMN_CREATED_TIME + " TEXT, " +
-                CommunicatorContract.SpendingEntry.COLUMN_COST + " REAL NOT NULL, " +
+                CommunicatorContract.SpendingEntry.COLUMN_COST + " DECIMAL(6,2) NOT NULL, " +
                 CommunicatorContract.SpendingEntry.COLUMN_FACEBOOK_ID + " TEXT, " +
                 CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID + " TEXT, " +
                 "FOREIGN KEY (" + CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID + ") " + "REFERENCES " +
