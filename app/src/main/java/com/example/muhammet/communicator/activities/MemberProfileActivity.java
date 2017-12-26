@@ -40,6 +40,7 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
     private ImageView memberProfilePhoto;
 
     private String member_id;
+    private String member_facebook_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,8 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
         Intent intent = getIntent();
 
         member_id = intent.getStringExtra("id");
+        member_facebook_id = intent.getStringExtra("facebook_id");
+        Log.i("MemberId", member_id);
 
         getSupportLoaderManager().initLoader(MEMBER_INFO_LOADER_ID, null, this);
         getSupportLoaderManager().initLoader(MEMBER_SPENDING_LOADER_ID, null, this);
@@ -96,8 +99,8 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
                     try {
                         return getContentResolver().query(CommunicatorContract.SpendingEntry.CONTENT_URI,
                                 null,
-                                "house_id",
-                                new String[]{String.valueOf(member_id)},
+                                "facebook_id=?",
+                                new String[]{member_facebook_id},
                                 null);
 
                     } catch (Exception e) {
@@ -134,10 +137,10 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
                 public Cursor loadInBackground() {
 
                     try {
-                        return getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
+                        return getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(member_id).build(),
                                 null,
-                                "_id=?",
-                                new String[]{member_id},
+                                null,
+                                null,
                                 null);
 
                     } catch (Exception e) {
@@ -166,9 +169,10 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
             if(data.moveToFirst()){
                 String first_name = data.getString(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME));
                 String last_name  = data.getString(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_LAST_NAME));
-                String full_name = first_name + last_name;
+                String full_name = first_name + " " + last_name;
 
                 String photo = data.getString(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_PHOTO_URL));
+                Log.i("photourl", photo);
                 double balance = data.getDouble(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_BALANCE));
 
                 memberProfileDebt.setText(String.valueOf(balance));

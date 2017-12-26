@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.muhammet.communicator.AsyncTaskFinishedObserver;
+import com.example.muhammet.communicator.listeners.AsyncTaskFinishedObserver;
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 

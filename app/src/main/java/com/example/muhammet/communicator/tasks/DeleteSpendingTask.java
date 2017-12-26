@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.muhammet.communicator.AsyncTaskFinishedObserver;
+import com.example.muhammet.communicator.listeners.AsyncTaskFinishedObserver;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 
 import java.io.BufferedReader;

@@ -1,11 +1,14 @@
 package com.example.muhammet.communicator.tasks;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import org.json.JSONException;
@@ -80,18 +83,11 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        return communicatorJsonStr;
-    }
-
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-
         JSONObject jsonObject = null;
         JSONObject jsonObject1 = null;
 
         try {
-            jsonObject = new JSONObject(s);
+            jsonObject = new JSONObject(communicatorJsonStr);
             String success = jsonObject.getString("success");
 
             jsonObject1 = jsonObject.getJSONObject("data");
@@ -99,7 +95,40 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
 
             if(success.equals("true")){
 
-                AddMemberTask addMemberTask = new AddMemberTask(mContext);
+                Cursor cursorForUser = mContext.getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
+                        null,
+                        "facebook_id=?",
+                        new String[]{facebook_id},
+                        null);
+
+                if(cursorForUser.moveToFirst()){
+                    long user_id = cursorForUser.getLong(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry._ID));
+                    String first_name = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME));
+                    String last_name = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_LAST_NAME));
+                    double balance = cursorForUser.getDouble(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_BALANCE));
+                    String photo_url = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_PHOTO_URL));
+                    int status = cursorForUser.getInt(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_STATUS));
+                    String created = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME));
+                    String fid = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID));
+                    String hid = String.valueOf(house_id);
+
+                    ContentValues cv = new ContentValues();
+                    cv.put("_id", user_id);
+                    cv.put("first_name", first_name);
+                    cv.put("last_name", last_name);
+                    cv.put("balance", balance);
+                    cv.put("photo_url", photo_url);
+                    cv.put("status", status);
+                    cv.put("created_time", created);
+                    cv.put("facebook_id", fid);
+                    cv.put("house_id", hid);
+                    Log.i("house_id", String.valueOf(house_id));
+
+                    mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
+                }
+                cursorForUser.close();
+
+                AddMemberTask addMemberTask = new AddMemberTask(mContext, facebook_id, house_id);
                 addMemberTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/members");
 
                 Intent intent = new Intent(mContext, BaseActivity.class);
@@ -112,5 +141,12 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        return communicatorJsonStr;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
     }
 }

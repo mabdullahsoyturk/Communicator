@@ -19,9 +19,13 @@ import java.net.URL;
 public class AddMemberTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
+    String facebook_id;
+    String house_id;
 
-    public AddMemberTask(Context context) throws MalformedURLException {
+    public AddMemberTask(Context context, String facebook_id, String house_id) throws MalformedURLException {
         mContext = context;
+        this.facebook_id = facebook_id;
+        this.house_id = house_id;
     }
 
     @Override
@@ -41,9 +45,11 @@ public class AddMemberTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoOutput(true);
 
             JSONObject jsonParam = new JSONObject();
+            jsonParam.put("house_id", house_id);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
+
             os.flush();
             os.close();
 
@@ -65,6 +71,8 @@ public class AddMemberTask extends AsyncTask<String, Void, String> {
             Log.i("RESULT", resultJsonStr);
         } catch (IOException e) {
             Log.e("MainActivity", "Error ", e);
+        } catch (JSONException e) {
+            e.printStackTrace();
         } finally{
             if (urlConnection != null) {
                 urlConnection.disconnect();

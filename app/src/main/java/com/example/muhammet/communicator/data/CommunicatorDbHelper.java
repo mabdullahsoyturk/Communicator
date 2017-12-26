@@ -8,7 +8,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "communicator2.db";
 
-    private static final int VERSION = 14;
+    private static final int VERSION = 27;
 
     public CommunicatorDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -21,9 +21,9 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CommunicatorContract.UserEntry.COLUMN_FIRST_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.UserEntry.COLUMN_LAST_NAME + " TEXT NOT NULL, " +
-                CommunicatorContract.UserEntry.COLUMN_BALANCE + " DECIMAL(6,2), " +
+                CommunicatorContract.UserEntry.COLUMN_BALANCE + " DECIMAL(6,2) DEFAULT 0, " +
                 CommunicatorContract.UserEntry.COLUMN_PHOTO_URL + " TEXT NOT NULL, " +
-                CommunicatorContract.UserEntry.COLUMN_STATUS + " INTEGER, " +
+                CommunicatorContract.UserEntry.COLUMN_STATUS + " INTEGER DEFAULT 1, " +
                 CommunicatorContract.UserEntry.COLUMN_CREATED_TIME + " TEXT, " +
                 CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + " TEXT, " +
                 CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + " TEXT NOT NULL UNIQUE ON CONFLICT REPLACE);";

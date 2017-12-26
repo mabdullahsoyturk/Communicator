@@ -1,4 +1,4 @@
-package com.example.muhammet.communicator;
+package com.example.muhammet.communicator.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

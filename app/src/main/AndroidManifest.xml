@@ -75,7 +75,7 @@
             android:name=".sync.CommunicatorSyncIntentService"
             android:exported="false" />
 
-        <receiver android:name=".NetworkMonitor">
+        <receiver android:name=".receivers.NetworkMonitor">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
             </intent-filter>

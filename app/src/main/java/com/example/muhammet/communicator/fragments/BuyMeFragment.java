@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.muhammet.communicator.AsyncTaskFinishedObserver;
+import com.example.muhammet.communicator.listeners.AsyncTaskFinishedObserver;
 import com.example.muhammet.communicator.listeners.BuyMeSpendingItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
@@ -32,9 +32,6 @@ import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class BuyMeFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor>,
         BuyMeSpendingItemClickListener{
@@ -135,7 +132,8 @@ public class BuyMeFragment extends Fragment implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<Cursor>(getContext()) {
+        return new AsyncTaskLoader<Cursor>(getContext())
+        {
 
             Cursor mTaskData = null;
 
@@ -157,7 +155,7 @@ public class BuyMeFragment extends Fragment implements
                 try {
                     return getActivity().getContentResolver().query(CommunicatorContract.BuyMeEntry.CONTENT_URI,
                             null,
-                            "house_id",
+                            "house_id=?",
                             new String[]{house_id},
                             null);
 
@@ -192,11 +190,11 @@ public class BuyMeFragment extends Fragment implements
 
     @Override
     public void onDeleteClicked(long id) {
-
+        Log.i("BuyMeFragmentId", "" + id);
     }
 
     @Override
     public void onEditClicked(long id) {
-
+        Log.i("BuyMeFragmentId", "" + id);
     }
 }

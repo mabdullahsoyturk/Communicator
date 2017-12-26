@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
-import com.example.muhammet.communicator.models.Member;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
@@ -37,6 +36,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
         private TextView member_name;
         private TextView member_debt;
         private long id;
+        private String facebook_id;
 
         public MemberAdapterViewHolder(View itemView, ListItemClickListener listener) {
             super(itemView);
@@ -48,13 +48,15 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
             itemView.setOnClickListener(this);
         }
 
-        public void bind(long id){
+        public void bind(long id, String facebook_id){
+            Log.i("IdInViewHolder", "" + id);
             this.id = id;
+            this.facebook_id = facebook_id;
         }
 
         @Override
         public void onClick(View view) {
-            mListener.onListItemClick(id);
+            mListener.onListItemClick(id, facebook_id);
         }
     }
 
@@ -82,9 +84,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
         int createdTımeIndex = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME);
         int facebookIdIndex  = mCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID);
 
-        Log.i("Position", "" + position);
         mCursor.moveToPosition(position);
 
+        Log.i("id of member", "" + mCursor.getLong(idIndex));
         long id = mCursor.getLong(idIndex);
         String firstName = mCursor.getString(firstNameIndex);
         String lastName = mCursor.getString(lastNameIndex);
@@ -106,7 +108,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
                 .into(holder.member_img);
 
 
-        holder.bind(id);
+        holder.bind(id, facebookId);
         holder.member_name.setText(firstName);
         holder.member_debt.setText(String.valueOf(balance));
     }

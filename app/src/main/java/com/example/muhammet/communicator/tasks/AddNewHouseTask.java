@@ -26,8 +26,6 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import javax.security.auth.login.LoginException;
-
 public class AddNewHouseTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
@@ -80,6 +78,7 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
             }
 
             Log.i("RESULT", resultJsonStr);
+
         } catch (IOException e) {
             Log.e("MainActivity", "Error ", e);
         } catch (JSONException e) {
@@ -90,7 +89,16 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        return resultJsonStr;
+
+        String success = "";
+
+        JSONObject resultJson = null;
+        try {
+            resultJson  = new JSONObject(resultJsonStr);
+            success = resultJson.getString("success");
+        } catch (JSONException e) {e.printStackTrace();}
+
+        return success;
     }
 
     public JSONObject addMembersToSqlite() throws JSONException {
@@ -122,11 +130,44 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
 
         cursor.close();
 
+        Cursor cursorForUser = mContext.getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
+                null,
+                "facebook_id=?",
+                new String[]{facebook_id},
+                null);
+
+        if(cursorForUser.moveToFirst()){
+            long user_id = cursorForUser.getLong(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry._ID));
+            String first_name = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME));
+            String last_name = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_LAST_NAME));
+            double balance = cursorForUser.getDouble(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_BALANCE));
+            String photo_url = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_PHOTO_URL));
+            int status = cursorForUser.getInt(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_STATUS));
+            String created = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME));
+            String fid = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID));
+            String hid = String.valueOf(house_id);
+
+            ContentValues cv = new ContentValues();
+            cv.put("_id", user_id);
+            cv.put("first_name", first_name);
+            cv.put("last_name", last_name);
+            cv.put("balance", balance);
+            cv.put("photo_url", photo_url);
+            cv.put("status", status);
+            cv.put("created_time", created);
+            cv.put("facebook_id", fid);
+            cv.put("house_id", hid);
+
+            mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
+        }
+        cursorForUser.close();
+
         JSONObject jsonParam = new JSONObject();
         jsonParam.put("id",house_id);
         jsonParam.put("name", house_name);
         jsonParam.put("facebook_id", facebook_id);
         jsonParam.put("created_time", formattedDate);
+        jsonParam.put("house_id", house_id);
 
         return jsonParam;
     }
@@ -135,15 +176,7 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        String success = "";
-
-        JSONObject resultJson = null;
-        try {
-            resultJson  = new JSONObject(s);
-            success = resultJson.getString("success");
-        } catch (JSONException e) {e.printStackTrace();}
-
-        if(success.equals("true")){
+        if(s.equals("true")){
             Intent intent = new Intent(mContext, BaseActivity.class);
             intent.putExtra("facebook_id", facebook_id);
             intent.putExtra("house_id", String.valueOf(house_id));

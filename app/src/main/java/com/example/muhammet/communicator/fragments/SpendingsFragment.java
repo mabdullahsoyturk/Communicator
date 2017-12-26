@@ -2,7 +2,6 @@ package com.example.muhammet.communicator.fragments;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,9 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.muhammet.communicator.AsyncTaskFinishedObserver;
+import com.example.muhammet.communicator.listeners.AsyncTaskFinishedObserver;
 import com.example.muhammet.communicator.listeners.BuyMeSpendingItemClickListener;
-import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.adapters.SpendingAdapter;
@@ -136,7 +134,7 @@ public class SpendingsFragment extends Fragment implements
                 try {
                     return getActivity().getContentResolver().query(CommunicatorContract.SpendingEntry.CONTENT_URI,
                             null,
-                            "house_id",
+                            "house_id=?",
                             new String[]{house_id},
                             null);
 

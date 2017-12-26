@@ -14,10 +14,6 @@ import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 
-/**
- * Created by Muhammet on 12.11.2017.
- */
-
 public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapterViewHolder>{
 
     Context mContext;

@@ -180,34 +180,35 @@ public class NetworkUtilities {
 
         for (int i = 0; i < jsonMemberArray.length(); i++) {
 
+            int _id;
             String first_name;
             String last_name;
             double balance;
             String photo_url;
             int status;
             String created_time;
-            String house_id;
             String facebook_id;
 
             JSONObject item = jsonMemberArray.getJSONObject(i);
+            Log.i("item", item.toString());
 
+            _id = item.getInt("id");
             first_name = item.getString("first_name");
             last_name = item.getString("last_name");
             balance = item.getDouble("balance");
             photo_url = item.getString("photo_url");
             status = item.getInt("status");
-            house_id = item.getString("_id");
             facebook_id = item.getString("facebook_id");
             created_time = item.getString("created_time");
 
             ContentValues memberValues = new ContentValues();
+            memberValues.put(CommunicatorContract.UserEntry._ID, _id);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME, first_name);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_LAST_NAME, last_name);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_BALANCE, balance);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_PHOTO_URL, photo_url);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_STATUS, status);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID, facebook_id);
-            memberValues.put(CommunicatorContract.UserEntry.COLUMN_HOUSE_ID, house_id);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME, created_time);
 
             memberContentValues[i] = memberValues;

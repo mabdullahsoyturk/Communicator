@@ -2,6 +2,8 @@ package com.example.muhammet.communicator.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +31,9 @@ import com.example.muhammet.communicator.activities.MemberProfileActivity;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
+import com.example.muhammet.communicator.utilities.PreferenceUtilities;
+
+import java.util.Locale;
 
 public class HomeFragment extends Fragment implements ListItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -100,10 +106,12 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     }
 
     @Override
-    public void onListItemClick(long clickedItemIndex) {
+    public void onListItemClick(long clickedItemIndex, String member_facebook_id) {
         Intent intent = new Intent(getActivity(), MemberProfileActivity.class);
         Log.i("clickedItemIndex", "" + clickedItemIndex);
+        Log.i("facebook_id", member_facebook_id);
         intent.putExtra("id", String.valueOf(clickedItemIndex));
+        intent.putExtra("facebook_id", member_facebook_id);
 
         startActivity(intent);
     }
@@ -111,7 +119,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     public void restartLoader(){
         getActivity().getSupportLoaderManager().restartLoader(MEMBER_LOADER_ID, null, this);
         getActivity().getSupportLoaderManager().restartLoader(HOUSE_LOADER_ID, null,this);
-        memberAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -148,8 +155,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                     try {
                         return getActivity().getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
                                 null,
-                                "house_id=?",
-                                new String[]{house_id},
+                                null,
+                                null,
                                 null);
 
                     } catch (Exception e) {
@@ -205,7 +212,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                     super.deliverResult(data);
                 }
             };
-
         }
 
         return null;

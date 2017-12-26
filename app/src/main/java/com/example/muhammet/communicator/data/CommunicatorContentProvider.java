@@ -57,7 +57,7 @@ public class CommunicatorContentProvider extends ContentProvider{
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
+    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String s1) {
         final SQLiteDatabase db = mCommunicatorDbHelper.getReadableDatabase();
 
         // Write URI match code and set a variable to return a Cursor
@@ -70,8 +70,8 @@ public class CommunicatorContentProvider extends ContentProvider{
             case BUY_MES:
                 retCursor =  db.query(CommunicatorContract.BuyMeEntry.TABLE_NAME,
                         null,
-                        null,
-                        null,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
                         null);
@@ -90,10 +90,11 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null);
                 break;
             case USERS:
+                Log.i("USERS", "worked");
                 retCursor = db.query(CommunicatorContract.UserEntry.TABLE_NAME,
-                        null,
-                        null,
-                        null,
+                        strings,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
                         null
@@ -103,7 +104,7 @@ public class CommunicatorContentProvider extends ContentProvider{
             case USERS_WITH_ID:
                 String userId = uri.getPathSegments().get(1);
                 // Use selections/selectionArgs to filter for this ID
-                retCursor = db.query(CommunicatorContract.SpendingEntry.TABLE_NAME,
+                retCursor = db.query(CommunicatorContract.UserEntry.TABLE_NAME,
                         null,
                         "_id=?",
                         new String[]{userId},
@@ -111,11 +112,12 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null,
                         null);
                 break;
+
             case HOUSES:
                 retCursor = db.query(CommunicatorContract.HouseEntry.TABLE_NAME,
                         null,
-                        null,
-                        null,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
                         null
@@ -137,8 +139,8 @@ public class CommunicatorContentProvider extends ContentProvider{
             case SPENDINGS:
                 retCursor = db.query(CommunicatorContract.SpendingEntry.TABLE_NAME,
                         null,
-                        null,
-                        null,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
                         null
@@ -357,6 +359,7 @@ public class CommunicatorContentProvider extends ContentProvider{
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         int tasksUpdated;
+        final SQLiteDatabase db = mCommunicatorDbHelper.getWritableDatabase();
 
         // match code
         int match = sUriMatcher.match(uri);
@@ -366,16 +369,23 @@ public class CommunicatorContentProvider extends ContentProvider{
                 //update a single task by getting the id
                 String buy_me_id = uri.getPathSegments().get(1);
                 //using selections
-                tasksUpdated = mCommunicatorDbHelper.getWritableDatabase().update(TABLE_NAME, contentValues, "_id=?", new String[]{buy_me_id});
+                tasksUpdated = db.update(TABLE_NAME, contentValues, "_id=?", new String[]{buy_me_id});
                 break;
 
             case SPENDINGS_WITH_ID:
                 //update a single task by getting the id
                 String spending_id = uri.getPathSegments().get(1);
                 //using selections
-                tasksUpdated = mCommunicatorDbHelper.getWritableDatabase().update(TABLE_NAME, contentValues, "_id=?", new String[]{spending_id});
+                tasksUpdated = db.update(TABLE_NAME, contentValues, "_id=?", new String[]{spending_id});
                 break;
 
+            case USERS_WITH_ID:
+                String user_id = uri.getPathSegments().get(1);
+                Log.i("updateWorked", "worked");
+                Log.i("user_id", user_id);
+
+                tasksUpdated = db.update(CommunicatorContract.UserEntry.TABLE_NAME, contentValues, "_id=?", new String[]{user_id});
+                break;
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

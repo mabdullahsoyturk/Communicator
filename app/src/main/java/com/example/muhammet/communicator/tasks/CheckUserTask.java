@@ -96,6 +96,38 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
             }
         }
 
+        String success = "";
+
+        JSONObject communicatorJson = null;
+        JSONObject jsonObject1 = null;
+
+        try {
+            communicatorJson  = new JSONObject(communicatorJsonStr);
+            success = communicatorJson.getString("success");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String houses = "12";
+
+        if (success.equals("false")){
+
+            try {
+                jsonObject1 = communicatorJson.getJSONObject("data");
+                houses      = jsonObject1.getString("houses");
+                house_id = jsonObject1.getString("house_id");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if(houses.length() != 2){
+                Intent intent = new Intent(mContext, BaseActivity.class);
+                intent.putExtra("facebook_id", facebook_id);
+                intent.putExtra("house_id", house_id);
+                mContext.startActivity(intent);
+            }
+        }
+
         return communicatorJsonStr;
     }
 
@@ -143,49 +175,5 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-
-        String success = "";
-
-        JSONObject communicatorJson = null;
-        JSONObject jsonObject1 = null;
-
-        try {
-            communicatorJson  = new JSONObject(s);
-            success = communicatorJson.getString("success");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        String houses = "12";
-
-        if (success.equals("false")){
-
-            Cursor cursor = mContext.getContentResolver().query(CommunicatorContract.HouseEntry.CONTENT_URI,
-                    null,
-                    "facebook_id",
-                    new String[]{facebook_id},
-                    null
-            );
-
-            if(cursor.moveToFirst()){
-                cursor.moveToFirst();
-                house_id = cursor.getString(cursor.getColumnIndex(CommunicatorContract.HouseEntry._ID));
-                Log.i("CheckUserHouseId", house_id);
-            }
-
-            try {
-                jsonObject1 = communicatorJson.getJSONObject("data");
-                houses      = jsonObject1.getString("houses");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            if(houses.length() != 2){
-                Intent intent = new Intent(mContext, BaseActivity.class);
-                intent.putExtra("facebook_id", facebook_id);
-                intent.putExtra("house_id", house_id);
-                mContext.startActivity(intent);
-            }
-        }
     }
 }

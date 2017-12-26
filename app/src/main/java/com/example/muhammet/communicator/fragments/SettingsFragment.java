@@ -58,8 +58,6 @@ public class SettingsFragment extends PreferenceFragment implements
                 Configuration conf = res.getConfiguration();
                 conf.locale = myLocale;
                 res.updateConfiguration(conf, dm);
-                Intent refresh = new Intent(getActivity(), BaseActivity.class);
-                startActivity(refresh);
             }else if(language.equals("Turkish")){
                 Locale myLocale = new Locale("tr");
                 Resources res = getResources();
@@ -67,15 +65,11 @@ public class SettingsFragment extends PreferenceFragment implements
                 Configuration conf = res.getConfiguration();
                 conf.locale = myLocale;
                 res.updateConfiguration(conf, dm);
-                Intent refresh = new Intent(getActivity(), BaseActivity.class);
-                startActivity(refresh);
             }
         }else if(key.equals("time_period")){
-            Intent intent = new Intent(getActivity(), BaseActivity.class);
-            startActivity(intent);
+
         }else if(key.equals("currency2")){
-            Intent intent = new Intent(getActivity(), BaseActivity.class);
-            startActivity(intent);
+
         }
     }
 }
