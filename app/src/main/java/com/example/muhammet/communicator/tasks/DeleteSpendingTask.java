@@ -81,10 +81,7 @@ public class DeleteSpendingTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        String success = "";
-        Log.i("success", success);
-
-        return success;
+        return "";
     }
 
     @Override

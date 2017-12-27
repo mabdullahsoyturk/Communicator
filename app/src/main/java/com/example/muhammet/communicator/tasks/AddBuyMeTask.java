@@ -1,6 +1,5 @@
 package com.example.muhammet.communicator.tasks;
 
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,6 +11,7 @@ import android.util.Log;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.utilities.DateUtilities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,9 +24,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class AddBuyMeTask extends AsyncTask<String, Void, String> {
 
@@ -106,9 +103,7 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
 
 
     public JSONObject addBuyMeToSqlite() throws JSONException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        java.util.Date date = new java.util.Date();
-        String formattedDate = dateFormat.format(date);
+        String formattedDate = DateUtilities.getFormattedDate();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);

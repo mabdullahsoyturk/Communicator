@@ -77,10 +77,7 @@ public class DeleteAllBuyMesTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        String success = "";
-        Log.i("success", success);
-
-        return success;
+        return "";
     }
 
     @Override

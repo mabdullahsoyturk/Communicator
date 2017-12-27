@@ -47,6 +47,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
             spendingIcon    = itemView.findViewById(R.id.spending_icon);
             spendingEdit    = itemView.findViewById(R.id.spending_edit);
             spendingDelete  = itemView.findViewById(R.id.spending_delete);
+            spendingDelete.setOnClickListener(this);
         }
 
         public void bind(long id){
@@ -55,7 +56,6 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
 
         @Override
         public void onClick(View view) {
-            mListener.onEditClicked(id);
             mListener.onDeleteClicked(id);
         }
     }

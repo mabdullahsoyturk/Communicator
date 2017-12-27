@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.tasks.CheckHousesTask;
@@ -25,6 +25,7 @@ public class HouseCheckActivity extends AppCompatActivity{
     private EditText invitation;
     private Button confirm;
     private Button addNewHouse;
+    ProgressBar progressBar;
 
     ProfileTracker profileTracker;
 
@@ -46,6 +47,7 @@ public class HouseCheckActivity extends AppCompatActivity{
         facebook_id = intent.getStringExtra("facebook_id");
 
         invitation = findViewById(R.id.activity_house_check_invitation);
+        progressBar = findViewById(R.id.activity_house_check_progress);
 
         profileTracker = new ProfileTracker() {
             @Override
@@ -53,7 +55,7 @@ public class HouseCheckActivity extends AppCompatActivity{
                 if (currentProfile != null) {
                     first_name = currentProfile.getFirstName();
                     last_name = currentProfile.getLastName();
-                    photo_url = currentProfile.getProfilePictureUri(100,100).toString();
+                    photo_url = currentProfile.getProfilePictureUri(125,125).toString();
                     facebook_id = currentProfile.getId();
                     checkIfUserExists();
                 }
@@ -84,7 +86,7 @@ public class HouseCheckActivity extends AppCompatActivity{
 
     public void checkIfUserExists(){
         try {
-            CheckUserTask checkUserTask = new CheckUserTask(mContext, first_name, last_name, photo_url,facebook_id);
+            CheckUserTask checkUserTask = new CheckUserTask(mContext, first_name, last_name, photo_url,facebook_id, progressBar);
             checkUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup");
         } catch (MalformedURLException e) {e.printStackTrace();}
     }

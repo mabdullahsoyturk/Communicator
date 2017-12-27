@@ -111,10 +111,6 @@ public class BuyMeFragment extends Fragment implements
 
         getActivity().getSupportLoaderManager().initLoader(BUY_ME_LOADER_ID, null, this);
 
-        CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_BUY_MES, facebook_id, house_id);
-
-        restartLoader();
-
         return view;
     }
 
@@ -155,8 +151,8 @@ public class BuyMeFragment extends Fragment implements
                 try {
                     return getActivity().getContentResolver().query(CommunicatorContract.BuyMeEntry.CONTENT_URI,
                             null,
-                            "house_id=?",
-                            new String[]{house_id},
+                            null,
+                            null,
                             null);
 
                 } catch (Exception e) {
@@ -176,6 +172,11 @@ public class BuyMeFragment extends Fragment implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         buyMeAdapter.swapCursor(data);
+        if(data.moveToFirst()){
+            house_id = data.getString(data.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID));
+            Log.i("house_id", house_id);
+            CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_BUY_MES, facebook_id, house_id);
+        }
     }
 
     @Override
@@ -190,11 +191,12 @@ public class BuyMeFragment extends Fragment implements
 
     @Override
     public void onDeleteClicked(long id) {
-        Log.i("BuyMeFragmentId", "" + id);
-    }
-
-    @Override
-    public void onEditClicked(long id) {
-        Log.i("BuyMeFragmentId", "" + id);
+        DeleteBuyMeTask deleteBuyMeTask = new DeleteBuyMeTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
+            @Override
+            public void isFinished(String s) {
+                restartLoader();
+            }
+        });
+        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes/" + String.valueOf(id));
     }
 }

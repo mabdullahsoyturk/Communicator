@@ -26,6 +26,7 @@ import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
+import com.example.muhammet.communicator.tasks.DeleteBuyMeTask;
 import com.example.muhammet.communicator.tasks.DeleteSpendingTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
@@ -91,9 +92,6 @@ public class SpendingsFragment extends Fragment implements
 
         getActivity().getSupportLoaderManager().initLoader(SPENDING_LOADER_ID, null, this);
 
-        CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_SPENDINGS,facebook_id, house_id);
-        restartLoader();
-
         return view;
     }
 
@@ -105,7 +103,6 @@ public class SpendingsFragment extends Fragment implements
     public void onResume() {
         super.onResume();
 
-        CommunicatorSyncUtils.startImmediateSync(mContext,CommunicatorSyncTask.ACTION_UPDATE_SPENDINGS, facebook_id, house_id);
         getActivity().getSupportLoaderManager().restartLoader(SPENDING_LOADER_ID, null, this);
 
     }
@@ -134,8 +131,8 @@ public class SpendingsFragment extends Fragment implements
                 try {
                     return getActivity().getContentResolver().query(CommunicatorContract.SpendingEntry.CONTENT_URI,
                             null,
-                            "house_id=?",
-                            new String[]{house_id},
+                            null,
+                            null,
                             null);
 
                 } catch (Exception e) {
@@ -155,6 +152,11 @@ public class SpendingsFragment extends Fragment implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         spendingAdapter.swapCursor(data);
+        if(data.moveToFirst()){
+            house_id = data.getString(data.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID));
+            Log.i("house_id", house_id);
+            CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_SPENDINGS,facebook_id, house_id);
+        }
     }
 
     @Override
@@ -169,11 +171,14 @@ public class SpendingsFragment extends Fragment implements
 
     @Override
     public void onDeleteClicked(long id) {
-
+        Log.i("id", ""+ id);
+        DeleteSpendingTask deleteBuyMeTask = new DeleteSpendingTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
+            @Override
+            public void isFinished(String s) {
+                restartLoader();
+            }
+        });
+        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/spendings/" + String.valueOf(id));
     }
 
-    @Override
-    public void onEditClicked(long id) {
-
-    }
 }

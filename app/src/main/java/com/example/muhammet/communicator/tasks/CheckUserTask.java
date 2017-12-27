@@ -8,9 +8,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.utilities.DateUtilities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +33,7 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
 
+    ProgressBar progressBar;
     private String first_name;
     private String last_name;
     private String photo_url;
@@ -38,12 +42,14 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
     private String house_id;
 
     public CheckUserTask(Context context, String first_name, String last_name,
-                         String photo_url, String facebook_id) throws MalformedURLException {
+                         String photo_url, String facebook_id, ProgressBar progressBar) throws MalformedURLException {
         this.first_name = first_name;
         this.last_name = last_name;
         this.photo_url = photo_url;
         this.facebook_id = facebook_id;
         mContext = context;
+        this.progressBar = progressBar;
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -115,12 +121,17 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
             try {
                 jsonObject1 = communicatorJson.getJSONObject("data");
                 houses      = jsonObject1.getString("houses");
-                house_id = jsonObject1.getString("house_id");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             if(houses.length() != 2){
+                progressBar.setVisibility(View.INVISIBLE);
+                try {
+                    house_id = jsonObject1.getString("house_id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Intent intent = new Intent(mContext, BaseActivity.class);
                 intent.putExtra("facebook_id", facebook_id);
                 intent.putExtra("house_id", house_id);
@@ -132,9 +143,7 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
     }
 
     public JSONObject addMemberToSqlite() throws JSONException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        java.util.Date date = new java.util.Date();
-        String formattedDate = dateFormat.format(date);
+        String formattedDate = DateUtilities.getFormattedDate();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("first_name", first_name);
@@ -175,5 +184,6 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }

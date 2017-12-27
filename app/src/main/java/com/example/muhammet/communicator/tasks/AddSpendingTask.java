@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.utilities.DateUtilities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,10 +109,7 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
     }
 
     public JSONObject addSpendingToSqlite() throws JSONException{
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Date date = new Date();
-        String formattedDate = dateFormat.format(date);
-        Log.i("currentDate", formattedDate);
+        String formattedDate = DateUtilities.getFormattedDate();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);

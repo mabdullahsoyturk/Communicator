@@ -42,7 +42,6 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
             buyMeDescription = itemView.findViewById(R.id.buy_me_description);
             editButton = itemView.findViewById(R.id.buy_me_edit);
             deleteButton = itemView.findViewById(R.id.buy_me_delete);
-            editButton.setOnClickListener(this);
             deleteButton.setOnClickListener(this);
         }
 
@@ -53,7 +52,6 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
         @Override
         public void onClick(View view) {
             mListener.onDeleteClicked(id);
-            mListener.onEditClicked(id);
         }
     }
 

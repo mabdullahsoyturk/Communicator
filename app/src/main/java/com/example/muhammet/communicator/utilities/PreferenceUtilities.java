@@ -4,10 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-/**
- * Created by Muhammet on 8.12.2017.
- */
-
 public class PreferenceUtilities {
 
     public static final String KEY_TIME_PERIOD = "time_period";

@@ -90,10 +90,10 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
             jsonObject = new JSONObject(communicatorJsonStr);
             String success = jsonObject.getString("success");
 
-            jsonObject1 = jsonObject.getJSONObject("data");
-            house_id = jsonObject1.getString("id");
-
             if(success.equals("true")){
+
+                jsonObject1 = jsonObject.getJSONObject("data");
+                house_id = jsonObject1.getString("id");
 
                 Cursor cursorForUser = mContext.getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
                         null,
@@ -110,7 +110,7 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
                     int status = cursorForUser.getInt(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_STATUS));
                     String created = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME));
                     String fid = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID));
-                    String hid = String.valueOf(house_id);
+                    String hid = house_id;
 
                     ContentValues cv = new ContentValues();
                     cv.put("_id", user_id);
@@ -122,7 +122,6 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
                     cv.put("created_time", created);
                     cv.put("facebook_id", fid);
                     cv.put("house_id", hid);
-                    Log.i("house_id", String.valueOf(house_id));
 
                     mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
                 }

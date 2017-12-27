@@ -82,7 +82,8 @@
         </receiver>
 
         <activity android:name=".activities.HouseCheckActivity" />
-        <activity android:name=".activities.AddNewHouseActivity"></activity>
+        <activity android:name=".activities.AddNewHouseActivity"
+            android:parentActivityName=".activities.HouseCheckActivity" />
     </application>
 
 </manifest>

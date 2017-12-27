@@ -134,7 +134,5 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
+    public void onLoaderReset(Loader<Cursor> loader) {}
 }

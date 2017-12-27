@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.utilities.DateUtilities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -89,7 +90,6 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
             }
         }
 
-
         String success = "";
 
         JSONObject resultJson = null;
@@ -102,9 +102,7 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
     }
 
     public JSONObject addMembersToSqlite() throws JSONException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        java.util.Date date = new java.util.Date();
-        String formattedDate = dateFormat.format(date);
+        String formattedDate = DateUtilities.getFormattedDate();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", house_name);
@@ -167,7 +165,6 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
         jsonParam.put("name", house_name);
         jsonParam.put("facebook_id", facebook_id);
         jsonParam.put("created_time", formattedDate);
-        jsonParam.put("house_id", house_id);
 
         return jsonParam;
     }

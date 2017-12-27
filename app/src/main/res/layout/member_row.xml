@@ -27,7 +27,7 @@
                 android:id="@+id/member_name"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/member_img"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:text="member"
                 />
@@ -38,7 +38,7 @@
                 android:id="@+id/member_debt"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/member_name"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:text="0.00$"
                 />
 

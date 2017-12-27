@@ -27,6 +27,7 @@ public class AddNewHouseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_house);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mContext = this;
 
@@ -43,7 +44,7 @@ public class AddNewHouseActivity extends AppCompatActivity {
 
                 try {
                     AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, facebook_id, house_name);
-                    addNewHouseTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/houses");
+                    addNewHouseTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/houses?facebook_id=" + facebook_id);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }

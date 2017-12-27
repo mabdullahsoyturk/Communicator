@@ -78,10 +78,7 @@ public class DeleteBuyMeTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        String success = "";
-        Log.i("success", success);
-
-        return success;
+        return "";
 
     }
 

@@ -79,15 +79,7 @@ public class AddMemberTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        String success = "";
-        try {
-            JSONObject resultJson  = new JSONObject(resultJsonStr);
-            success = resultJson.getString("success");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return success;
+        return "";
     }
 
     @Override

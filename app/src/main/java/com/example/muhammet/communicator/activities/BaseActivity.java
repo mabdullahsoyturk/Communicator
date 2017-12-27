@@ -272,19 +272,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         startActivity(startSettingsActivity);
     }
 
-    public void sendToPay(View view){
-        Intent startPayActivity = new Intent(this,PayActivity.class);
-        startActivity(startPayActivity);
-    }
-
-    public void sendToAddSpending(View view){
-        Intent startAddSpendingActivity = new Intent(this,AddSpendingActivity.class);
-        Log.i("Base'de fid", facebook_id);
-        startAddSpendingActivity.putExtra("facebook_id", facebook_id);
-        startAddSpendingActivity.putExtra("house_id", house_id);
-        startActivity(startAddSpendingActivity);
-    }
-
     public void sendToAddBuyMe(View view){
         Intent startAddBuyMeActivity = new Intent(this,AddBuyMeActivity.class);
         startAddBuyMeActivity.putExtra("facebook_id", facebook_id);

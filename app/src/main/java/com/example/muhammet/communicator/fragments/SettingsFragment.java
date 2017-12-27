@@ -46,8 +46,6 @@ public class SettingsFragment extends PreferenceFragment implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        Log.i("key", key);
-
         if(key.equals("language")){
             SharedPreferences prefs       = sharedPreferences;
             String            language    = prefs.getString("language", "en");

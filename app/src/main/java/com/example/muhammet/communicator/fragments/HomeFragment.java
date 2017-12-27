@@ -23,7 +23,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.muhammet.communicator.activities.AddSpendingActivity;
 import com.example.muhammet.communicator.activities.BaseActivity;
+import com.example.muhammet.communicator.activities.PayActivity;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.listeners.ListItemClickListener;
 import com.example.muhammet.communicator.R;
@@ -48,6 +50,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     Context mContext;
     private TextView house_name;
     private Button btn_add_member;
+    private Button add_spending;
+    private Button pay;
 
     private String facebook_id;
     private String house_id;
@@ -62,8 +66,32 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         house_id = getArguments().getString("house_id");
 
         mContext = getContext();
+
         house_name = view.findViewById(R.id.tv_house_name);
         rv_members = view.findViewById(R.id.recycler_view);
+
+        add_spending = view.findViewById(R.id.fragment_home_add_spending);
+        add_spending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent startAddSpendingActivity = new Intent(mContext,AddSpendingActivity.class);
+                startAddSpendingActivity.putExtra("facebook_id", facebook_id);
+                startAddSpendingActivity.putExtra("house_id", house_id);
+                startActivity(startAddSpendingActivity);
+            }
+        });
+
+        pay = view.findViewById(R.id.fragment_home_pay);
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent startPayActivity = new Intent(mContext,PayActivity.class);
+                startPayActivity.putExtra("facebook_id", facebook_id);
+                startPayActivity.putExtra("house_id", house_id);
+                startActivity(startPayActivity);
+            }
+        });
+
         rv_members.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -97,11 +125,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
 
         getActivity().getSupportLoaderManager().initLoader(MEMBER_LOADER_ID, null, this);
 
-        Log.i("HouseOnHome", house_id);
-        CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
-
-        restartLoader();
-
         return view;
     }
 
@@ -116,16 +139,10 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         startActivity(intent);
     }
 
-    public void restartLoader(){
-        getActivity().getSupportLoaderManager().restartLoader(MEMBER_LOADER_ID, null, this);
-        getActivity().getSupportLoaderManager().restartLoader(HOUSE_LOADER_ID, null,this);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
 
-        CommunicatorSyncUtils.startImmediateSync(mContext,CommunicatorSyncTask.ACTION_UPDATE_MEMBERS,facebook_id, house_id);
         getActivity().getSupportLoaderManager().restartLoader(MEMBER_LOADER_ID, null, this);
     }
 
@@ -196,8 +213,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                     try {
                         return getActivity().getContentResolver().query(CommunicatorContract.HouseEntry.CONTENT_URI,
                                 null,
-                                "_id=?",
-                                new String[]{house_id},
+                                null,
+                                null,
                                 null);
 
                     } catch (Exception e) {
@@ -226,6 +243,9 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
             if(data.moveToFirst()){
                 String nameOfHouse = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry.COLUMN_NAME));
                 house_name.setText(nameOfHouse);
+                house_id = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry._ID));
+                Log.i("house_id", house_id);
+                CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
             }
         }
     }
