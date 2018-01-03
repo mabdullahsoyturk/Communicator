@@ -126,9 +126,9 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
             }
 
             if(houses.length() != 2){
-                progressBar.setVisibility(View.INVISIBLE);
                 try {
                     house_id = jsonObject1.getString("house_id");
+                    Log.i("houseIdInCheckUser", house_id);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

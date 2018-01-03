@@ -55,7 +55,7 @@ public class HouseCheckActivity extends AppCompatActivity{
                 if (currentProfile != null) {
                     first_name = currentProfile.getFirstName();
                     last_name = currentProfile.getLastName();
-                    photo_url = currentProfile.getProfilePictureUri(125,125).toString();
+                    photo_url = currentProfile.getProfilePictureUri(100,100).toString();
                     facebook_id = currentProfile.getId();
                     checkIfUserExists();
                 }

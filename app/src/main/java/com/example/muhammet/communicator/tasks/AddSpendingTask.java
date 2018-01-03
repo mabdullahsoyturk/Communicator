@@ -32,16 +32,14 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
     private String name;
-    private String cost;
-    private String selectedUser;
+    private double cost;
     private String facebook_id;
     private String house_id;
 
-    public AddSpendingTask(Context context, String name, String cost, String facebook_id, String house_id, String selectedUser) throws MalformedURLException {
+    public AddSpendingTask(Context context, String name, double cost, String facebook_id, String house_id) throws MalformedURLException {
         mContext = context;
         this.name = name;
         this.cost = cost;
-        this.selectedUser = selectedUser;
         this.facebook_id = facebook_id;
         this.house_id = house_id;
     }

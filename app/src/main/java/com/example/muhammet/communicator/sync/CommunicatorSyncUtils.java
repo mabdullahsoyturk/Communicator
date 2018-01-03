@@ -13,5 +13,4 @@ public class CommunicatorSyncUtils {
         intentToSyncImmediately.putExtra("house_id", house_id);
         context.startService(intentToSyncImmediately);
     }
-
 }

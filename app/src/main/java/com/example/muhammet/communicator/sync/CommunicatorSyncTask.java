@@ -7,12 +7,14 @@ import android.util.Log;
 
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
+import com.example.muhammet.communicator.utilities.NotificationUtilities;
 
 public class CommunicatorSyncTask {
 
     public static final String ACTION_UPDATE_BUY_MES = "update-buy-mes";
     public static final String ACTION_UPDATE_SPENDINGS = "update-spendings";
     public static final String ACTION_UPDATE_MEMBERS = "update-members";
+    public static final String ACTION_DISMISS_NOTIFICATION = "dismiss-notification";
 
     public static void syncTask(Context context, String action, String facebook_id, String house_id){
 
@@ -20,12 +22,16 @@ public class CommunicatorSyncTask {
             syncBuyMes(context, facebook_id, house_id);
         }
 
-        if(ACTION_UPDATE_MEMBERS.equals(action)){
+        else if(ACTION_UPDATE_MEMBERS.equals(action)){
             syncMembers(context, facebook_id, house_id);
         }
 
-        if(ACTION_UPDATE_SPENDINGS.equals(action)){
+        else if(ACTION_UPDATE_SPENDINGS.equals(action)){
             syncSpendings(context, facebook_id, house_id);
+        }
+
+        else if(ACTION_DISMISS_NOTIFICATION.equals(action)){
+            NotificationUtilities.clearAllNotifications(context);
         }
     }
 

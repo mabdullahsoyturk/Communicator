@@ -4,10 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
-/**
- * Created by Muhammet on 8.12.2017.
- */
-
 public class CommunicatorSyncIntentService extends IntentService{
 
     public CommunicatorSyncIntentService() {

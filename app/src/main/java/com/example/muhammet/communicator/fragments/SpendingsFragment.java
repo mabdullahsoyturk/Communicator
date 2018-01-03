@@ -26,7 +26,6 @@ import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
-import com.example.muhammet.communicator.tasks.DeleteBuyMeTask;
 import com.example.muhammet.communicator.tasks.DeleteSpendingTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 

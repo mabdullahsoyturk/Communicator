@@ -1,9 +1,9 @@
 package com.example.muhammet.communicator.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +15,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +32,6 @@ import com.example.muhammet.communicator.activities.MemberProfileActivity;
 import com.example.muhammet.communicator.adapters.MemberAdapter;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
-import com.example.muhammet.communicator.utilities.PreferenceUtilities;
-
-import java.util.Locale;
 
 public class HomeFragment extends Fragment implements ListItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -47,6 +43,7 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     RecyclerView rv_members;
     private DividerItemDecoration mDividerItemDecoration;
 
+    BroadcastReceiver broadcastReceiver;
     Context mContext;
     private TextView house_name;
     private Button btn_add_member;
@@ -125,7 +122,37 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
 
         getActivity().getSupportLoaderManager().initLoader(MEMBER_LOADER_ID, null, this);
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent ıntent) {
+                CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
+            }
+        };
+
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.UI_UPDATE_BROADCAST));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        restartLoader();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mContext.unregisterReceiver(broadcastReceiver);
+    }
+
+    public void restartLoader(){
+        getActivity().getSupportLoaderManager().restartLoader(MEMBER_LOADER_ID, null, this);
     }
 
     @Override
@@ -137,13 +164,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         intent.putExtra("facebook_id", member_facebook_id);
 
         startActivity(intent);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        getActivity().getSupportLoaderManager().restartLoader(MEMBER_LOADER_ID, null, this);
     }
 
     @Override

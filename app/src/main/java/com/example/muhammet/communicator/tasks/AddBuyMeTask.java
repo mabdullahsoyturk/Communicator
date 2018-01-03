@@ -12,6 +12,7 @@ import android.util.Log;
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.utilities.DateUtilities;
+import com.example.muhammet.communicator.utilities.NotificationUtilities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -145,6 +146,8 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+
+        NotificationUtilities.remindUserBecauseBuyMeAdded(mContext, facebook_id, house_id);
 
         Intent intent = new Intent(mContext,BaseActivity.class);
         intent.putExtra("facebook_id", facebook_id);

@@ -155,6 +155,7 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
             cv.put("created_time", created);
             cv.put("facebook_id", fid);
             cv.put("house_id", hid);
+            Log.i("addnewhouse", hid);
 
             mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
         }
