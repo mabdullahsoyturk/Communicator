@@ -66,7 +66,7 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
 
         String selectedUser = spinner.getSelectedItem().toString();
 
-        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,cost, facebook_id, house_id, selectedUser);
+        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id);
         addSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/spendings");
 
         Intent intent = new Intent(this, BaseActivity.class);

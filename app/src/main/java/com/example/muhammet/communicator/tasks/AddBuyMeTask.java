@@ -26,6 +26,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static com.example.muhammet.communicator.utilities.SQLiteUtils.addBuyMeToLocal;
+
 public class AddBuyMeTask extends AsyncTask<String, Void, String> {
 
     Context mContext;
@@ -58,7 +60,7 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = addBuyMeToSqlite();
+            JSONObject jsonParam = addBuyMeToLocal(mContext, name, description, facebook_id, house_id);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
@@ -100,47 +102,6 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
         }
 
         return success;
-    }
-
-
-    public JSONObject addBuyMeToSqlite() throws JSONException {
-        String formattedDate = DateUtilities.getFormattedDate();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("description", description);
-        contentValues.put("facebook_id", facebook_id);
-        contentValues.put("house_id", house_id);
-        contentValues.put("created_time", formattedDate);
-
-        Uri uri = mContext.getContentResolver().insert(CommunicatorContract.BuyMeEntry.CONTENT_URI, contentValues);
-
-        long buyMeId;
-
-        Cursor cursor = mContext.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-
-        if(cursor.moveToFirst()){
-            int buyMeIndex = cursor.getColumnIndex(CommunicatorContract.BuyMeEntry._ID);
-            buyMeId = cursor.getLong(buyMeIndex);
-        }else{
-            buyMeId = ContentUris.parseId(uri);
-        }
-
-        cursor.close();
-
-        JSONObject jsonParam = new JSONObject();
-        jsonParam.put("id", buyMeId);
-        jsonParam.put("name", name);
-        jsonParam.put("description", description);
-        jsonParam.put("facebook_id", facebook_id);
-        jsonParam.put("house_id", house_id);
-        jsonParam.put("created_time", formattedDate);
-
-        return jsonParam;
     }
 
     @Override

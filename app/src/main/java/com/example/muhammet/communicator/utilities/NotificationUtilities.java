@@ -6,6 +6,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -49,7 +52,10 @@ public class NotificationUtilities {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,BUY_ME_NOTIFICATION_CHANNEL_ID);
         notificationBuilder
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                .setSmallIcon(R.drawable.add_spending_image)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setSmallIcon(R.drawable.app_icon)
+                .setWhen(0)
+                .setLargeIcon(largeIcon(context))
                 .setContentTitle(context.getString(R.string.buy_me_added_notification_title))
                 .setContentText(context.getString(R.string.buy_me_added_notification_body))
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(
@@ -86,7 +92,7 @@ public class NotificationUtilities {
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
 
-        NotificationCompat.Action ignoreBuyMeAction = new NotificationCompat.Action(R.drawable.buy_me_image,
+        NotificationCompat.Action ignoreBuyMeAction = new NotificationCompat.Action(R.drawable.app_icon,
                 "Ignore it!",
                 ignoreBuyMePendingIntent);
 
@@ -99,7 +105,7 @@ public class NotificationUtilities {
         Intent intentToSyncImmediately = new Intent(context, CommunicatorSyncIntentService.class);
         intentToSyncImmediately.putExtra("facebook_id", facebook_id);
         intentToSyncImmediately.putExtra("house_id", house_id);
-        intentToSyncImmediately.setAction(CommunicatorSyncTask.ACTION_UPDATE_BUY_MES);
+        intentToSyncImmediately.setAction(CommunicatorSyncTask.ACTION_CHECK);
         PendingIntent updateBuyMePendingIntent = PendingIntent.getService(
                 context,
                 BUY_ME_PENDING_INTENT_ID,
@@ -107,7 +113,7 @@ public class NotificationUtilities {
                 PendingIntent.FLAG_CANCEL_CURRENT
         );
 
-        NotificationCompat.Action updateBuyMeAction = new NotificationCompat.Action(R.drawable.add_spending_image,
+        NotificationCompat.Action updateBuyMeAction = new NotificationCompat.Action(R.drawable.app_icon,
                 "See it!",
                 updateBuyMePendingIntent);
 
@@ -115,11 +121,11 @@ public class NotificationUtilities {
 
     }
 
-//    private static Bitmap largeIcon(Context context) {
-//
-//        Resources res       = context.getResources();
-////        Bitmap    largeIcon = BitmapFactory.decodeResource(res, R.drawable.ic_local_drink_black_24px);
-//        return largeIcon;
-//    }
+    private static Bitmap largeIcon(Context context) {
+
+        Resources res       = context.getResources();
+        Bitmap    largeIcon = BitmapFactory.decodeResource(res, R.drawable.app_icon);
+        return largeIcon;
+    }
 
 }

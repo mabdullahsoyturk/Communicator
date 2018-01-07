@@ -3,8 +3,10 @@ package com.example.muhammet.communicator.sync;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
+import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 import com.example.muhammet.communicator.utilities.NotificationUtilities;
@@ -15,6 +17,7 @@ public class CommunicatorSyncTask {
     public static final String ACTION_UPDATE_SPENDINGS = "update-spendings";
     public static final String ACTION_UPDATE_MEMBERS = "update-members";
     public static final String ACTION_DISMISS_NOTIFICATION = "dismiss-notification";
+    public static final String ACTION_CHECK = "check";
 
     public static void syncTask(Context context, String action, String facebook_id, String house_id){
 
@@ -32,6 +35,13 @@ public class CommunicatorSyncTask {
 
         else if(ACTION_DISMISS_NOTIFICATION.equals(action)){
             NotificationUtilities.clearAllNotifications(context);
+        }
+
+        else if(ACTION_CHECK.equals(action)){
+            Intent intent = new Intent(context, BaseActivity.class);
+            intent.putExtra("facebook_id", facebook_id);
+            intent.putExtra("house_id", house_id);
+            context.startActivity(intent);
         }
     }
 

@@ -1,6 +1,9 @@
 package com.example.muhammet.communicator.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,7 +40,7 @@ public class SpendingsFragment extends Fragment implements
     private static final int SPENDING_LOADER_ID = 1;
     Context mContext;
     ProgressBar progressBar;
-    //BroadcastReceiver broadcastReceiver;
+    BroadcastReceiver broadcastReceiver;
 
     RecyclerView mRecyclerView;
     SpendingAdapter spendingAdapter;
@@ -75,6 +78,11 @@ public class SpendingsFragment extends Fragment implements
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
 
+
+                //Intent intent = new Intent();               ADD THIS TO THE END OF DELETE ALL BUY MES SERVICE
+                //intent.setAction(CommunicatorContract.SERVICE_FINISHED_BROADCAST);
+                //mContext.sendBroadcast(intent);
+
                 long id = (long)viewHolder.itemView.getTag();
 
                 String stringId = Long.toString(id);
@@ -91,6 +99,13 @@ public class SpendingsFragment extends Fragment implements
 
         getActivity().getSupportLoaderManager().initLoader(SPENDING_LOADER_ID, null, this);
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent ıntent) {
+                restartLoader();
+            }
+        };
+
         return view;
     }
 
@@ -99,11 +114,24 @@ public class SpendingsFragment extends Fragment implements
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.SERVICE_FINISHED_BROADCAST));
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
         getActivity().getSupportLoaderManager().restartLoader(SPENDING_LOADER_ID, null, this);
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mContext.unregisterReceiver(broadcastReceiver);
     }
 
     @Override

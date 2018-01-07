@@ -1,9 +1,13 @@
 package com.example.muhammet.communicator.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -18,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.muhammet.communicator.activities.AddBuyMeActivity;
 import com.example.muhammet.communicator.listeners.AsyncTaskFinishedObserver;
 import com.example.muhammet.communicator.listeners.BuyMeSpendingItemClickListener;
 import com.example.muhammet.communicator.R;
@@ -39,9 +44,10 @@ public class BuyMeFragment extends Fragment implements
     private static final String TAG = BaseActivity.class.getSimpleName();
     private static final int BUY_ME_LOADER_ID = 0;
     Context mContext;
-    //BroadcastReceiver broadcastReceiver;
+    BroadcastReceiver broadcastReceiver;
 
     private Button deleteAllButton;
+    private FloatingActionButton addBuyMeButton;
     RecyclerView mRecyclerView;
     BuyMeAdapter buyMeAdapter;
     private DividerItemDecoration mDividerItemDecoration;
@@ -60,10 +66,24 @@ public class BuyMeFragment extends Fragment implements
 
         mContext = getContext();
 
+        addBuyMeButton = view.findViewById(R.id.buy_me_button_add);
+        addBuyMeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent startAddBuyMeActivity = new Intent(mContext,AddBuyMeActivity.class);
+                startAddBuyMeActivity.putExtra("facebook_id", facebook_id);
+                startAddBuyMeActivity.putExtra("house_id", house_id);
+                startActivity(startAddBuyMeActivity);
+            }
+        });
+
         deleteAllButton = view.findViewById(R.id.buy_me_delete);
         deleteAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 try {
                     DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id, house_id, new AsyncTaskFinishedObserver() {
                         @Override
@@ -111,6 +131,13 @@ public class BuyMeFragment extends Fragment implements
 
         getActivity().getSupportLoaderManager().initLoader(BUY_ME_LOADER_ID, null, this);
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent ıntent) {
+                restartLoader();
+            }
+        };
+
         return view;
     }
 
@@ -120,10 +147,23 @@ public class BuyMeFragment extends Fragment implements
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.SERVICE_FINISHED_BROADCAST));
+    }
+
+    @Override
    public void onResume() {
         super.onResume();
 
         restartLoader();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mContext.unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -174,6 +214,7 @@ public class BuyMeFragment extends Fragment implements
         buyMeAdapter.swapCursor(data);
         if(data.moveToFirst()){
             house_id = data.getString(data.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID));
+            Log.i("works", "works");
             Log.i("house_id", house_id);
             CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_BUY_MES, facebook_id, house_id);
         }
@@ -199,4 +240,5 @@ public class BuyMeFragment extends Fragment implements
         });
         deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes/" + String.valueOf(id));
     }
+
 }

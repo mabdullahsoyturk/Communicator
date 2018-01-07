@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         facebook_id = intent.getStringExtra("facebook_id");
         house_id = intent.getStringExtra("house_id");
+        Log.i("HouseIdInAddBuyMe", house_id);
 
         tv_name = findViewById(R.id.activity_add_buy_me_name);
         tv_description = findViewById(R.id.activity_add_buy_me_description);

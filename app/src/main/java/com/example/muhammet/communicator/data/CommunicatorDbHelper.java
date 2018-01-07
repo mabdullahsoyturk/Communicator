@@ -8,7 +8,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "communicator2.db";
 
-    private static final int VERSION = 30;
+    private static final int VERSION = 31;
 
     public CommunicatorDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);

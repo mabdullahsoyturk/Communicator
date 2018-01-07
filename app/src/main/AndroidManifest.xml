@@ -84,6 +84,15 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".receivers.ServiceMonitor"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.muhammet.communicator.servicefinishedbroadcast"></action>
+            </intent-filter>
+
+        </receiver>
+
         <activity android:name=".activities.HouseCheckActivity" />
         <activity android:name=".activities.AddNewHouseActivity"
             android:parentActivityName=".activities.HouseCheckActivity" />
