@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -75,8 +76,17 @@
             android:name=".sync.CommunicatorSyncIntentService"
             android:exported="false" />
 
-        <service android:name=".sync.CommunicatorIntentService"
+        <service android:name=".services.CommunicatorIntentService"
             android:exported="false" />
+
+        <service
+            android:name=".sync.CommunicatorFirebaseJobService"
+            android:exported="false">
+            <!-- COMPLETED (9) Declare an intent filter with the action ACTION_EXECUTE -->
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
 
         <receiver android:name=".receivers.NetworkMonitor">
             <intent-filter>

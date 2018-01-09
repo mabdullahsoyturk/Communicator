@@ -1,19 +1,14 @@
 package com.example.muhammet.communicator.tasks;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
-import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.utilities.DateUtilities;
+import com.example.muhammet.communicator.utilities.SQLiteUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,8 +21,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class CheckUserTask extends AsyncTask<String, Void, String> {
 
@@ -68,7 +61,7 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = addMemberToSqlite();
+            JSONObject jsonParam = SQLiteUtils.addMemberToLocal(mContext, first_name, last_name, photo_url, facebook_id);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
@@ -140,45 +133,6 @@ public class CheckUserTask extends AsyncTask<String, Void, String> {
         }
 
         return communicatorJsonStr;
-    }
-
-    public JSONObject addMemberToSqlite() throws JSONException {
-        String formattedDate = DateUtilities.getFormattedDate();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("first_name", first_name);
-        contentValues.put("last_name", last_name);
-        contentValues.put("balance", 0);
-        contentValues.put("photo_url", photo_url);
-        contentValues.put("status", 1);
-        contentValues.put("created_time", formattedDate);
-        contentValues.put("facebook_id", facebook_id);
-
-        Uri uri = mContext.getContentResolver().insert(CommunicatorContract.UserEntry.CONTENT_URI, contentValues);
-
-        Cursor cursor = mContext.getContentResolver().query(uri,
-                null,
-                null,
-                null,
-                null);
-
-        if(cursor.moveToFirst()){
-            int userIndex = cursor.getColumnIndex(CommunicatorContract.UserEntry._ID);
-            id = cursor.getLong(userIndex);
-        }else{
-            id = ContentUris.parseId(uri);
-        }
-
-        cursor.close();
-
-        JSONObject jsonParam = new JSONObject();
-        jsonParam.put("first_name", first_name);
-        jsonParam.put("last_name", last_name);
-        jsonParam.put("photo_url", photo_url);
-        jsonParam.put("facebook_id", facebook_id);
-        jsonParam.put("id", String.valueOf(id));
-
-        return jsonParam;
     }
 
     @Override

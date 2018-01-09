@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.fragments.BuyMeFragment;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 import com.example.muhammet.communicator.utilities.NotificationUtilities;
 
@@ -17,7 +18,10 @@ public class CommunicatorSyncTask {
     public static final String ACTION_UPDATE_SPENDINGS = "update-spendings";
     public static final String ACTION_UPDATE_MEMBERS = "update-members";
     public static final String ACTION_DISMISS_NOTIFICATION = "dismiss-notification";
-    public static final String ACTION_CHECK = "check";
+    public static final String ACTION_CHECK_BUY_MES = "check-buymes";
+    public static final String ACTION_CHECK_SPENDINGS = "check-spendings";
+    public static final String ACTION_SHOP_DAY = "shop-day";
+
 
     public static void syncTask(Context context, String action, String facebook_id, String house_id){
 
@@ -37,11 +41,26 @@ public class CommunicatorSyncTask {
             NotificationUtilities.clearAllNotifications(context);
         }
 
-        else if(ACTION_CHECK.equals(action)){
+        else if(ACTION_CHECK_BUY_MES.equals(action)){
             Intent intent = new Intent(context, BaseActivity.class);
             intent.putExtra("facebook_id", facebook_id);
             intent.putExtra("house_id", house_id);
+            intent.putExtra("fragment", "buy_me_fragment");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
+        }
+
+        else if(ACTION_CHECK_SPENDINGS.equals(action)){
+            Intent intent = new Intent(context, BaseActivity.class);
+            intent.putExtra("facebook_id", facebook_id);
+            intent.putExtra("house_id", house_id);
+            intent.putExtra("fragment", "spending_fragment");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
+
+        else if(ACTION_SHOP_DAY.equals(action)){
+            NotificationUtilities.remindUserForShoppingDay(context);
         }
     }
 

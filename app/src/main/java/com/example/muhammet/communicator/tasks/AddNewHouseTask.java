@@ -48,7 +48,7 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = SQLiteUtils.addMembersToLocal(mContext, house_name, facebook_id);
+            JSONObject jsonParam = SQLiteUtils.addHouseToLocal(mContext, house_name, facebook_id);
             house_id = jsonParam.getString("id");
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());

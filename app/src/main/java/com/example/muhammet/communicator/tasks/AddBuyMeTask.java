@@ -1,17 +1,11 @@
 package com.example.muhammet.communicator.tasks;
 
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
-import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.utilities.DateUtilities;
 import com.example.muhammet.communicator.utilities.NotificationUtilities;
 
 import org.json.JSONException;
@@ -108,7 +102,7 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        NotificationUtilities.remindUserBecauseBuyMeAdded(mContext, facebook_id, house_id);
+        NotificationUtilities.remindUserBecauseBuyMeAdded(mContext);
 
         Intent intent = new Intent(mContext,BaseActivity.class);
         intent.putExtra("facebook_id", facebook_id);

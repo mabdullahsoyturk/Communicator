@@ -29,6 +29,8 @@ import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.adapters.BuyMeAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.services.ServiceTasks;
+import com.example.muhammet.communicator.services.ServiceUtils;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.DeleteAllBuyMesTask;
@@ -44,7 +46,7 @@ public class BuyMeFragment extends Fragment implements
     private static final String TAG = BaseActivity.class.getSimpleName();
     private static final int BUY_ME_LOADER_ID = 0;
     Context mContext;
-    BroadcastReceiver broadcastReceiver;
+    //BroadcastReceiver broadcastReceiver;
 
     private Button deleteAllButton;
     private FloatingActionButton addBuyMeButton;
@@ -81,20 +83,18 @@ public class BuyMeFragment extends Fragment implements
         deleteAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
-                try {
-                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id, house_id, new AsyncTaskFinishedObserver() {
-                        @Override
-                        public void isFinished(String s) {
-                            restartLoader();
-                        }
-                    });
-                    deleteAllBuyMesTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes");
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+                ServiceUtils.deleteAllBuyMesService(mContext, ServiceTasks.ACTION_DELETE_ALL_BUY_MES, facebook_id, house_id);
+//                try {
+//                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id, house_id, new AsyncTaskFinishedObserver() {
+//                        @Override
+//                        public void isFinished(String s) {
+//                            restartLoader();
+//                        }
+//                    });
+//                    deleteAllBuyMesTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes");
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
         mRecyclerView = view.findViewById(R.id.rv_buy_me);
@@ -131,12 +131,12 @@ public class BuyMeFragment extends Fragment implements
 
         getActivity().getSupportLoaderManager().initLoader(BUY_ME_LOADER_ID, null, this);
 
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent ıntent) {
-                restartLoader();
-            }
-        };
+//        broadcastReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent ıntent) {
+//                restartLoader();
+//            }
+//        };
 
         return view;
     }
@@ -150,7 +150,7 @@ public class BuyMeFragment extends Fragment implements
     public void onStart() {
         super.onStart();
 
-        mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.SERVICE_FINISHED_BROADCAST));
+//        mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.SERVICE_FINISHED_BROADCAST));
     }
 
     @Override
@@ -163,7 +163,7 @@ public class BuyMeFragment extends Fragment implements
     @Override
     public void onPause() {
         super.onPause();
-        mContext.unregisterReceiver(broadcastReceiver);
+        //mContext.unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -232,13 +232,14 @@ public class BuyMeFragment extends Fragment implements
 
     @Override
     public void onDeleteClicked(long id) {
-        DeleteBuyMeTask deleteBuyMeTask = new DeleteBuyMeTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
-            @Override
-            public void isFinished(String s) {
-                restartLoader();
-            }
-        });
-        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes/" + String.valueOf(id));
+        ServiceUtils.deleteBuyMeService(mContext, ServiceTasks.ACTION_DELETE_BUY_ME, facebook_id, house_id, String.valueOf(id));
+//        DeleteBuyMeTask deleteBuyMeTask = new DeleteBuyMeTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
+//            @Override
+//            public void isFinished(String s) {
+//                restartLoader();
+//            }
+//        });
+//        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes/" + String.valueOf(id));
     }
 
 }

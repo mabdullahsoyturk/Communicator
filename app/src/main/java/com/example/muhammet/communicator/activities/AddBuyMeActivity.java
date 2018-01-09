@@ -1,5 +1,6 @@
 package com.example.muhammet.communicator.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.muhammet.communicator.R;
+import com.example.muhammet.communicator.services.ServiceTasks;
+import com.example.muhammet.communicator.services.ServiceUtils;
 import com.example.muhammet.communicator.tasks.AddBuyMeTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
@@ -16,6 +19,7 @@ import java.net.MalformedURLException;
 
 public class AddBuyMeActivity extends AppCompatActivity {
 
+    Context mContext;
     private TextView tv_name;
     private TextView tv_description;
 
@@ -27,6 +31,8 @@ public class AddBuyMeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_buy_me);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mContext = this;
 
         Intent intent = getIntent();
         facebook_id = intent.getStringExtra("facebook_id");
@@ -45,7 +51,8 @@ public class AddBuyMeActivity extends AppCompatActivity {
             return;
         }
 
-        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this,name,description, facebook_id, house_id);
-        addBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/buy_mes");
+        ServiceUtils.addBuyMeService(mContext, ServiceTasks.ACTION_ADD_BUY_ME, name, description, facebook_id, house_id);
+        //AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this,name,description, facebook_id, house_id);
+        //addBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/buy_mes");
     }
 }

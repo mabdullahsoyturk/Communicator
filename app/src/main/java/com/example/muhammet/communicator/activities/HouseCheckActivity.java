@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.muhammet.communicator.R;
+import com.example.muhammet.communicator.services.ServiceTasks;
+import com.example.muhammet.communicator.services.ServiceUtils;
 import com.example.muhammet.communicator.tasks.CheckHousesTask;
 import com.example.muhammet.communicator.tasks.CheckUserTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
@@ -86,9 +88,11 @@ public class HouseCheckActivity extends AppCompatActivity{
 
     public void checkIfUserExists(){
         try {
-            CheckUserTask checkUserTask = new CheckUserTask(mContext, first_name, last_name, photo_url,facebook_id, progressBar);
-            checkUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup");
-        } catch (MalformedURLException e) {e.printStackTrace();}
+            ServiceUtils.checkUserService(mContext, ServiceTasks.ACTION_CHECK_USER, first_name, last_name, photo_url, facebook_id);
+
+            //CheckUserTask checkUserTask = new CheckUserTask(mContext, first_name,last_name,photo_url,facebook_id, progressBar);
+            //checkUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup");
+        } catch (Exception e) {e.printStackTrace();}
     }
 
     public void checkIfUserHasToken(){
@@ -111,8 +115,10 @@ public class HouseCheckActivity extends AppCompatActivity{
 
     private void checkIfInvitationCodeValid(String invitation_code){
         try {
-            CheckHousesTask checkHousesTask = new CheckHousesTask(mContext, facebook_id, first_name, last_name, photo_url);
-            checkHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + invitation_code);
-        } catch (MalformedURLException e) {e.printStackTrace();}
+            ServiceUtils.checkHousesService(mContext, ServiceTasks.ACTION_CHECK_HOUSES, invitation_code, facebook_id);
+
+            //CheckHousesTask checkHousesTask = new CheckHousesTask(mContext, facebook_id, first_name, last_name, photo_url);
+            //checkHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + invitation_code);
+        } catch (Exception e) {e.printStackTrace();}
     }
 }

@@ -94,7 +94,7 @@ public class SQLiteUtils {
         return jsonParam;
     }
 
-    public static JSONObject addMembersToLocal(Context mContext, String house_name, String facebook_id) throws JSONException {
+    public static JSONObject addHouseToLocal(Context mContext, String house_name, String facebook_id) throws JSONException {
         String formattedDate = DateUtilities.getFormattedDate();
 
         ContentValues contentValues = new ContentValues();
@@ -161,6 +161,47 @@ public class SQLiteUtils {
         jsonParam.put("name", house_name);
         jsonParam.put("facebook_id", facebook_id);
         jsonParam.put("created_time", formattedDate);
+
+        return jsonParam;
+    }
+
+    public static JSONObject addMemberToLocal(Context mContext, String first_name, String last_name, String photo_url, String facebook_id) throws JSONException {
+        String formattedDate = DateUtilities.getFormattedDate();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("first_name", first_name);
+        contentValues.put("last_name", last_name);
+        contentValues.put("balance", 0);
+        contentValues.put("photo_url", photo_url);
+        contentValues.put("status", 1);
+        contentValues.put("created_time", formattedDate);
+        contentValues.put("facebook_id", facebook_id);
+
+        Uri uri = mContext.getContentResolver().insert(CommunicatorContract.UserEntry.CONTENT_URI, contentValues);
+
+        Cursor cursor = mContext.getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+
+        long id;
+
+        if(cursor.moveToFirst()){
+            int userIndex = cursor.getColumnIndex(CommunicatorContract.UserEntry._ID);
+            id = cursor.getLong(userIndex);
+        }else{
+            id = ContentUris.parseId(uri);
+        }
+
+        cursor.close();
+
+        JSONObject jsonParam = new JSONObject();
+        jsonParam.put("first_name", first_name);
+        jsonParam.put("last_name", last_name);
+        jsonParam.put("photo_url", photo_url);
+        jsonParam.put("facebook_id", facebook_id);
+        jsonParam.put("id", String.valueOf(id));
 
         return jsonParam;
     }

@@ -18,6 +18,8 @@ import android.widget.Spinner;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.services.ServiceTasks;
+import com.example.muhammet.communicator.services.ServiceUtils;
 import com.example.muhammet.communicator.tasks.AddSpendingTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
@@ -66,13 +68,15 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
 
         String selectedUser = spinner.getSelectedItem().toString();
 
-        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id);
+        ServiceUtils.addSpendingService(mContext, ServiceTasks.ACTION_ADD_SPENDING, name, Double.parseDouble(cost), facebook_id, house_id);
+
+        /*AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id);
         addSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/spendings");
 
         Intent intent = new Intent(this, BaseActivity.class);
         intent.putExtra("facebook_id", facebook_id);
         intent.putExtra("house_id", house_id);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     @Override

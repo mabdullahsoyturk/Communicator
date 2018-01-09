@@ -27,6 +27,8 @@ import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.services.ServiceTasks;
+import com.example.muhammet.communicator.services.ServiceUtils;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.DeleteSpendingTask;
@@ -198,14 +200,14 @@ public class SpendingsFragment extends Fragment implements
 
     @Override
     public void onDeleteClicked(long id) {
-        Log.i("id", ""+ id);
-        DeleteSpendingTask deleteBuyMeTask = new DeleteSpendingTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
-            @Override
-            public void isFinished(String s) {
-                restartLoader();
-            }
-        });
-        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/spendings/" + String.valueOf(id));
+        ServiceUtils.deleteSpendingService(mContext, ServiceTasks.ACTION_DELETE_SPENDING, facebook_id, house_id, String.valueOf(id));
+//        DeleteSpendingTask deleteBuyMeTask = new DeleteSpendingTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
+//            @Override
+//            public void isFinished(String s) {
+//                restartLoader();
+//            }
+//        });
+//        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/spendings/" + String.valueOf(id));
     }
 
 }

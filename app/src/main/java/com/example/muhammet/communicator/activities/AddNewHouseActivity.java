@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.muhammet.communicator.R;
+import com.example.muhammet.communicator.services.ServiceTasks;
+import com.example.muhammet.communicator.services.ServiceUtils;
 import com.example.muhammet.communicator.tasks.AddNewHouseTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
@@ -42,12 +44,13 @@ public class AddNewHouseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String house_name = et_house_name.getText().toString();
 
-                try {
-                    AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, facebook_id, house_name);
-                    addNewHouseTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/houses?facebook_id=" + facebook_id);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+                ServiceUtils.addNewHouseService(mContext, ServiceTasks.ACTION_ADD_NEW_HUOSE, house_name, facebook_id);
+//                try {
+//                    AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, facebook_id, house_name);
+//                    addNewHouseTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/houses?facebook_id=" + facebook_id);
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
     }

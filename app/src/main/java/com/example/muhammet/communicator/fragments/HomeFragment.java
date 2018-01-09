@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     RecyclerView rv_members;
     private DividerItemDecoration mDividerItemDecoration;
 
-    BroadcastReceiver broadcastReceiver;
+    //BroadcastReceiver broadcastReceiver;
     Context mContext;
     private TextView house_name;
     private Button btn_add_member;
@@ -122,12 +122,12 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
 
         getActivity().getSupportLoaderManager().initLoader(MEMBER_LOADER_ID, null, this);
 
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent ıntent) {
-                CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
-            }
-        };
+//        broadcastReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent ıntent) {
+//                CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
+//            }
+//        };
 
         return view;
     }
@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     public void onStart() {
         super.onStart();
 
-        mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.UI_UPDATE_BROADCAST));
+        //mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.UI_UPDATE_BROADCAST));
     }
 
     @Override
@@ -148,7 +148,11 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     @Override
     public void onPause() {
         super.onPause();
-        mContext.unregisterReceiver(broadcastReceiver);
+//        try{
+//            mContext.unregisterReceiver(broadcastReceiver);
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
     }
 
     public void restartLoader(){

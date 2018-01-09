@@ -85,7 +85,6 @@ public class NetworkUtilities {
                 }
             }
         }
-
         return communicatorJsonStr;
     }
 

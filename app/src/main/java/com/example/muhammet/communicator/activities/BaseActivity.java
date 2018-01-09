@@ -27,6 +27,7 @@ import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.fragments.BuyMeFragment;
 import com.example.muhammet.communicator.fragments.HomeFragment;
 import com.example.muhammet.communicator.fragments.SpendingsFragment;
+import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -71,11 +72,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Log.i("fidBase", "id is " + facebook_id);
         house_id = intent.getStringExtra("house_id");
 
+        CommunicatorSyncUtils.initialize(this, facebook_id, house_id);
+
         //////////////////////////TOOLBAR CONFIGS///////////////////////////////////////////////////
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
-        addLandingFragment();
+        String fragmentName = intent.getStringExtra("fragment");
+
+        addLandingFragment(fragmentName);
 
         ///////////////////////////BOTTOM BAR CONFIGS///////////////////////////////////////////////
         BottomNavigationView bottomBar = findViewById(R.id.bottom_navigation);
@@ -151,6 +157,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -194,15 +205,40 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void addLandingFragment(){
-        fragment = new HomeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("facebook_id", facebook_id);
-        bundle.putString("house_id",house_id);
-        fragment.setArguments(bundle);
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.base_container, fragment).commit();
+    public void addLandingFragment(String fragmentName){
+
+        if(fragmentName != null && fragmentName.equals("buy_me_fragment")){
+            fragment = new BuyMeFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("facebook_id", facebook_id);
+            bundle.putString("house_id", house_id);
+            fragment.setArguments(bundle);
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.base_container, fragment).commit();
+        }
+
+        else if(fragmentName != null && fragmentName.equals("spending_fragment")){
+            fragment = new SpendingsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("facebook_id", facebook_id);
+            bundle.putString("house_id", house_id);
+            fragment.setArguments(bundle);
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.base_container, fragment).commit();
+        }
+
+        else{
+            fragment = new HomeFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("facebook_id", facebook_id);
+            bundle.putString("house_id",house_id);
+            fragment.setArguments(bundle);
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.base_container, fragment).commit();
+        }
     }
 
     public void onLogout(){
