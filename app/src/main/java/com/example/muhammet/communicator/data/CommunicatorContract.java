@@ -11,7 +11,6 @@ public class CommunicatorContract {
 
     public static final String AUTHORITY = "com.example.muhammet.communicator";
 
-    // The base content URI = "content://" + <authority>
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     // Define the possible paths for accessing data in this contract

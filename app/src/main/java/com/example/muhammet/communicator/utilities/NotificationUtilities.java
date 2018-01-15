@@ -260,7 +260,6 @@ public class NotificationUtilities {
     }
 
     private static Bitmap largeIcon(Context context){
-
         Resources res = context.getResources();
 
         Bitmap largeIcon = BitmapFactory.decodeResource(res, R.drawable.app_icon);

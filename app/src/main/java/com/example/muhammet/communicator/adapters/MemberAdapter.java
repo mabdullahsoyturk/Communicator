@@ -49,7 +49,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
         }
 
         public void bind(long id, String facebook_id){
-            Log.i("IdInViewHolder", "" + id);
             this.id = id;
             this.facebook_id = facebook_id;
         }
@@ -86,7 +85,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberAdap
 
         mCursor.moveToPosition(position);
 
-        Log.i("id of member", "" + mCursor.getLong(idIndex));
         long id = mCursor.getLong(idIndex);
         String firstName = mCursor.getString(firstNameIndex);
         String lastName = mCursor.getString(lastNameIndex);

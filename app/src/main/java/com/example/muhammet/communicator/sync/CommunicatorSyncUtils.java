@@ -19,43 +19,40 @@ import java.util.concurrent.TimeUnit;
 
 public class CommunicatorSyncUtils {
 
+    private static final int SYNC_INTERVAL_MINUTES = 1;
     private static final int SYNC_INTERVAL_HOURS = 1;
     private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS);
+    private static final int SYNC_INTERVAL_SECONDS_2 = (int)TimeUnit.MINUTES.toSeconds(SYNC_INTERVAL_MINUTES);
     private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS;
     private static final String COMMUNICATOR_SYNC_TAG = "communicator-sync";
 
     private static boolean sInitialized;
 
-    static void scheduleFirebaseJobDispatcherSync(@NonNull final Context context, String facebook_id, String house_id) {
+    static void scheduleFirebaseJobDispatcherSync(@NonNull final Context context) {
 
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
-        Bundle bundle = new Bundle();
-        bundle.putString("facebook_id", facebook_id);
-        bundle.putString("house_id", house_id);
-
         Job syncSunshineJob = dispatcher.newJobBuilder()
                 .setService(CommunicatorFirebaseJobService.class)
                 .setTag(COMMUNICATOR_SYNC_TAG)
-                .setExtras(bundle)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(
-                        SYNC_INTERVAL_SECONDS,
-                        SYNC_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
+                        10,
+                        20))
                 .setReplaceCurrent(true)
                 .build();
 
         dispatcher.schedule(syncSunshineJob);
     }
 
-    synchronized public static void initialize(@NonNull final Context context, String facebook_id, String house_id) {
+    synchronized public static void initialize(@NonNull final Context context) {
         if (sInitialized) return;
 
         sInitialized = true;
-        scheduleFirebaseJobDispatcherSync(context, facebook_id, house_id);
+        scheduleFirebaseJobDispatcherSync(context);
     }
 
     public static void startImmediateSync(@NonNull final Context context, String action, String facebook_id, String house_id) {

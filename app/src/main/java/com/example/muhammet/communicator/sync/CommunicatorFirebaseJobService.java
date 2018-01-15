@@ -2,6 +2,8 @@ package com.example.muhammet.communicator.sync;
 
 
 import android.app.job.JobParameters;
+
+import com.example.muhammet.communicator.utilities.NotificationUtilities;
 import com.firebase.jobdispatcher.JobService;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,11 +18,8 @@ public class CommunicatorFirebaseJobService extends JobService{
         mFetchSpendingTask = new AsyncTask<Void, Void, Void>(){
             @Override
             protected Void doInBackground(Void... voids) {
-                Bundle bundle = job.getExtras();
-                String facebook_id = bundle.getString("facebook_id");
-                String house_id = bundle.getString("house_id");
                 Context context = getApplicationContext();
-                CommunicatorSyncTask.syncSpendings(context,facebook_id, house_id);
+                NotificationUtilities.remindUserForShoppingDay(context);
                 return null;
             }
 

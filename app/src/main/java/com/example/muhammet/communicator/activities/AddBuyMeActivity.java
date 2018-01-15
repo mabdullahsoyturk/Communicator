@@ -51,8 +51,8 @@ public class AddBuyMeActivity extends AppCompatActivity {
             return;
         }
 
-        ServiceUtils.addBuyMeService(mContext, ServiceTasks.ACTION_ADD_BUY_ME, name, description, facebook_id, house_id);
-        //AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this,name,description, facebook_id, house_id);
-        //addBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/buy_mes");
+        //ServiceUtils.addBuyMeService(mContext, ServiceTasks.ACTION_ADD_BUY_ME, name, description, facebook_id, house_id);
+        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this,name,description, facebook_id, house_id);
+        addBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/buy_mes");
     }
 }

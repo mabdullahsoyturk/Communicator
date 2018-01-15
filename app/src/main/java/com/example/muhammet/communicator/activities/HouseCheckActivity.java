@@ -57,7 +57,7 @@ public class HouseCheckActivity extends AppCompatActivity{
                 if (currentProfile != null) {
                     first_name = currentProfile.getFirstName();
                     last_name = currentProfile.getLastName();
-                    photo_url = currentProfile.getProfilePictureUri(100,100).toString();
+                    photo_url = currentProfile.getProfilePictureUri(200,200).toString();
                     facebook_id = currentProfile.getId();
                     checkIfUserExists();
                 }
@@ -88,10 +88,10 @@ public class HouseCheckActivity extends AppCompatActivity{
 
     public void checkIfUserExists(){
         try {
-            ServiceUtils.checkUserService(mContext, ServiceTasks.ACTION_CHECK_USER, first_name, last_name, photo_url, facebook_id);
+            //ServiceUtils.checkUserService(mContext, ServiceTasks.ACTION_CHECK_USER, first_name, last_name, photo_url, facebook_id);
 
-            //CheckUserTask checkUserTask = new CheckUserTask(mContext, first_name,last_name,photo_url,facebook_id, progressBar);
-            //checkUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup");
+            CheckUserTask checkUserTask = new CheckUserTask(mContext, first_name,last_name,photo_url,facebook_id, progressBar);
+            checkUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup");
         } catch (Exception e) {e.printStackTrace();}
     }
 
@@ -102,7 +102,7 @@ public class HouseCheckActivity extends AppCompatActivity{
             if (currentProfile != null) {
                 first_name = currentProfile.getFirstName();
                 last_name = currentProfile.getLastName();
-                photo_url = currentProfile.getProfilePictureUri(100,100).toString();
+                photo_url = currentProfile.getProfilePictureUri(200,200).toString();
                 facebook_id = currentProfile.getId();
                 checkIfUserExists();
             }
@@ -115,10 +115,10 @@ public class HouseCheckActivity extends AppCompatActivity{
 
     private void checkIfInvitationCodeValid(String invitation_code){
         try {
-            ServiceUtils.checkHousesService(mContext, ServiceTasks.ACTION_CHECK_HOUSES, invitation_code, facebook_id);
+            //ServiceUtils.checkHousesService(mContext, ServiceTasks.ACTION_CHECK_HOUSES, invitation_code, facebook_id);
 
-            //CheckHousesTask checkHousesTask = new CheckHousesTask(mContext, facebook_id, first_name, last_name, photo_url);
-            //checkHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + invitation_code);
+            CheckHousesTask checkHousesTask = new CheckHousesTask(mContext, facebook_id, first_name, last_name, photo_url);
+            checkHousesTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "api/users/" + facebook_id + "/houses/" + invitation_code);
         } catch (Exception e) {e.printStackTrace();}
     }
 }

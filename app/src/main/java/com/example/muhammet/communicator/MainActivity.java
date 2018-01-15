@@ -39,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancel() {}
+            public void onCancel() {
+                Toast.makeText(MainActivity.this, "Facebook login is needed to use the app", Toast.LENGTH_LONG).show();
+            }
 
             @Override
             public void onError(FacebookException exception) {

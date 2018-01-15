@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -87,21 +88,6 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>
         </service>
-
-        <receiver android:name=".receivers.NetworkMonitor">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name=".receivers.ServiceMonitor"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.example.muhammet.communicator.servicefinishedbroadcast"></action>
-            </intent-filter>
-
-        </receiver>
 
         <activity android:name=".activities.HouseCheckActivity" />
         <activity android:name=".activities.AddNewHouseActivity"

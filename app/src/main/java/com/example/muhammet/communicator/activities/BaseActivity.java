@@ -69,10 +69,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         Intent intent = getIntent();
         facebook_id = intent.getStringExtra("facebook_id");
-        Log.i("fidBase", "id is " + facebook_id);
         house_id = intent.getStringExtra("house_id");
 
-        CommunicatorSyncUtils.initialize(this, facebook_id, house_id);
+        //CommunicatorSyncUtils.initialize(this);
 
         //////////////////////////TOOLBAR CONFIGS///////////////////////////////////////////////////
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -154,11 +153,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Profile.fetchProfileForCurrentAccessToken();
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -248,7 +242,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     ///////////////////////////////////////FORMAT IMAGES////////////////////////////////////////////
     private void displayProfilePic(Uri uri) {
-        // helper method to load the profile pic in a circular imageview
         Transformation transformation = new RoundedTransformationBuilder()
                 .cornerRadiusDp(30)
                 .oval(false)
@@ -292,9 +285,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         request.setParameters(parameters);
         request.executeAsync();
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    ////////////////////////////////////DIRECT TO ANOTHER ACTIVITY//////////////////////////////////
     private void launchLoginActivity() {
         Context context = BaseActivity.this;
         Class mainActivity = MainActivity.class;
@@ -307,5 +298,4 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         Intent startSettingsActivity = new Intent(this,SettingsActivity.class);
         startActivity(startSettingsActivity);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 }

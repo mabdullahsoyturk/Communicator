@@ -172,7 +172,6 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
                 String full_name = first_name + " " + last_name;
 
                 String photo = data.getString(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_PHOTO_URL));
-                Log.i("photourl", photo);
                 double balance = data.getDouble(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_BALANCE));
 
                 memberProfileDebt.setText(String.valueOf(balance));

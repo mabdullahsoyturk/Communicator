@@ -1,9 +1,6 @@
 package com.example.muhammet.communicator.fragments;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,8 +24,6 @@ import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.adapters.SpendingAdapter;
 import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.services.ServiceTasks;
-import com.example.muhammet.communicator.services.ServiceUtils;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.DeleteSpendingTask;
@@ -42,7 +37,6 @@ public class SpendingsFragment extends Fragment implements
     private static final int SPENDING_LOADER_ID = 1;
     Context mContext;
     ProgressBar progressBar;
-    BroadcastReceiver broadcastReceiver;
 
     RecyclerView mRecyclerView;
     SpendingAdapter spendingAdapter;
@@ -79,12 +73,6 @@ public class SpendingsFragment extends Fragment implements
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-
-
-                //Intent intent = new Intent();               ADD THIS TO THE END OF DELETE ALL BUY MES SERVICE
-                //intent.setAction(CommunicatorContract.SERVICE_FINISHED_BROADCAST);
-                //mContext.sendBroadcast(intent);
-
                 long id = (long)viewHolder.itemView.getTag();
 
                 String stringId = Long.toString(id);
@@ -101,13 +89,6 @@ public class SpendingsFragment extends Fragment implements
 
         getActivity().getSupportLoaderManager().initLoader(SPENDING_LOADER_ID, null, this);
 
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent ıntent) {
-                restartLoader();
-            }
-        };
-
         return view;
     }
 
@@ -116,24 +97,11 @@ public class SpendingsFragment extends Fragment implements
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.SERVICE_FINISHED_BROADCAST));
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
         getActivity().getSupportLoaderManager().restartLoader(SPENDING_LOADER_ID, null, this);
 
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mContext.unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -148,7 +116,6 @@ public class SpendingsFragment extends Fragment implements
                     // Delivers any previously loaded data immediately
                     deliverResult(mTaskData);
                 } else {
-                    // Force a new load
                     forceLoad();
                 }
             }
@@ -183,7 +150,6 @@ public class SpendingsFragment extends Fragment implements
         spendingAdapter.swapCursor(data);
         if(data.moveToFirst()){
             house_id = data.getString(data.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID));
-            Log.i("house_id", house_id);
             CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_SPENDINGS,facebook_id, house_id);
         }
     }
@@ -200,14 +166,14 @@ public class SpendingsFragment extends Fragment implements
 
     @Override
     public void onDeleteClicked(long id) {
-        ServiceUtils.deleteSpendingService(mContext, ServiceTasks.ACTION_DELETE_SPENDING, facebook_id, house_id, String.valueOf(id));
-//        DeleteSpendingTask deleteBuyMeTask = new DeleteSpendingTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
-//            @Override
-//            public void isFinished(String s) {
-//                restartLoader();
-//            }
-//        });
-//        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/spendings/" + String.valueOf(id));
+        //ServiceUtils.deleteSpendingService(mContext, ServiceTasks.ACTION_DELETE_SPENDING, facebook_id, house_id, String.valueOf(id));
+        DeleteSpendingTask deleteBuyMeTask = new DeleteSpendingTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
+            @Override
+            public void isFinished(String s) {
+                restartLoader();
+            }
+        });
+        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/spendings/" + String.valueOf(id));
     }
 
 }

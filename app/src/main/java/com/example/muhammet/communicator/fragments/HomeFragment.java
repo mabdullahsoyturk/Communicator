@@ -43,7 +43,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     RecyclerView rv_members;
     private DividerItemDecoration mDividerItemDecoration;
 
-    //BroadcastReceiver broadcastReceiver;
     Context mContext;
     private TextView house_name;
     private Button btn_add_member;
@@ -122,37 +121,13 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
 
         getActivity().getSupportLoaderManager().initLoader(MEMBER_LOADER_ID, null, this);
 
-//        broadcastReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent ıntent) {
-//                CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
-//            }
-//        };
-
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        //mContext.registerReceiver(broadcastReceiver, new IntentFilter(CommunicatorContract.UI_UPDATE_BROADCAST));
     }
 
     @Override
     public void onResume() {
         super.onResume();
         restartLoader();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        try{
-//            mContext.unregisterReceiver(broadcastReceiver);
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
     }
 
     public void restartLoader(){
@@ -162,8 +137,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     @Override
     public void onListItemClick(long clickedItemIndex, String member_facebook_id) {
         Intent intent = new Intent(getActivity(), MemberProfileActivity.class);
-        Log.i("clickedItemIndex", "" + clickedItemIndex);
-        Log.i("facebook_id", member_facebook_id);
         intent.putExtra("id", String.valueOf(clickedItemIndex));
         intent.putExtra("facebook_id", member_facebook_id);
 
@@ -184,7 +157,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                         // Delivers any previously loaded data immediately
                         deliverResult(mTaskData);
                     } else {
-                        // Force a new load
                         forceLoad();
                     }
                 }
@@ -268,7 +240,6 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                 String nameOfHouse = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry.COLUMN_NAME));
                 house_name.setText(nameOfHouse);
                 house_id = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry._ID));
-                Log.i("house_id", house_id);
                 CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
             }
         }

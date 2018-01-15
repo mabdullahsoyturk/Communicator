@@ -68,15 +68,10 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
 
         String selectedUser = spinner.getSelectedItem().toString();
 
-        ServiceUtils.addSpendingService(mContext, ServiceTasks.ACTION_ADD_SPENDING, name, Double.parseDouble(cost), facebook_id, house_id);
+        //ServiceUtils.addSpendingService(mContext, ServiceTasks.ACTION_ADD_SPENDING, name, Double.parseDouble(cost), facebook_id, house_id);
 
-        /*AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id);
+        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id);
         addSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/spendings");
-
-        Intent intent = new Intent(this, BaseActivity.class);
-        intent.putExtra("facebook_id", facebook_id);
-        intent.putExtra("house_id", house_id);
-        startActivity(intent);*/
     }
 
     @Override
@@ -125,7 +120,6 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         List<String> list = new ArrayList<String>();
-        Log.i("data size", "" + data.getCount());
 
         for(int i = 0; i < data.getCount(); i++){
             data.moveToPosition(i);

@@ -44,13 +44,13 @@ public class AddNewHouseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String house_name = et_house_name.getText().toString();
 
-                ServiceUtils.addNewHouseService(mContext, ServiceTasks.ACTION_ADD_NEW_HUOSE, house_name, facebook_id);
-//                try {
-//                    AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, facebook_id, house_name);
-//                    addNewHouseTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/houses?facebook_id=" + facebook_id);
-//                } catch (MalformedURLException e) {
-//                    e.printStackTrace();
-//                }
+//                ServiceUtils.addNewHouseService(mContext, ServiceTasks.ACTION_ADD_NEW_HUOSE, house_name, facebook_id);
+                try {
+                    AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, facebook_id, house_name);
+                    addNewHouseTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/houses?facebook_id=" + facebook_id);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
