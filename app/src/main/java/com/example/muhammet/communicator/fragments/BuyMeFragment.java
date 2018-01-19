@@ -164,8 +164,8 @@ public class BuyMeFragment extends Fragment implements
                 try {
                     return getActivity().getContentResolver().query(CommunicatorContract.BuyMeEntry.CONTENT_URI,
                             null,
-                            null,
-                            null,
+                            "house_id=?",
+                            new String[]{house_id},
                             null);
 
                 } catch (Exception e) {

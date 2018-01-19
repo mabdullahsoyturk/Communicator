@@ -90,7 +90,6 @@ public class CommunicatorContentProvider extends ContentProvider{
                         null);
                 break;
             case USERS:
-                Log.i("USERS", "worked");
                 retCursor = db.query(CommunicatorContract.UserEntry.TABLE_NAME,
                         strings,
                         selection,

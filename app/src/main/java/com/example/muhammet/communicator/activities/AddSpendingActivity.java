@@ -11,21 +11,18 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
-import com.example.muhammet.communicator.services.ServiceTasks;
-import com.example.muhammet.communicator.services.ServiceUtils;
 import com.example.muhammet.communicator.tasks.AddSpendingTask;
+import com.example.muhammet.communicator.utilities.CustomSpinner;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AddSpendingActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
@@ -39,7 +36,7 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
 
     private String facebook_id;
     private String house_id;
-    private Spinner spinner;
+    private CustomSpinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +49,6 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
         Intent intent = getIntent();
         facebook_id = intent.getStringExtra("facebook_id");
         house_id = intent.getStringExtra("house_id");
-        Log.i("houseIdInSpending", house_id);
 
         spinner = findViewById(R.id.activity_add_spending_members_spinner);
 
@@ -66,11 +62,11 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
         String name = et_add_spending_name.getText().toString();
         String cost = et_add_spending_cost.getText().toString();
 
-        String selectedUser = spinner.getSelectedItem().toString();
+        List<String> list = spinner.getSelectedStrings();
 
         //ServiceUtils.addSpendingService(mContext, ServiceTasks.ACTION_ADD_SPENDING, name, Double.parseDouble(cost), facebook_id, house_id);
 
-        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id);
+        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id, list);
         addSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/spendings");
     }
 
@@ -98,8 +94,8 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
                 try {
                     return mContext.getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
                             null,
-                            null,
-                            null,
+                            "house_id=?",
+                             new String[]{house_id},
                             null);
 
                 } catch (Exception e) {
@@ -118,17 +114,16 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-        List<String> list = new ArrayList<String>();
+        String[] list = new String[data.getCount()];
 
         for(int i = 0; i < data.getCount(); i++){
             data.moveToPosition(i);
             String first_name = data.getString(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME));
-            list.add(first_name);
+            list[i] = (first_name);
         }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, list);
-        spinner.setAdapter(arrayAdapter);
+        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, list);
+        spinner.setItems(list);
     }
 
     @Override

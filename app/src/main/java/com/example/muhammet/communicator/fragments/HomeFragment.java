@@ -1,9 +1,7 @@
 package com.example.muhammet.communicator.fragments;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -139,6 +137,7 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         Intent intent = new Intent(getActivity(), MemberProfileActivity.class);
         intent.putExtra("id", String.valueOf(clickedItemIndex));
         intent.putExtra("facebook_id", member_facebook_id);
+        intent.putExtra("house_id", house_id);
 
         startActivity(intent);
     }
@@ -168,8 +167,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                     try {
                         return getActivity().getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
                                 null,
-                                null,
-                                null,
+                                "house_id=?",
+                                new String[]{house_id},
                                 null);
 
                     } catch (Exception e) {
@@ -209,8 +208,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                     try {
                         return getActivity().getContentResolver().query(CommunicatorContract.HouseEntry.CONTENT_URI,
                                 null,
-                                null,
-                                null,
+                                "_id=?",
+                                new String[]{house_id},
                                 null);
 
                     } catch (Exception e) {
@@ -233,6 +232,7 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(loader.getId() == MEMBER_LOADER_ID){
+            data.moveToFirst();
             memberAdapter.swapCursor(data);
         }
         if(loader.getId() == HOUSE_LOADER_ID){
@@ -240,6 +240,7 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                 String nameOfHouse = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry.COLUMN_NAME));
                 house_name.setText(nameOfHouse);
                 house_id = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry._ID));
+                Log.i("LoaderHouseId", house_id);
                 CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
             }
         }

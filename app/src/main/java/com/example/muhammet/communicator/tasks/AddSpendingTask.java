@@ -28,21 +28,24 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class AddSpendingTask extends AsyncTask<String, Void, String> {
 
+    List<String> userList;
     Context mContext;
     private String name;
     private double cost;
     private String facebook_id;
     private String house_id;
 
-    public AddSpendingTask(Context context, String name, double cost, String facebook_id, String house_id) throws MalformedURLException {
+    public AddSpendingTask(Context context, String name, double cost, String facebook_id, String house_id, List<String> userList) throws MalformedURLException {
         mContext = context;
         this.name = name;
         this.cost = cost;
         this.facebook_id = facebook_id;
         this.house_id = house_id;
+        this.userList = userList;
     }
 
     @Override
@@ -61,7 +64,7 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = SQLiteUtils.addSpendingToLocal(mContext, name, cost, facebook_id, house_id);
+            JSONObject jsonParam = SQLiteUtils.addSpendingToLocal(mContext, name, cost, facebook_id, house_id, userList);
 
             Log.i("JSON", jsonParam.toString());
 

@@ -10,16 +10,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.muhammet.communicator.R;
-import com.example.muhammet.communicator.services.ServiceTasks;
-import com.example.muhammet.communicator.services.ServiceUtils;
 import com.example.muhammet.communicator.tasks.CheckHousesTask;
 import com.example.muhammet.communicator.tasks.CheckUserTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-
-import java.net.MalformedURLException;
 
 public class HouseCheckActivity extends AppCompatActivity{
     Context mContext;
@@ -57,7 +53,7 @@ public class HouseCheckActivity extends AppCompatActivity{
                 if (currentProfile != null) {
                     first_name = currentProfile.getFirstName();
                     last_name = currentProfile.getLastName();
-                    photo_url = currentProfile.getProfilePictureUri(200,200).toString();
+                    photo_url = currentProfile.getProfilePictureUri(150,150).toString();
                     facebook_id = currentProfile.getId();
                     checkIfUserExists();
                 }
@@ -102,7 +98,7 @@ public class HouseCheckActivity extends AppCompatActivity{
             if (currentProfile != null) {
                 first_name = currentProfile.getFirstName();
                 last_name = currentProfile.getLastName();
-                photo_url = currentProfile.getProfilePictureUri(200,200).toString();
+                photo_url = currentProfile.getProfilePictureUri(150,150).toString();
                 facebook_id = currentProfile.getId();
                 checkIfUserExists();
             }

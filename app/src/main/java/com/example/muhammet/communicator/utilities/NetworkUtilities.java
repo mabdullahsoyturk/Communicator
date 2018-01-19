@@ -190,9 +190,9 @@ public class NetworkUtilities {
             int status;
             String created_time;
             String facebook_id;
+            String house_id;
 
             JSONObject item = jsonMemberArray.getJSONObject(i);
-            Log.i("item", item.toString());
 
             _id = item.getInt("id");
             first_name = item.getString("first_name");
@@ -202,6 +202,7 @@ public class NetworkUtilities {
             status = item.getInt("status");
             facebook_id = item.getString("facebook_id");
             created_time = item.getString("created_time");
+            house_id = item.getString("house_id");
 
             ContentValues memberValues = new ContentValues();
             memberValues.put(CommunicatorContract.UserEntry._ID, _id);
@@ -212,6 +213,7 @@ public class NetworkUtilities {
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_STATUS, status);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID, facebook_id);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME, created_time);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_HOUSE_ID, house_id);
 
             memberContentValues[i] = memberValues;
         }

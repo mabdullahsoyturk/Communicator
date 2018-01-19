@@ -1,11 +1,14 @@
 package com.example.muhammet.communicator.tasks;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.muhammet.communicator.activities.BaseActivity;
+import com.example.muhammet.communicator.data.CommunicatorContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +49,39 @@ public class UpdateUserTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoOutput(true);
 
             JSONObject jsonParam = new JSONObject();
+
+            Cursor cursorForUser = mContext.getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
+                    null,
+                    "facebook_id=?",
+                    new String[]{facebook_id},
+                    null);
+
+            if(cursorForUser.moveToFirst()){
+                long user_id = cursorForUser.getLong(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry._ID));
+                String first_name = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME));
+                String last_name = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_LAST_NAME));
+                double balance = cursorForUser.getDouble(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_BALANCE));
+                String photo_url = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_PHOTO_URL));
+                int status = cursorForUser.getInt(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_STATUS));
+                String created = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME));
+                String fid = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID));
+                String hid = house_id;
+
+                ContentValues cv = new ContentValues();
+                cv.put("_id", user_id);
+                cv.put("first_name", first_name);
+                cv.put("last_name", last_name);
+                cv.put("balance", balance);
+                cv.put("photo_url", photo_url);
+                cv.put("status", status);
+                cv.put("created_time", created);
+                cv.put("facebook_id", fid);
+                cv.put("house_id", hid);
+
+                mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
+            }
+            cursorForUser.close();
+
             jsonParam.put("house_id", house_id);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());

@@ -74,8 +74,6 @@ public class CommunicatorSyncTask {
             ContentValues[] buyMeValues = NetworkUtilities
                     .getBuyMeContentValuesFromJson(context, jsonWeatherResponse);
 
-            Log.i("buyMeValues", "" + buyMeValues.length);
-
             if (buyMeValues != null) {
                 /* Get a handle on the ContentResolver to delete and insert data */
                 ContentResolver communicatorContentResolver = context.getContentResolver();
@@ -139,8 +137,6 @@ public class CommunicatorSyncTask {
             ContentValues[] memberValues = NetworkUtilities
                     .getMemberContentValuesFromJson(context, jsonWeatherResponse);
 
-            Log.i("memberValues", "" + memberValues.length);
-
             if (memberValues != null) {
                 /* Get a handle on the ContentResolver to delete and insert data */
                 ContentResolver communicatorContentResolver = context.getContentResolver();
@@ -153,8 +149,6 @@ public class CommunicatorSyncTask {
                 communicatorContentResolver.bulkInsert(
                         CommunicatorContract.UserEntry.CONTENT_URI,
                         memberValues);
-
-                Log.i("Sync Worked", "Works");
             }
             /* If the code reaches this point, we have successfully performed our sync */
 

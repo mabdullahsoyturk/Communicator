@@ -12,6 +12,8 @@ import com.example.muhammet.communicator.data.CommunicatorContract;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class SQLiteUtils {
 
     public static JSONObject addBuyMeToLocal(Context mContext, String name, String description, String facebook_id, String house_id) throws JSONException {
@@ -54,7 +56,7 @@ public class SQLiteUtils {
         return jsonParam;
     }
 
-    public static JSONObject addSpendingToLocal(Context mContext, String name, double cost, String facebook_id, String house_id) throws JSONException {
+    public static JSONObject addSpendingToLocal(Context mContext, String name, double cost, String facebook_id, String house_id, List<String> list) throws JSONException {
         String formattedDate = DateUtilities.getFormattedDate();
 
         ContentValues contentValues = new ContentValues();
