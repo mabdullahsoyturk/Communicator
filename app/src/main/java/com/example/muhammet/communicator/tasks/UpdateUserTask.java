@@ -26,11 +26,13 @@ public class UpdateUserTask extends AsyncTask<String, Void, String> {
     Context mContext;
     private String facebook_id;
     private String house_id;
+    private String house_id_server;
 
-    public UpdateUserTask(Context context, String facebook_id, String house_id){
+    public UpdateUserTask(Context context, String facebook_id, String house_id, String house_id_server){
         mContext = context;
         this.facebook_id = facebook_id;
         this.house_id = house_id;
+        this.house_id_server = house_id_server;
     }
 
     @Override
@@ -66,6 +68,7 @@ public class UpdateUserTask extends AsyncTask<String, Void, String> {
                 String created = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME));
                 String fid = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID));
                 String hid = house_id;
+                String hid_server = house_id_server;
 
                 ContentValues cv = new ContentValues();
                 cv.put("_id", user_id);
@@ -77,12 +80,14 @@ public class UpdateUserTask extends AsyncTask<String, Void, String> {
                 cv.put("created_time", created);
                 cv.put("facebook_id", fid);
                 cv.put("house_id", hid);
+                cv.put("house_id_server", hid_server);
 
                 mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
             }
             cursorForUser.close();
 
             jsonParam.put("house_id", house_id);
+            jsonParam.put("house_id_server", house_id_server);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
@@ -127,6 +132,7 @@ public class UpdateUserTask extends AsyncTask<String, Void, String> {
             Intent intent = new Intent(mContext, BaseActivity.class);
             intent.putExtra("facebook_id", facebook_id);
             intent.putExtra("house_id", String.valueOf(house_id));
+            intent.putExtra("house_id_server", house_id_server);
             mContext.startActivity(intent);
         }
 

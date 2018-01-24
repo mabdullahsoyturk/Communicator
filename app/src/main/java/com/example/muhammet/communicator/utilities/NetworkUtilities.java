@@ -22,16 +22,16 @@ import java.util.Scanner;
 
 public class NetworkUtilities {
 
-    //public static final String STATIC_COMMUNICATOR_URL =
-    //"http://10.0.2.2:3000/";
-
     public static final String STATIC_COMMUNICATOR_URL =
-            "https://warm-meadow-40773.herokuapp.com/";
+    "http://10.0.2.2:3000/";
 
-    //public static final String STATIC_AUTHENTICATED_COMMUNICATOR_URL = "http://10.0.2.2:3000/api/users/";
+//    public static final String STATIC_COMMUNICATOR_URL =
+//            "https://warm-meadow-40773.herokuapp.com/";
 
-    public static final String STATIC_AUTHENTICATED_COMMUNICATOR_URL =
-            "https://warm-meadow-40773.herokuapp.com/api/users/";
+    public static final String STATIC_AUTHENTICATED_COMMUNICATOR_URL = "http://10.0.2.2:3000/api/users/";
+
+//    public static final String STATIC_AUTHENTICATED_COMMUNICATOR_URL =
+//            "https://warm-meadow-40773.herokuapp.com/api/users/";
 
     private static final String USER_BASE_URL = STATIC_COMMUNICATOR_URL;
 
@@ -121,7 +121,7 @@ public class NetworkUtilities {
             buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_NAME, name);
             buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION, description);
             buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_FACEBOOK_ID, facebook_id);
-            buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID, house_id);
+            buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID_SERVER, house_id);
             buyMeValues.put(CommunicatorContract.BuyMeEntry.COLUMN_CREATED_TIME, created_time);
 
             buyMeContentValues[i] = buyMeValues;
@@ -163,7 +163,7 @@ public class NetworkUtilities {
             spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_CREATED_TIME, created_time);
             spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_COST, cost);
             spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_FACEBOOK_ID, facebook_id);
-            spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID, house_id);
+            spendingValues.put(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID_SERVER, house_id);
 
             spendingContentValues[i] = spendingValues;
         }
@@ -191,6 +191,7 @@ public class NetworkUtilities {
             String created_time;
             String facebook_id;
             String house_id;
+            String house_id_server;
 
             JSONObject item = jsonMemberArray.getJSONObject(i);
 
@@ -203,6 +204,7 @@ public class NetworkUtilities {
             facebook_id = item.getString("facebook_id");
             created_time = item.getString("created_time");
             house_id = item.getString("house_id");
+            house_id_server = item.getString("house_id_server");
 
             ContentValues memberValues = new ContentValues();
             memberValues.put(CommunicatorContract.UserEntry._ID, _id);
@@ -214,6 +216,7 @@ public class NetworkUtilities {
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID, facebook_id);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME, created_time);
             memberValues.put(CommunicatorContract.UserEntry.COLUMN_HOUSE_ID, house_id);
+            memberValues.put(CommunicatorContract.UserEntry.COLUMN_HOUSE_ID_SERVER, house_id_server);
 
             memberContentValues[i] = memberValues;
         }

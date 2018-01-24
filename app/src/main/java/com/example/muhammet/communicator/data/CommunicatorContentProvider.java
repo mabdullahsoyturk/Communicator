@@ -378,6 +378,12 @@ public class CommunicatorContentProvider extends ContentProvider{
                 tasksUpdated = db.update(TABLE_NAME, contentValues, "_id=?", new String[]{spending_id});
                 break;
 
+            case HOUSES_WITH_ID:
+                String house_id = uri.getPathSegments().get(1);
+                Log.i("updateWorkedHouse", "worked");
+                tasksUpdated = db.update(CommunicatorContract.HouseEntry.TABLE_NAME, contentValues, "_id=?", new String[]{house_id});
+                break;
+
             case USERS_WITH_ID:
                 String user_id = uri.getPathSegments().get(1);
                 Log.i("updateWorked", "worked");

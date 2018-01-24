@@ -23,18 +23,18 @@ public class CommunicatorSyncTask {
     public static final String ACTION_SHOP_DAY = "shop-day";
 
 
-    public static void syncTask(Context context, String action, String facebook_id, String house_id){
+    public static void syncTask(Context context, String action, String facebook_id, String house_id_server){
 
         if(ACTION_UPDATE_BUY_MES.equals(action)){
-            syncBuyMes(context, facebook_id, house_id);
+            syncBuyMes(context, facebook_id, house_id_server);
         }
 
         else if(ACTION_UPDATE_MEMBERS.equals(action)){
-            syncMembers(context, facebook_id, house_id);
+            syncMembers(context, facebook_id, house_id_server);
         }
 
         else if(ACTION_UPDATE_SPENDINGS.equals(action)){
-            syncSpendings(context, facebook_id, house_id);
+            syncSpendings(context, facebook_id, house_id_server);
         }
 
         else if(ACTION_DISMISS_NOTIFICATION.equals(action)){
@@ -44,7 +44,7 @@ public class CommunicatorSyncTask {
         else if(ACTION_CHECK_BUY_MES.equals(action)){
             Intent intent = new Intent(context, BaseActivity.class);
             intent.putExtra("facebook_id", facebook_id);
-            intent.putExtra("house_id", house_id);
+            intent.putExtra("house_id_server", house_id_server);
             intent.putExtra("fragment", "buy_me_fragment");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
@@ -53,7 +53,7 @@ public class CommunicatorSyncTask {
         else if(ACTION_CHECK_SPENDINGS.equals(action)){
             Intent intent = new Intent(context, BaseActivity.class);
             intent.putExtra("facebook_id", facebook_id);
-            intent.putExtra("house_id", house_id);
+            intent.putExtra("house_id_server", house_id_server);
             intent.putExtra("fragment", "spending_fragment");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
@@ -64,10 +64,10 @@ public class CommunicatorSyncTask {
         }
     }
 
-    synchronized public static void syncBuyMes(Context context, String facebook_id, String house_id) {
+    synchronized public static void syncBuyMes(Context context, String facebook_id, String house_id_server) {
 
         try {
-            String buyMeUrl = NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes";
+            String buyMeUrl = NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id_server) + "/buy_mes";
             
             String jsonWeatherResponse = NetworkUtilities.getStringResponse(buyMeUrl);
 
@@ -96,10 +96,10 @@ public class CommunicatorSyncTask {
 
     }
 
-    synchronized public static void syncSpendings(Context context, String facebook_id, String house_id) {
+    synchronized public static void syncSpendings(Context context, String facebook_id, String house_id_server) {
 
         try {
-            String spendingUrl = NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/spendings";
+            String spendingUrl = NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id_server) + "/spendings";
 
             String jsonWeatherResponse = NetworkUtilities.getStringResponse(spendingUrl);
 
@@ -127,10 +127,10 @@ public class CommunicatorSyncTask {
 
     }
 
-    synchronized public static void syncMembers(Context context, String facebook_id, String house_id) {
+    synchronized public static void syncMembers(Context context, String facebook_id, String house_id_server) {
 
         try {
-            String memberUrl = NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/members";
+            String memberUrl = NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id_server) + "/members";
 
             String jsonWeatherResponse = NetworkUtilities.getStringResponse(memberUrl);
 

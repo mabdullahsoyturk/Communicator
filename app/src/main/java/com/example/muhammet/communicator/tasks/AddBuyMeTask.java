@@ -28,14 +28,14 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
     private String name;
     private String description;
     private String facebook_id;
-    private String house_id;
+    private String house_id_server;
 
-    public AddBuyMeTask(Context context, String name, String description, String facebook_id, String house_id) throws MalformedURLException {
+    public AddBuyMeTask(Context context, String name, String description, String facebook_id, String house_id_server) throws MalformedURLException {
         mContext = context;
         this.name = name;
         this.description = description;
         this.facebook_id = facebook_id;
-        this.house_id = house_id;
+        this.house_id_server = house_id_server;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = addBuyMeToLocal(mContext, name, description, facebook_id, house_id);
+            JSONObject jsonParam = addBuyMeToLocal(mContext, name, description, facebook_id, house_id_server);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
@@ -106,7 +106,7 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
 
         Intent intent = new Intent(mContext,BaseActivity.class);
         intent.putExtra("facebook_id", facebook_id);
-        intent.putExtra("house_id", house_id);
+        intent.putExtra("house_id_server", house_id_server);
         mContext.startActivity(intent);
     }
 }

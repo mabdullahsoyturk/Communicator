@@ -24,7 +24,8 @@ public class AddBuyMeActivity extends AppCompatActivity {
     private TextView tv_description;
 
     private String facebook_id;
-    private String house_id;
+    //private String house_id;
+    private String house_id_server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,9 @@ public class AddBuyMeActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         facebook_id = intent.getStringExtra("facebook_id");
-        house_id = intent.getStringExtra("house_id");
-        Log.i("HouseIdInAddBuyMe", house_id);
+        //house_id = intent.getStringExtra("house_id");
+        house_id_server = intent.getStringExtra("house_id_server");
+        Log.i("HouseIdInAddBuyMe", house_id_server);
 
         tv_name = findViewById(R.id.activity_add_buy_me_name);
         tv_description = findViewById(R.id.activity_add_buy_me_description);
@@ -52,7 +54,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
         }
 
         //ServiceUtils.addBuyMeService(mContext, ServiceTasks.ACTION_ADD_BUY_ME, name, description, facebook_id, house_id);
-        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this,name,description, facebook_id, house_id);
-        addBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/buy_mes");
+        AddBuyMeTask addBuyMeTask = new AddBuyMeTask(this,name,description, facebook_id, house_id_server);
+        addBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id_server) + "/buy_mes");
     }
 }

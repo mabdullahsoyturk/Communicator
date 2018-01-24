@@ -53,7 +53,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private String last_name;
     private String photo_url;
     private String facebook_id;
-    private String house_id;
+    //private String house_id;
+    private String house_id_server;
 
     private TextView name;
     private TextView email;
@@ -69,7 +70,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         Intent intent = getIntent();
         facebook_id = intent.getStringExtra("facebook_id");
-        house_id = intent.getStringExtra("house_id");
+        //house_id = intent.getStringExtra("house_id");
+        house_id_server = intent.getStringExtra("house_id_server");
 
         //CommunicatorSyncUtils.initialize(this);
 
@@ -92,21 +94,24 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         fragment = new HomeFragment();
                         Bundle bundleHome = new Bundle();
                         bundleHome.putString("facebook_id", facebook_id);
-                        bundleHome.putString("house_id", house_id);
+                        //bundleHome.putString("house_id", house_id);
+                        bundleHome.putString("house_id_server", house_id_server);
                         fragment.setArguments(bundleHome);
                         break;
                     case R.id.navigation_buy_me:
                         fragment = new BuyMeFragment();
                         Bundle bundleBuyMe = new Bundle();
                         bundleBuyMe.putString("facebook_id", facebook_id);
-                        bundleBuyMe.putString("house_id", house_id);
+                        //bundleBuyMe.putString("house_id", house_id);
+                        bundleBuyMe.putString("house_id_server", house_id_server);
                         fragment.setArguments(bundleBuyMe);
                         break;
                     case R.id.navigation_spendings:
                         fragment = new SpendingsFragment();
                         Bundle bundleSpendings = new Bundle();
                         bundleSpendings.putString("facebook_id", facebook_id);
-                        bundleSpendings.putString("house_id", house_id);
+                        //bundleSpendings.putString("house_id", house_id);
+                        bundleSpendings.putString("house_id_server", house_id_server);
                         fragment.setArguments(bundleSpendings);
                         break;
             }
@@ -205,7 +210,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             fragment = new BuyMeFragment();
             Bundle bundle = new Bundle();
             bundle.putString("facebook_id", facebook_id);
-            bundle.putString("house_id", house_id);
+            //bundle.putString("house_id", house_id);
+            bundle.putString("house_id_server", house_id_server);
             fragment.setArguments(bundle);
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
@@ -216,7 +222,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             fragment = new SpendingsFragment();
             Bundle bundle = new Bundle();
             bundle.putString("facebook_id", facebook_id);
-            bundle.putString("house_id", house_id);
+            //bundle.putString("house_id", house_id);
+            bundle.putString("house_id_server", house_id_server);
             fragment.setArguments(bundle);
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
@@ -227,7 +234,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             fragment = new HomeFragment();
             Bundle bundle = new Bundle();
             bundle.putString("facebook_id", facebook_id);
-            bundle.putString("house_id",house_id);
+            //bundle.putString("house_id",house_id);
+            bundle.putString("house_id_server", house_id_server);
             fragment.setArguments(bundle);
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
@@ -296,6 +304,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     public void sendToPrefs(View view){
         Intent startSettingsActivity = new Intent(this,SettingsActivity.class);
+        startSettingsActivity.putExtra("facebook_id", facebook_id);
+        //startSettingsActivity.putExtra("house_id", house_id);
+        startSettingsActivity.putExtra("house_id_server", house_id_server);
         startActivity(startSettingsActivity);
     }
 }

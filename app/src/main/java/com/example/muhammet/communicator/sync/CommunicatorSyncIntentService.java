@@ -13,6 +13,6 @@ public class CommunicatorSyncIntentService extends IntentService{
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         String action = intent.getAction();
-        CommunicatorSyncTask.syncTask(this, action, intent.getStringExtra("facebook_id"), intent.getStringExtra("house_id"));
+        CommunicatorSyncTask.syncTask(this, action, intent.getStringExtra("facebook_id"), intent.getStringExtra("house_id_server"));
     }
 }

@@ -13,13 +13,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
+import com.example.muhammet.communicator.tasks.AddPaymentTask;
+import com.example.muhammet.communicator.utilities.CustomSpinner;
+import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PayActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -27,11 +34,13 @@ public class PayActivity extends AppCompatActivity implements LoaderManager.Load
     private static final String TAG = PayActivity.class.getSimpleName();
 
     Context mContext;
+    private EditText et_how_much;
 
     private String facebook_id;
-    private String house_id;
+    private String house_id_server;
     private Spinner spinner;
     private Button addPayment;
+    private String[] ids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +50,24 @@ public class PayActivity extends AppCompatActivity implements LoaderManager.Load
 
         spinner = findViewById(R.id.activitiy_pay_spinner);
         addPayment = findViewById(R.id.add_payment_button);
+        et_how_much = findViewById(R.id.activity_pay_how_much);
 
         mContext = this;
 
         Intent intent = getIntent();
         facebook_id = intent.getStringExtra("facebook_id");
-        house_id = intent.getStringExtra("house_id");
+        house_id_server = intent.getStringExtra("house_id_server");
 
         getSupportLoaderManager().initLoader(ACTIVITY_PAY_LOADER_ID, null, this);
     }
 
-    public void onClickMakePayment(View view){
+    public void onClickMakePayment(View view) throws MalformedURLException {
+        String how_much = et_how_much.getText().toString();
 
+        int index = spinner.getSelectedItemPosition();
+
+        AddPaymentTask addPaymentTask = new AddPaymentTask(mContext, facebook_id, Double.parseDouble(how_much), ids[index], house_id_server);
+        addPaymentTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/payment");
     }
 
     @Override
@@ -79,8 +94,8 @@ public class PayActivity extends AppCompatActivity implements LoaderManager.Load
                 try {
                     return mContext.getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
                             null,
-                            null,
-                            null,
+                            "house_id_server=?",
+                            new String[]{house_id_server},
                             null);
 
                 } catch (Exception e) {
@@ -100,11 +115,13 @@ public class PayActivity extends AppCompatActivity implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         List<String> list = new ArrayList<String>();
-        Log.i("data size", "" + data.getCount());
+        ids = new String[data.getCount()];
 
         for(int i = 0; i < data.getCount(); i++){
             data.moveToPosition(i);
             String first_name = data.getString(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME));
+            String face_id = data.getString(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID));
+            ids[i] = face_id;
             list.add(first_name);
         }
 

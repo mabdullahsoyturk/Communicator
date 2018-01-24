@@ -55,11 +55,11 @@ public class CommunicatorSyncUtils {
         scheduleFirebaseJobDispatcherSync(context);
     }
 
-    public static void startImmediateSync(@NonNull final Context context, String action, String facebook_id, String house_id) {
+    public static void startImmediateSync(@NonNull final Context context, String action, String facebook_id, String house_id_server) {
         Intent intentToSyncImmediately = new Intent(context, CommunicatorSyncIntentService.class);
         intentToSyncImmediately.setAction(action);
         intentToSyncImmediately.putExtra("facebook_id", facebook_id);
-        intentToSyncImmediately.putExtra("house_id", house_id);
+        intentToSyncImmediately.putExtra("house_id_server", house_id_server);
         context.startService(intentToSyncImmediately);
     }
 }

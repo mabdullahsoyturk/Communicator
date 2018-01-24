@@ -74,7 +74,7 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
         int nameIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_NAME);
         int descriptionIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION);
         int facebookIdIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_FACEBOOK_ID);
-        int houseIdIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID);
+        int houseIdIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID_SERVER);
         int createdTimeIndex = mCursor.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_CREATED_TIME);
 
         mCursor.moveToPosition(position);

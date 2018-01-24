@@ -35,8 +35,10 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
     Context mContext;
 
     private String facebook_id;
-    private String house_id;
+    //private String house_id;
+    private String house_id_server;
     private CustomSpinner spinner;
+    private String[] listOfIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,9 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
 
         Intent intent = getIntent();
         facebook_id = intent.getStringExtra("facebook_id");
-        house_id = intent.getStringExtra("house_id");
+        //house_id = intent.getStringExtra("house_id");
+        house_id_server = intent.getStringExtra("house_id_server");
+        Log.i("HouseIdServerSpending", house_id_server);
 
         spinner = findViewById(R.id.activity_add_spending_members_spinner);
 
@@ -62,12 +66,17 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
         String name = et_add_spending_name.getText().toString();
         String cost = et_add_spending_cost.getText().toString();
 
-        List<String> list = spinner.getSelectedStrings();
+        List<Integer> indices = spinner.getSelectedIndicies();
+        List<String> listOfNames = spinner.getSelectedStrings();
+        List<String> selectedUserIds = new ArrayList<>();
 
+        for(int i = 0; i < indices.size(); i++){
+            selectedUserIds.add(listOfIds[indices.get(i)]);
+        }
         //ServiceUtils.addSpendingService(mContext, ServiceTasks.ACTION_ADD_SPENDING, name, Double.parseDouble(cost), facebook_id, house_id);
 
-        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id, list);
-        addSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/spendings");
+        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id_server, selectedUserIds);
+        addSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id_server) + "/spendings");
     }
 
     @Override
@@ -94,8 +103,8 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
                 try {
                     return mContext.getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
                             null,
-                            "house_id=?",
-                             new String[]{house_id},
+                            "house_id_server=?",
+                             new String[]{house_id_server},
                             null);
 
                 } catch (Exception e) {
@@ -114,16 +123,20 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        String[] list = new String[data.getCount()];
+        String[] listOfNames = new String[data.getCount()];
+        listOfIds = new String[data.getCount()];
 
         for(int i = 0; i < data.getCount(); i++){
             data.moveToPosition(i);
             String first_name = data.getString(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FIRST_NAME));
-            list[i] = (first_name);
+            String user_facebook_id = data.getString(data.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID));
+
+            listOfNames[i] = first_name;
+            listOfIds[i] = user_facebook_id;
+            Log.i("Ids", user_facebook_id);
         }
 
-        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, list);
-        spinner.setItems(list);
+        spinner.setItems(listOfNames);
     }
 
     @Override

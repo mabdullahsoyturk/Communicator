@@ -27,6 +27,7 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
     Context mContext;
     private String facebook_id;
     private String house_id;
+    private String house_id_server;
     
     public CheckHousesTask(Context context, String facebook_id, String first_name, String last_name, String photo_url) throws MalformedURLException {
         mContext = context;
@@ -88,6 +89,7 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
 
                 jsonObject1 = jsonObject.getJSONObject("data");
                 house_id = jsonObject1.getString("id");
+                house_id_server = jsonObject1.getString("_id");
 
                 Cursor cursorForUser = mContext.getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
                         null,
@@ -105,6 +107,7 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
                     String created = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_CREATED_TIME));
                     String fid = cursorForUser.getString(cursorForUser.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID));
                     String hid = house_id;
+                    String hid_server = house_id_server;
 
                     ContentValues cv = new ContentValues();
                     cv.put("_id", user_id);
@@ -116,17 +119,20 @@ public class CheckHousesTask extends AsyncTask<String, Void, String> {
                     cv.put("created_time", created);
                     cv.put("facebook_id", fid);
                     cv.put("house_id", hid);
+                    cv.put("house_id_server", hid_server);
 
                     mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
                 }
                 cursorForUser.close();
 
-                AddMemberTask addMemberTask = new AddMemberTask(mContext, facebook_id, house_id);
-                addMemberTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/members");
+                Log.i("HouseIdInCheckHouses", house_id);
+
+                AddMemberTask addMemberTask = new AddMemberTask(mContext, facebook_id, house_id, house_id_server);
+                addMemberTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id_server) + "/members");
 
                 Intent intent = new Intent(mContext, BaseActivity.class);
                 intent.putExtra("facebook_id", facebook_id);
-                intent.putExtra("house_id", house_id);
+                intent.putExtra("house_id_server", house_id_server);
                 mContext.startActivity(intent);
             }
         } catch (JSONException e) {

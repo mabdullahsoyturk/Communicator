@@ -50,7 +50,8 @@ public class BuyMeFragment extends Fragment implements
     private DividerItemDecoration mDividerItemDecoration;
 
     private String facebook_id;
-    private String house_id;
+    //private String house_id;
+    private String house_id_server;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,7 +60,8 @@ public class BuyMeFragment extends Fragment implements
         View view = inflater.inflate(R.layout.fragment_buy_me, container, false);
 
         facebook_id = getArguments().getString("facebook_id");
-        house_id = getArguments().getString("house_id");
+        //house_id = getArguments().getString("house_id");
+        house_id_server = getArguments().getString("house_id_server");
 
         mContext = getContext();
 
@@ -69,7 +71,8 @@ public class BuyMeFragment extends Fragment implements
             public void onClick(View view) {
                 Intent startAddBuyMeActivity = new Intent(mContext,AddBuyMeActivity.class);
                 startAddBuyMeActivity.putExtra("facebook_id", facebook_id);
-                startAddBuyMeActivity.putExtra("house_id", house_id);
+                //startAddBuyMeActivity.putExtra("house_id", house_id);
+                startAddBuyMeActivity.putExtra("house_id_server", house_id_server);
                 startActivity(startAddBuyMeActivity);
             }
         });
@@ -80,13 +83,13 @@ public class BuyMeFragment extends Fragment implements
             public void onClick(View view) {
                 //ServiceUtils.deleteAllBuyMesService(mContext, ServiceTasks.ACTION_DELETE_ALL_BUY_MES, facebook_id, house_id);
                 try {
-                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id, house_id, new AsyncTaskFinishedObserver() {
+                    DeleteAllBuyMesTask deleteAllBuyMesTask = new DeleteAllBuyMesTask(getContext(), buyMeAdapter, facebook_id, house_id_server, new AsyncTaskFinishedObserver() {
                         @Override
                         public void isFinished(String s) {
                             restartLoader();
                         }
                     });
-                    deleteAllBuyMesTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes");
+                    deleteAllBuyMesTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id_server) + "/buy_mes");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -114,13 +117,13 @@ public class BuyMeFragment extends Fragment implements
 
                 String stringId = Long.toString(id);
 
-                DeleteBuyMeTask deleteBuyMeTask = new DeleteBuyMeTask(getContext(), facebook_id, house_id, stringId,new AsyncTaskFinishedObserver() {
+                DeleteBuyMeTask deleteBuyMeTask = new DeleteBuyMeTask(getContext(), facebook_id, house_id_server, stringId,new AsyncTaskFinishedObserver() {
                     @Override
                     public void isFinished(String s) {
                         restartLoader();
                     }
                 });
-                deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes/" + stringId);
+                deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id_server) + "/buy_mes/" + stringId);
             }
         }).attachToRecyclerView(mRecyclerView);
 
@@ -164,8 +167,8 @@ public class BuyMeFragment extends Fragment implements
                 try {
                     return getActivity().getContentResolver().query(CommunicatorContract.BuyMeEntry.CONTENT_URI,
                             null,
-                            "house_id=?",
-                            new String[]{house_id},
+                            "house_id_server=?",
+                            new String[]{house_id_server},
                             null);
 
                 } catch (Exception e) {
@@ -186,8 +189,8 @@ public class BuyMeFragment extends Fragment implements
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         buyMeAdapter.swapCursor(data);
         if(data.moveToFirst()){
-            house_id = data.getString(data.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID));
-            CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_BUY_MES, facebook_id, house_id);
+            house_id_server = data.getString(data.getColumnIndex(CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID_SERVER));
+            CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_BUY_MES, facebook_id, house_id_server);
         }
     }
 
@@ -204,13 +207,13 @@ public class BuyMeFragment extends Fragment implements
     @Override
     public void onDeleteClicked(long id) {
         //ServiceUtils.deleteBuyMeService(mContext, ServiceTasks.ACTION_DELETE_BUY_ME, facebook_id, house_id, String.valueOf(id));
-        DeleteBuyMeTask deleteBuyMeTask = new DeleteBuyMeTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
+        DeleteBuyMeTask deleteBuyMeTask = new DeleteBuyMeTask(getContext(), facebook_id, house_id_server, String.valueOf(id),new AsyncTaskFinishedObserver() {
             @Override
             public void isFinished(String s) {
                 restartLoader();
             }
         });
-        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/buy_mes/" + String.valueOf(id));
+        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id_server) + "/buy_mes/" + String.valueOf(id));
     }
 
 }

@@ -21,11 +21,13 @@ public class AddMemberTask extends AsyncTask<String, Void, String> {
     Context mContext;
     String facebook_id;
     String house_id;
+    String house_id_server;
 
-    public AddMemberTask(Context context, String facebook_id, String house_id) throws MalformedURLException {
+    public AddMemberTask(Context context, String facebook_id, String house_id, String house_id_server) throws MalformedURLException {
         mContext = context;
         this.facebook_id = facebook_id;
         this.house_id = house_id;
+        this.house_id_server = house_id_server;
     }
 
     @Override
@@ -46,10 +48,10 @@ public class AddMemberTask extends AsyncTask<String, Void, String> {
 
             JSONObject jsonParam = new JSONObject();
             jsonParam.put("house_id", house_id);
+            jsonParam.put("house_id_server", house_id_server);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
-
             os.flush();
             os.close();
 

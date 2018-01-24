@@ -45,6 +45,7 @@ public class CommunicatorContract {
         public static final String COLUMN_STATUS        = "status";
         public static final String COLUMN_FACEBOOK_ID   = "facebook_id";
         public static final String COLUMN_HOUSE_ID      = "house_id";
+        public static final String COLUMN_HOUSE_ID_SERVER = "house_id_server";
         public static final String COLUMN_CREATED_TIME  = "created_time";
 
     }
@@ -54,6 +55,7 @@ public class CommunicatorContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_HOUSES).build();
 
         public static final String TABLE_NAME = "houses";
+        public static final String COLUMN_HOUSE_ID_SERVER = "house_id_server";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_FACEBOOK_ID = "facebook_id";
         public static final String COLUMN_CREATED_TIME = "created_time";
@@ -68,7 +70,7 @@ public class CommunicatorContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_FACEBOOK_ID = "facebook_id";
-        public static final String COLUMN_HOUSE_ID = "house_id";
+        public static final String COLUMN_HOUSE_ID_SERVER = "house_id_server";
         public static final String COLUMN_CREATED_TIME = "created_time";
     }
 
@@ -82,7 +84,7 @@ public class CommunicatorContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_COST = "cost";
         public static final String COLUMN_FACEBOOK_ID = "facebook_id";
-        public static final String COLUMN_HOUSE_ID = "house_id";
+        public static final String COLUMN_HOUSE_ID_SERVER = "house_id_server";
         public static final String COLUMN_CREATED_TIME = "created_time";
     }
 
@@ -92,7 +94,7 @@ public class CommunicatorContract {
 
         public static final String TABLE_NAME = "house_members";
 
-        public static final String COLUMN_HOUSE_ID = "house_id";
+        public static final String COLUMN_HOUSE_ID_SERVER = "house_id_server";
         public static final String COLUMN_FACEBOOK_ID = "facebook_id";
     }
 }

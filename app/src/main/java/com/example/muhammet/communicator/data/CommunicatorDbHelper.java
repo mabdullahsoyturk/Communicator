@@ -8,7 +8,7 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "communicator2.db";
 
-    private static final int VERSION = 32;
+    private static final int VERSION = 33;
 
     public CommunicatorDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -26,10 +26,12 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.UserEntry.COLUMN_STATUS + " INTEGER DEFAULT 1, " +
                 CommunicatorContract.UserEntry.COLUMN_CREATED_TIME + " TEXT, " +
                 CommunicatorContract.UserEntry.COLUMN_HOUSE_ID + " TEXT, " +
+                CommunicatorContract.UserEntry.COLUMN_HOUSE_ID_SERVER + " TEXT, " +
                 CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + " TEXT NOT NULL UNIQUE ON CONFLICT REPLACE);";
 
         final String CREATE_HOUSES_TABLE = "CREATE TABLE " + CommunicatorContract.HouseEntry.TABLE_NAME + " (" +
                 CommunicatorContract.HouseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                CommunicatorContract.HouseEntry.COLUMN_HOUSE_ID_SERVER + " TEXT, " +
                 CommunicatorContract.HouseEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 CommunicatorContract.HouseEntry.COLUMN_FACEBOOK_ID + " TEXT UNIQUE ON CONFLICT REPLACE, " +
                 CommunicatorContract.HouseEntry.COLUMN_CREATED_TIME + " TEXT, " +
@@ -43,9 +45,9 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.BuyMeEntry.COLUMN_DESCRIPTION    + " TEXT NOT NULL, " +
                 CommunicatorContract.BuyMeEntry.COLUMN_CREATED_TIME + " TEXT, " +
                 CommunicatorContract.BuyMeEntry.COLUMN_FACEBOOK_ID + " TEXT, " +
-                CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID + " TEXT, " +
-                "FOREIGN KEY (" + CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID + ") " + "REFERENCES " +
-                CommunicatorContract.HouseEntry.TABLE_NAME + "(" + CommunicatorContract.HouseEntry._ID + ")," +
+                CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID_SERVER + " TEXT, " +
+                "FOREIGN KEY (" + CommunicatorContract.BuyMeEntry.COLUMN_HOUSE_ID_SERVER + ") " + "REFERENCES " +
+                CommunicatorContract.HouseEntry.TABLE_NAME + "(" + CommunicatorContract.HouseEntry.COLUMN_HOUSE_ID_SERVER + ")," +
                 "FOREIGN KEY (" + CommunicatorContract.BuyMeEntry.COLUMN_FACEBOOK_ID + ") " + "REFERENCES " +
                 CommunicatorContract.UserEntry.TABLE_NAME + "(" + CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + ")" +
                 ");";
@@ -56,15 +58,15 @@ public class CommunicatorDbHelper extends SQLiteOpenHelper {
                 CommunicatorContract.SpendingEntry.COLUMN_CREATED_TIME + " TEXT, " +
                 CommunicatorContract.SpendingEntry.COLUMN_COST + " DECIMAL(6,2) NOT NULL, " +
                 CommunicatorContract.SpendingEntry.COLUMN_FACEBOOK_ID + " TEXT, " +
-                CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID + " TEXT, " +
-                "FOREIGN KEY (" + CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID + ") " + "REFERENCES " +
-                CommunicatorContract.HouseEntry.TABLE_NAME + "(" + CommunicatorContract.HouseEntry._ID + "), " +
+                CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID_SERVER + " TEXT, " +
+                "FOREIGN KEY (" + CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID_SERVER + ") " + "REFERENCES " +
+                CommunicatorContract.HouseEntry.TABLE_NAME + "(" + CommunicatorContract.HouseEntry.COLUMN_HOUSE_ID_SERVER + "), " +
                 "FOREIGN KEY (" + CommunicatorContract.SpendingEntry.COLUMN_FACEBOOK_ID + ") " + "REFERENCES " +
                 CommunicatorContract.UserEntry.TABLE_NAME + "(" + CommunicatorContract.UserEntry.COLUMN_FACEBOOK_ID + "));";
 
         final String CREATE_HOUSE_MEMBERS_TABLE = "CREATE TABLE " + CommunicatorContract.HouseMemberEntry.TABLE_NAME + " (" +
                 CommunicatorContract.HouseMemberEntry.COLUMN_FACEBOOK_ID + " TEXT, " +
-                CommunicatorContract.HouseMemberEntry.COLUMN_HOUSE_ID + " TEXT);";
+                CommunicatorContract.HouseMemberEntry.COLUMN_HOUSE_ID_SERVER + " TEXT);";
 
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_HOUSES_TABLE);

@@ -87,7 +87,7 @@ public class HouseCheckActivity extends AppCompatActivity{
             //ServiceUtils.checkUserService(mContext, ServiceTasks.ACTION_CHECK_USER, first_name, last_name, photo_url, facebook_id);
 
             CheckUserTask checkUserTask = new CheckUserTask(mContext, first_name,last_name,photo_url,facebook_id, progressBar);
-            checkUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup");
+            checkUserTask.execute(NetworkUtilities.STATIC_COMMUNICATOR_URL + "signup/check");
         } catch (Exception e) {e.printStackTrace();}
     }
 

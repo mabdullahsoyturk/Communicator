@@ -39,7 +39,7 @@
     <string name="activity_add_buy_me_description">Description: </string>
 
     <string name="activity_pay_from">From: </string>
-    <string name="activity_pay_to">To: </string>
+    <string name="activity_pay_to">Who are paying to: </string>
     <string name="activity_pay_how_much">How Much: </string>
 
     <string name="activity_check_house_explanation">If you have an invitation code from a house please enter it.</string>
@@ -55,9 +55,10 @@
     <string name="fragment_buy_me_delete_all">Delete All</string>
 
     <string name="fragment_home_house_name">House Name</string>
-    <string name="fragment_home_house_add_member">Add Member</string>
+    <string name="fragment_home_house_invite_member">Invite Member</string>
     <string name="fragment_home_house_pay">Pay</string>
     <string name="fragment_home_house_add_spending">Add Spending</string>
+    <string name="fragment_home_invitation_text">Send the following code to the person you want to invite.</string>
 
     <string name="fragment_spendings_filter">Filter</string>
 

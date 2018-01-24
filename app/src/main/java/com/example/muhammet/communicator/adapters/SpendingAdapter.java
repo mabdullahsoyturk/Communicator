@@ -77,7 +77,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
         int nameIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_NAME);
         int costIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_COST);
         int facebookIdIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_FACEBOOK_ID);
-        int houseIdIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID);
+        int houseIdIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID_SERVER);
         int createdTimeIndex = mCursor.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_CREATED_TIME);
 
         mCursor.moveToPosition(position);

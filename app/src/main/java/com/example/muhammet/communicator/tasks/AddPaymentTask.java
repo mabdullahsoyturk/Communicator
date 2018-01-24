@@ -2,7 +2,6 @@ package com.example.muhammet.communicator.tasks;
 
 import android.content.Context;
 import android.content.Intent;
-
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,50 +16,47 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import java.util.List;
+public class AddPaymentTask extends AsyncTask<String, Void, String> {
 
-public class AddSpendingTask extends AsyncTask<String, Void, String> {
-
-    List<String> listOfIds;
     Context mContext;
-    private String name;
-    private double cost;
     private String facebook_id;
     private String house_id_server;
+    private double how_much;
+    private String to;
 
-    public AddSpendingTask(Context context, String name, double cost, String facebook_id, String house_id_server, List<String> listOfIds) throws MalformedURLException {
+    public AddPaymentTask(Context context, String facebook_id, double how_much, String to, String house_id_server) throws MalformedURLException {
         mContext = context;
-        this.name = name;
-        this.cost = cost;
         this.facebook_id = facebook_id;
+        this.how_much = how_much;
+        this.to = to;
         this.house_id_server = house_id_server;
-        this.listOfIds = listOfIds;
     }
 
     @Override
     protected String doInBackground(String... strings) {
-
         HttpURLConnection urlConnection   = null;
         BufferedReader reader          = null;
-        String 		      communicatorJsonStr = null;
+        String 		      resultJsonStr = null;
 
         try {
             URL communicatorURL = new URL(strings[0]);
             urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
-            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestMethod("PUT");
             urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             urlConnection.setRequestProperty("Accept","application/json");
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = SQLiteUtils.addSpendingToLocal(mContext, name, cost, facebook_id, house_id_server, listOfIds);
+            SQLiteUtils.addPayment(mContext, facebook_id, how_much, to);
 
-            Log.i("JSON", jsonParam.toString());
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.put("facebook_id", facebook_id);
+            jsonParam.put("how_much", how_much);
+            jsonParam.put("to", to);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
@@ -78,13 +74,13 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
                     buffer.append(line + "\n");
                 }
                 if (buffer.length() != 0) {
-                    communicatorJsonStr = buffer.toString();
+                    resultJsonStr = buffer.toString();
                 }
             }
 
-            Log.i("RESULT", communicatorJsonStr);
+            Log.i("RESULT", resultJsonStr);
         } catch (IOException e) {
-            Log.e("SpendingTask", "Error ", e);
+            Log.e("MainActivity", "Error ", e);
         } catch (JSONException e) {
             e.printStackTrace();
         } finally{
@@ -95,22 +91,22 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
 
         String success = "";
         try {
-            JSONObject communicatorJson  = new JSONObject(communicatorJsonStr);
-            success = communicatorJson.getString("success");
+            JSONObject resultJson  = new JSONObject(resultJsonStr);
+            success = resultJson.getString("success");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        Intent intent = new Intent(mContext, BaseActivity.class);
-        intent.putExtra("facebook_id", facebook_id);
-        intent.putExtra("house_id_server", house_id_server);
-        mContext.startActivity(intent);
 
         return success;
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        Intent intent = new Intent(mContext, BaseActivity.class);
+        intent.putExtra("facebook_id", facebook_id);
+        intent.putExtra("house_id_server", house_id_server);
+        mContext.startActivity(intent);
     }
 }

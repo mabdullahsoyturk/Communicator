@@ -27,6 +27,7 @@ import com.example.muhammet.communicator.data.CommunicatorContract;
 import com.example.muhammet.communicator.sync.CommunicatorSyncTask;
 import com.example.muhammet.communicator.sync.CommunicatorSyncUtils;
 import com.example.muhammet.communicator.tasks.DeleteSpendingTask;
+import com.example.muhammet.communicator.tasks.UpdateBalancesTask;
 import com.example.muhammet.communicator.utilities.NetworkUtilities;
 
 public class SpendingsFragment extends Fragment implements
@@ -43,7 +44,8 @@ public class SpendingsFragment extends Fragment implements
     private DividerItemDecoration mDividerItemDecoration;
 
     private String facebook_id;
-    private String house_id;
+    //private String house_id;
+    private String house_id_server;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,7 +56,8 @@ public class SpendingsFragment extends Fragment implements
         mContext = getContext();
 
         facebook_id = getArguments().getString("facebook_id");
-        house_id = getArguments().getString("house_id");
+        //house_id = getArguments().getString("house_id");
+        house_id_server = getArguments().getString("house_id_server");
 
         mRecyclerView = view.findViewById(R.id.rv_spendings);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
@@ -77,13 +80,13 @@ public class SpendingsFragment extends Fragment implements
 
                 String stringId = Long.toString(id);
 
-                DeleteSpendingTask deleteSpendingTask = new DeleteSpendingTask(getContext(), facebook_id, house_id, stringId, new AsyncTaskFinishedObserver() {
+                DeleteSpendingTask deleteSpendingTask = new DeleteSpendingTask(getContext(), facebook_id, house_id_server, stringId, new AsyncTaskFinishedObserver() {
                     @Override
                     public void isFinished(String s) {
                         restartLoader();
                     }
                 });
-                deleteSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id) + "/spendings/" + stringId);
+                deleteSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id_server) + "/spendings/" + stringId);
             }
         }).attachToRecyclerView(mRecyclerView);
 
@@ -127,8 +130,8 @@ public class SpendingsFragment extends Fragment implements
                 try {
                     return getActivity().getContentResolver().query(CommunicatorContract.SpendingEntry.CONTENT_URI,
                             null,
-                            "house_id=?",
-                            new String[]{house_id},
+                            "house_id_server=?",
+                            new String[]{house_id_server},
                             null);
 
                 } catch (Exception e) {
@@ -149,8 +152,8 @@ public class SpendingsFragment extends Fragment implements
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         spendingAdapter.swapCursor(data);
         if(data.moveToFirst()){
-            house_id = data.getString(data.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID));
-            CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_SPENDINGS,facebook_id, house_id);
+            house_id_server = data.getString(data.getColumnIndex(CommunicatorContract.SpendingEntry.COLUMN_HOUSE_ID_SERVER));
+            CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_SPENDINGS,facebook_id, house_id_server);
         }
     }
 
@@ -165,15 +168,23 @@ public class SpendingsFragment extends Fragment implements
     }
 
     @Override
-    public void onDeleteClicked(long id) {
-        //ServiceUtils.deleteSpendingService(mContext, ServiceTasks.ACTION_DELETE_SPENDING, facebook_id, house_id, String.valueOf(id));
-        DeleteSpendingTask deleteBuyMeTask = new DeleteSpendingTask(getContext(), facebook_id, house_id, String.valueOf(id),new AsyncTaskFinishedObserver() {
+    public void onDeleteClicked(final long id) {
+        Log.i("SpendingId", "" + id);
+
+        UpdateBalancesTask updateBalancesTask = new UpdateBalancesTask(mContext, facebook_id, new AsyncTaskFinishedObserver() {
             @Override
             public void isFinished(String s) {
-                restartLoader();
+                DeleteSpendingTask deleteBuyMeTask = new DeleteSpendingTask(getContext(), facebook_id, house_id_server, String.valueOf(id),new AsyncTaskFinishedObserver() {
+                    @Override
+                    public void isFinished(String s) {
+                        restartLoader();
+                    }
+                });
+                deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id_server) + "/spendings/" + String.valueOf(id));
             }
         });
-        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id) + "/spendings/" + String.valueOf(id));
+
+        updateBalancesTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id_server) + "/spendings/" + String.valueOf(id));
     }
 
 }

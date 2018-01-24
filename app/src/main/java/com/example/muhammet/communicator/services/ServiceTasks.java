@@ -226,14 +226,14 @@ public class ServiceTasks {
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = SQLiteUtils.addSpendingToLocal(context, name, cost, facebook_id, house_id);
+            //JSONObject jsonParam = SQLiteUtils.addSpendingToLocal(context, name, cost, facebook_id, house_id);
 
-            Log.i("JSON", jsonParam.toString());
-
-            DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
-            os.writeBytes(jsonParam.toString());
-            os.flush();
-            os.close();
+//            Log.i("JSON", jsonParam.toString());
+//
+//            DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
+//            os.writeBytes(jsonParam.toString());
+//            os.flush();
+//            os.close();
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer     = new StringBuffer();
@@ -253,8 +253,6 @@ public class ServiceTasks {
             Log.i("RESULT", communicatorJsonStr);
         } catch (IOException e) {
             Log.e("SpendingTask", "Error ", e);
-        } catch (JSONException e) {
-            e.printStackTrace();
         } finally{
             if (urlConnection != null) {
                 urlConnection.disconnect();

@@ -47,7 +47,7 @@ public class AddNewHouseActivity extends AppCompatActivity {
 //                ServiceUtils.addNewHouseService(mContext, ServiceTasks.ACTION_ADD_NEW_HUOSE, house_name, facebook_id);
                 try {
                     AddNewHouseTask addNewHouseTask = new AddNewHouseTask(mContext, facebook_id, house_name);
-                    addNewHouseTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/houses?facebook_id=" + facebook_id);
+                    addNewHouseTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id) + "/houses");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }

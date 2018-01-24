@@ -2,6 +2,7 @@ package com.example.muhammet.communicator.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,10 +15,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.muhammet.communicator.activities.AddSpendingActivity;
@@ -43,12 +46,13 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
 
     Context mContext;
     private TextView house_name;
-    private Button btn_add_member;
+    private Button btn_invite_member;
     private Button add_spending;
     private Button pay;
 
     private String facebook_id;
-    private String house_id;
+    //private String house_id;
+    private String house_id_server;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +61,9 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         facebook_id = getArguments().getString("facebook_id");
-        house_id = getArguments().getString("house_id");
+        //house_id = getArguments().getString("house_id");
+        house_id_server = getArguments().getString("house_id_server");
+        Log.i("house_id_server", house_id_server);
 
         mContext = getContext();
 
@@ -70,7 +76,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
             public void onClick(View view) {
                 Intent startAddSpendingActivity = new Intent(mContext,AddSpendingActivity.class);
                 startAddSpendingActivity.putExtra("facebook_id", facebook_id);
-                startAddSpendingActivity.putExtra("house_id", house_id);
+                //startAddSpendingActivity.putExtra("house_id", house_id);
+                startAddSpendingActivity.putExtra("house_id_server", house_id_server);
                 startActivity(startAddSpendingActivity);
             }
         });
@@ -81,7 +88,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
             public void onClick(View view) {
                 Intent startPayActivity = new Intent(mContext,PayActivity.class);
                 startPayActivity.putExtra("facebook_id", facebook_id);
-                startPayActivity.putExtra("house_id", house_id);
+                //startPayActivity.putExtra("house_id", house_id);
+                startPayActivity.putExtra("house_id_server", house_id_server);
                 startActivity(startPayActivity);
             }
         });
@@ -96,17 +104,20 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         memberAdapter = new MemberAdapter(mContext, this);
         rv_members.setAdapter(memberAdapter);
 
-        btn_add_member = view.findViewById(R.id.btn_add_member);
-        btn_add_member.setOnClickListener(new View.OnClickListener() {
+        btn_invite_member = view.findViewById(R.id.btn_invite_member);
+        btn_invite_member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        mContext);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
 
-                alertDialogBuilder.setTitle("Send the following code to the person you want to add.");
+                TextView showText = new TextView(mContext);
+                showText.setText(house_id_server);
+                showText.setTextIsSelectable(true);
+
+                alertDialogBuilder.setTitle(mContext.getString(R.string.fragment_home_invitation_text));
 
                 alertDialogBuilder
-                        .setMessage(house_id)
+                        .setView(showText)
                         .setCancelable(true);
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
@@ -137,7 +148,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
         Intent intent = new Intent(getActivity(), MemberProfileActivity.class);
         intent.putExtra("id", String.valueOf(clickedItemIndex));
         intent.putExtra("facebook_id", member_facebook_id);
-        intent.putExtra("house_id", house_id);
+        //intent.putExtra("house_id", house_id);
+        intent.putExtra("house_id_server", house_id_server);
 
         startActivity(intent);
     }
@@ -167,8 +179,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                     try {
                         return getActivity().getContentResolver().query(CommunicatorContract.UserEntry.CONTENT_URI,
                                 null,
-                                "house_id=?",
-                                new String[]{house_id},
+                                "house_id_server=?",
+                                new String[]{house_id_server},
                                 null);
 
                     } catch (Exception e) {
@@ -208,8 +220,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
                     try {
                         return getActivity().getContentResolver().query(CommunicatorContract.HouseEntry.CONTENT_URI,
                                 null,
-                                "_id=?",
-                                new String[]{house_id},
+                                "house_id_server=?",
+                                new String[]{house_id_server},
                                 null);
 
                     } catch (Exception e) {
@@ -232,16 +244,15 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(loader.getId() == MEMBER_LOADER_ID){
-            data.moveToFirst();
             memberAdapter.swapCursor(data);
         }
         if(loader.getId() == HOUSE_LOADER_ID){
             if(data.moveToFirst()){
                 String nameOfHouse = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry.COLUMN_NAME));
                 house_name.setText(nameOfHouse);
-                house_id = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry._ID));
-                Log.i("LoaderHouseId", house_id);
-                CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id);
+                house_id_server = data.getString(data.getColumnIndex(CommunicatorContract.HouseEntry.COLUMN_HOUSE_ID_SERVER));
+                Log.i("LoaderHouseIdServer", house_id_server);
+                CommunicatorSyncUtils.startImmediateSync(mContext, CommunicatorSyncTask.ACTION_UPDATE_MEMBERS, facebook_id, house_id_server);
             }
         }
     }

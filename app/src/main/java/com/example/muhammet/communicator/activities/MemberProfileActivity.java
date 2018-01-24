@@ -41,6 +41,7 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
 
     private String member_id;
     private String facebook_id;
+    private String house_id_server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class MemberProfileActivity extends AppCompatActivity implements LoaderMa
 
         member_id = intent.getStringExtra("id");
         facebook_id = intent.getStringExtra("facebook_id");
+        house_id_server = intent.getStringExtra("house_id_server");
         Log.i("MemberId", member_id);
 
         getSupportLoaderManager().initLoader(MEMBER_INFO_LOADER_ID, null, this);

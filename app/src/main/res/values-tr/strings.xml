@@ -41,4 +41,15 @@
     <string name="pref_language_label_en">İngilizce</string>
     <string name="pref_language_label_tr">Türkçe</string>
     <string name="activity_add_spending_name">İsim:</string>
+    <string name="activity_pay_how_much">Fiyatı:</string>
+    <string name="activity_check_house_explanation">Eğer davet kodunuz varsa lütfen buraya girin.</string>
+    <string name="activity_check_house_invitation_code">Davet Kodu</string>
+    <string name="activity_check_house_or">Veya yeni bir ev ekle</string>
+    <string name="activity_check_house_add_a_new_house">Yeni Ev Ekle</string>
+    <string name="buy_me_added_notification_title">Yeni bir alınacak eklendi!</string>
+    <string name="buy_me_added_notification_body">Birisi alınacak ekledi.</string>
+    <string name="spending_added_notification_title">Bir harcama yapıldı!</string>
+    <string name="spending_added_notification_body">Yeni bir harcama var.</string>
+    <string name="fragment_home_house_invite_member">Eve Davet Et</string>
+    <string name="fragment_home_invitation_text">Kodu davet etmek istediğiniz kişiye gönderin.</string>
 </resources>

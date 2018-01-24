@@ -84,14 +84,20 @@ public class AddNewHouseTask extends AsyncTask<String, Void, String> {
         }
 
         String success = "";
+        String house_id_server = "";
 
         JSONObject resultJson = null;
         try {
             resultJson  = new JSONObject(resultJsonStr);
             success = resultJson.getString("success");
+            JSONObject jsonObject = resultJson.getJSONObject("data");
+            house_id_server = jsonObject.getString("_id");
+
         } catch (JSONException e) {e.printStackTrace();}
 
-        UpdateUserTask updateUserTask = new UpdateUserTask(mContext, facebook_id, house_id);
+        SQLiteUtils.updateHouse(mContext, house_id, house_id_server);
+
+        UpdateUserTask updateUserTask = new UpdateUserTask(mContext, facebook_id, house_id, house_id_server);
         updateUserTask.execute(NetworkUtilities.buildWithFacebookId(facebook_id));
 
         return success;

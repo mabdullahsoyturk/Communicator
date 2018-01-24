@@ -1,12 +1,9 @@
 package com.example.muhammet.communicator.tasks;
 
 import android.content.Context;
-import android.content.Intent;
-
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.muhammet.communicator.activities.BaseActivity;
 import com.example.muhammet.communicator.utilities.SQLiteUtils;
 
 import org.json.JSONException;
@@ -17,33 +14,31 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import java.util.List;
 
-public class AddSpendingTask extends AsyncTask<String, Void, String> {
+public class AddUserTask extends AsyncTask<String, Void, Void> {
 
-    List<String> listOfIds;
     Context mContext;
-    private String name;
-    private double cost;
-    private String facebook_id;
-    private String house_id_server;
 
-    public AddSpendingTask(Context context, String name, double cost, String facebook_id, String house_id_server, List<String> listOfIds) throws MalformedURLException {
-        mContext = context;
-        this.name = name;
-        this.cost = cost;
+    private String first_name;
+    private String last_name;
+    private String photo_url;
+    private String facebook_id;
+
+    public AddUserTask(Context context, String first_name, String last_name,
+                       String photo_url, String facebook_id){
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.photo_url = photo_url;
         this.facebook_id = facebook_id;
-        this.house_id_server = house_id_server;
-        this.listOfIds = listOfIds;
+        mContext = context;
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected Void doInBackground(String... strings) {
+        Log.i("idInAddTask", facebook_id);
 
         HttpURLConnection urlConnection   = null;
         BufferedReader reader          = null;
@@ -53,19 +48,19 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
             URL communicatorURL = new URL(strings[0]);
             urlConnection  = (HttpURLConnection) communicatorURL.openConnection();
             urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            urlConnection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             urlConnection.setRequestProperty("Accept","application/json");
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
 
-            JSONObject jsonParam = SQLiteUtils.addSpendingToLocal(mContext, name, cost, facebook_id, house_id_server, listOfIds);
-
-            Log.i("JSON", jsonParam.toString());
+            JSONObject jsonParam = SQLiteUtils.addMemberToLocal(mContext, first_name,last_name,photo_url,facebook_id);
 
             DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
             os.writeBytes(jsonParam.toString());
             os.flush();
             os.close();
+
+            Log.i("JSON", jsonParam.toString());
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer     = new StringBuffer();
@@ -82,9 +77,10 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
                 }
             }
 
-            Log.i("RESULT", communicatorJsonStr);
+//            Log.i("RESULT", communicatorJsonStr);
+
         } catch (IOException e) {
-            Log.e("SpendingTask", "Error ", e);
+            Log.e("MainActivity", "Error ", e);
         } catch (JSONException e) {
             e.printStackTrace();
         } finally{
@@ -93,24 +89,6 @@ public class AddSpendingTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        String success = "";
-        try {
-            JSONObject communicatorJson  = new JSONObject(communicatorJsonStr);
-            success = communicatorJson.getString("success");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Intent intent = new Intent(mContext, BaseActivity.class);
-        intent.putExtra("facebook_id", facebook_id);
-        intent.putExtra("house_id_server", house_id_server);
-        mContext.startActivity(intent);
-
-        return success;
-    }
-
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+        return null;
     }
 }
