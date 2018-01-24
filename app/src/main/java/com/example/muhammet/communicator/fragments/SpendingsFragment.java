@@ -78,15 +78,22 @@ public class SpendingsFragment extends Fragment implements
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 long id = (long)viewHolder.itemView.getTag();
 
-                String stringId = Long.toString(id);
+                final String stringId = Long.toString(id);
 
-                DeleteSpendingTask deleteSpendingTask = new DeleteSpendingTask(getContext(), facebook_id, house_id_server, stringId, new AsyncTaskFinishedObserver() {
+                UpdateBalancesTask updateBalancesTask = new UpdateBalancesTask(mContext, facebook_id, new AsyncTaskFinishedObserver() {
                     @Override
                     public void isFinished(String s) {
-                        restartLoader();
+                        DeleteSpendingTask deleteBuyMeTask = new DeleteSpendingTask(getContext(), facebook_id, house_id_server, stringId,new AsyncTaskFinishedObserver() {
+                            @Override
+                            public void isFinished(String s) {
+                                restartLoader();
+                            }
+                        });
+                        deleteBuyMeTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id,house_id_server) + "/spendings/" + stringId);
                     }
                 });
-                deleteSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id_server) + "/spendings/" + stringId);
+
+                updateBalancesTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id_server) + "/spendings/" + stringId);
             }
         }).attachToRecyclerView(mRecyclerView);
 
