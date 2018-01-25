@@ -33,7 +33,7 @@
     <string name="activity_add_spending_name">Name: </string>
     <string name="activity_add_spending_type">Type: </string>
     <string name="activity_add_spending_cost">Cost: </string>
-    <string name="activity_add_spending_who_paid_it">Who Paid It: </string>
+    <string name="activity_add_spending_who_paid_it">Who pays: </string>
 
     <string name="activity_add_buy_me_name">Name: </string>
     <string name="activity_add_buy_me_description">Description: </string>

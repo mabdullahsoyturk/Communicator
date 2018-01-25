@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class CommunicatorSyncUtils {
 
     private static final int SYNC_INTERVAL_MINUTES = 1;
-    private static final int SYNC_INTERVAL_HOURS = 1;
+    private static final int SYNC_INTERVAL_HOURS = 168;
     private static final int SYNC_INTERVAL_SECONDS = (int) TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS);
     private static final int SYNC_INTERVAL_SECONDS_2 = (int)TimeUnit.MINUTES.toSeconds(SYNC_INTERVAL_MINUTES);
     private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS;
@@ -40,8 +40,8 @@ public class CommunicatorSyncUtils {
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(
-                        10,
-                        20))
+                        SYNC_INTERVAL_SECONDS,
+                        SYNC_INTERVAL_SECONDS + SYNC_INTERVAL_SECONDS))
                 .setReplaceCurrent(true)
                 .build();
 

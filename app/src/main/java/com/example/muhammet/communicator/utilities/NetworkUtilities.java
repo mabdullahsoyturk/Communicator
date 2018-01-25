@@ -22,16 +22,16 @@ import java.util.Scanner;
 
 public class NetworkUtilities {
 
-    public static final String STATIC_COMMUNICATOR_URL =
-    "http://10.0.2.2:3000/";
-
 //    public static final String STATIC_COMMUNICATOR_URL =
-//            "https://warm-meadow-40773.herokuapp.com/";
+//    "http://10.0.2.2:3000/";
 
-    public static final String STATIC_AUTHENTICATED_COMMUNICATOR_URL = "http://10.0.2.2:3000/api/users/";
+    public static final String STATIC_COMMUNICATOR_URL =
+            "https://warm-meadow-40773.herokuapp.com/";
 
-//    public static final String STATIC_AUTHENTICATED_COMMUNICATOR_URL =
-//            "https://warm-meadow-40773.herokuapp.com/api/users/";
+//    public static final String STATIC_AUTHENTICATED_COMMUNICATOR_URL = "http://10.0.2.2:3000/api/users/";
+
+    public static final String STATIC_AUTHENTICATED_COMMUNICATOR_URL =
+            "https://warm-meadow-40773.herokuapp.com/api/users/";
 
     private static final String USER_BASE_URL = STATIC_COMMUNICATOR_URL;
 

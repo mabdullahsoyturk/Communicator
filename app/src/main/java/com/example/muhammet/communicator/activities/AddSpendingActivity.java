@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.data.CommunicatorContract;
@@ -67,16 +68,25 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
         String cost = et_add_spending_cost.getText().toString();
 
         List<Integer> indices = spinner.getSelectedIndicies();
-        List<String> listOfNames = spinner.getSelectedStrings();
         List<String> selectedUserIds = new ArrayList<>();
 
         for(int i = 0; i < indices.size(); i++){
             selectedUserIds.add(listOfIds[indices.get(i)]);
         }
-        //ServiceUtils.addSpendingService(mContext, ServiceTasks.ACTION_ADD_SPENDING, name, Double.parseDouble(cost), facebook_id, house_id);
 
-        AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id_server, selectedUserIds);
-        addSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id_server) + "/spendings");
+        if(selectedUserIds.size() <= 0){
+            Toast.makeText(mContext, "You need to pick at least one person.", Toast.LENGTH_LONG).show();
+        }else if(!selectedUserIds.contains(facebook_id)){
+            Toast.makeText(mContext, "You cannot add a spending that you are not involved.", Toast.LENGTH_LONG).show();
+        }else if(name.equals("") || cost.equals("")){
+            Toast.makeText(mContext, "Name or cost field cannot be left blank.", Toast.LENGTH_LONG).show();
+        }
+        else{
+            AddSpendingTask addSpendingTask = new AddSpendingTask(this, name,Double.parseDouble(cost), facebook_id, house_id_server, selectedUserIds);
+            addSpendingTask.execute(NetworkUtilities.buildWithFacebookIdAndHouseId(facebook_id, house_id_server) + "/spendings");
+        }
+
+        //ServiceUtils.addSpendingService(mContext, ServiceTasks.ACTION_ADD_SPENDING, name, Double.parseDouble(cost), facebook_id, house_id);
     }
 
     @Override
@@ -133,7 +143,6 @@ public class AddSpendingActivity extends AppCompatActivity implements LoaderMana
 
             listOfNames[i] = first_name;
             listOfIds[i] = user_facebook_id;
-            Log.i("Ids", user_facebook_id);
         }
 
         spinner.setItems(listOfNames);

@@ -112,20 +112,35 @@ public class SQLiteUtils {
                 String hid = userCursor.getString(userCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_HOUSE_ID));
                 hid_server = userCursor.getString(userCursor.getColumnIndex(CommunicatorContract.UserEntry.COLUMN_HOUSE_ID_SERVER));
 
+                if(listOfIds.get(i).equals(facebook_id)){
+                    ContentValues cv = new ContentValues();
+                    cv.put("_id", user_id);
+                    cv.put("first_name", first_name);
+                    cv.put("last_name", last_name);
+                    cv.put("balance", balance + (cost - (cost/listOfIds.size())));
+                    cv.put("photo_url", photo_url);
+                    cv.put("status", status);
+                    cv.put("created_time", created);
+                    cv.put("facebook_id", fid);
+                    cv.put("house_id", hid);
+                    cv.put("house_id_server", hid_server);
 
-                ContentValues cv = new ContentValues();
-                cv.put("_id", user_id);
-                cv.put("first_name", first_name);
-                cv.put("last_name", last_name);
-                cv.put("balance", balance + (cost/listOfIds.size()));
-                cv.put("photo_url", photo_url);
-                cv.put("status", status);
-                cv.put("created_time", created);
-                cv.put("facebook_id", fid);
-                cv.put("house_id", hid);
-                cv.put("house_id_server", hid_server);
+                    mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
+                }else{
+                    ContentValues cv = new ContentValues();
+                    cv.put("_id", user_id);
+                    cv.put("first_name", first_name);
+                    cv.put("last_name", last_name);
+                    cv.put("balance", balance - (cost/listOfIds.size()));
+                    cv.put("photo_url", photo_url);
+                    cv.put("status", status);
+                    cv.put("created_time", created);
+                    cv.put("facebook_id", fid);
+                    cv.put("house_id", hid);
+                    cv.put("house_id_server", hid_server);
 
-                mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
+                    mContext.getContentResolver().update(CommunicatorContract.UserEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(user_id)).build(), cv, null,null);
+                }
             }
         }
 

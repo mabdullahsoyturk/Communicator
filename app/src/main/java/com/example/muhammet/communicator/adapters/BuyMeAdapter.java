@@ -30,7 +30,6 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
         private BuyMeSpendingItemClickListener mListener;
         private TextView buyMeName;
         private TextView buyMeDescription;
-        private Button editButton;
         private Button deleteButton;
         private long id;
 
@@ -40,7 +39,6 @@ public class BuyMeAdapter extends RecyclerView.Adapter<BuyMeAdapter.BuyMeAdapter
 
             buyMeName = itemView.findViewById(R.id.buy_me_name);
             buyMeDescription = itemView.findViewById(R.id.buy_me_description);
-            editButton = itemView.findViewById(R.id.buy_me_edit);
             deleteButton = itemView.findViewById(R.id.buy_me_delete);
             deleteButton.setOnClickListener(this);
         }

@@ -33,7 +33,6 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
         private TextView spendingDate;
         private TextView spendingShare;
         private ImageView spendingIcon;
-        private Button spendingEdit;
         private Button spendingDelete;
         private long id;
 
@@ -45,7 +44,6 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
             spendingDate    = itemView.findViewById(R.id.spending_date);
             spendingShare   = itemView.findViewById(R.id.spending_share);
             spendingIcon    = itemView.findViewById(R.id.spending_icon);
-            spendingEdit    = itemView.findViewById(R.id.spending_edit);
             spendingDelete  = itemView.findViewById(R.id.spending_delete);
             spendingDelete.setOnClickListener(this);
         }

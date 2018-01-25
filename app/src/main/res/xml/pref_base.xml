@@ -3,19 +3,19 @@
     android:layout_width = "match_parent"
     android:layout_height= "match_parent">
 
-    <ListPreference
-        android:defaultValue="@string/pref_time_period_label_all"
-        android:entries="@array/pref_time_period_options"
-        android:entryValues="@array/pref_time_period_values"
-        android:key="@string/pref_time_period_key"
-        android:title="@string/pref_time_period_label" />
+    <!--<ListPreference-->
+        <!--android:defaultValue="@string/pref_time_period_label_all"-->
+        <!--android:entries="@array/pref_time_period_options"-->
+        <!--android:entryValues="@array/pref_time_period_values"-->
+        <!--android:key="@string/pref_time_period_key"-->
+        <!--android:title="@string/pref_time_period_label" />-->
 
-    <ListPreference
-        android:defaultValue="@string/pref_currency_label_turkish_lira"
-        android:entries="@array/pref_currency_options"
-        android:entryValues="@array/pref_currency_values"
-        android:key="@string/pref_currency_key"
-        android:title="@string/pref_currency_label" />
+    <!--<ListPreference-->
+        <!--android:defaultValue="@string/pref_currency_label_turkish_lira"-->
+        <!--android:entries="@array/pref_currency_options"-->
+        <!--android:entryValues="@array/pref_currency_values"-->
+        <!--android:key="@string/pref_currency_key"-->
+        <!--android:title="@string/pref_currency_label" />-->
 
     <ListPreference
         android:defaultValue="@string/pref_language_label_en"

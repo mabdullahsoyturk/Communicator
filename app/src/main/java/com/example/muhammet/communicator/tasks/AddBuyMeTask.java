@@ -102,7 +102,7 @@ public class AddBuyMeTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        NotificationUtilities.remindUserBecauseBuyMeAdded(mContext);
+        //NotificationUtilities.remindUserBecauseBuyMeAdded(mContext);
 
         Intent intent = new Intent(mContext,BaseActivity.class);
         intent.putExtra("facebook_id", facebook_id);

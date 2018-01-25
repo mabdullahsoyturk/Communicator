@@ -6,16 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/feedback"
-            android:title="Feedback" />
-        <item
-            android:id="@+id/help"
-            android:title="Help" />
-        <item
-            android:id="@+id/privacy_policy"
-            android:title="Privacy Policy" />
-        <item
-            android:id="@+id/terms_of_service"
-            android:title="Terms of Service" />
+            android:title="Feedback and Help" />
     </group>
 
 </menu>

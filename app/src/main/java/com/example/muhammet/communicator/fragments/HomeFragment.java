@@ -130,6 +130,8 @@ public class HomeFragment extends Fragment implements ListItemClickListener, Loa
 
         getActivity().getSupportLoaderManager().initLoader(MEMBER_LOADER_ID, null, this);
 
+        CommunicatorSyncUtils.initialize(mContext);
+
         return view;
     }
 

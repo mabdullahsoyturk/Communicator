@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.muhammet.communicator.R;
 import com.example.muhammet.communicator.services.ServiceTasks;
@@ -50,6 +51,7 @@ public class AddBuyMeActivity extends AppCompatActivity {
         String description = tv_description.getText().toString();
 
         if(name.length() == 0 || description.length() == 0){
+            Toast.makeText(mContext, "Name or description field cannot be left blank.", Toast.LENGTH_LONG).show();
             return;
         }
 

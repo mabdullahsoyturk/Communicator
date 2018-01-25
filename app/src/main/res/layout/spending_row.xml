@@ -36,16 +36,6 @@
         android:layout_below="@id/spending_name"
         android:layout_toRightOf="@id/spending_icon"/>
 
-    <Button android:id="@+id/spending_edit"
-        android:drawableLeft="@drawable/ic_touch_app_black_24dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/buy_me_row_edit"
-        android:textColor="@color/colorPrimary"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_toLeftOf="@id/spending_delete"
-        />
-
     <Button android:id="@+id/spending_delete"
         android:drawableLeft="@drawable/ic_delete_black_24dp"
         android:layout_width="wrap_content"

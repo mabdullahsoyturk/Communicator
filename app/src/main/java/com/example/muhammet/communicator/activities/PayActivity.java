@@ -48,7 +48,7 @@ public class PayActivity extends AppCompatActivity implements LoaderManager.Load
         setContentView(R.layout.activity_pay);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        spinner = findViewById(R.id.activitiy_pay_spinner);
+        spinner = findViewById(R.id.activity_pay_spinner);
         addPayment = findViewById(R.id.add_payment_button);
         et_how_much = findViewById(R.id.activity_pay_how_much);
 

@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -64,6 +65,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Communicator");
         setContentView(R.layout.activity_base);
 
         house_name = findViewById(R.id.tv_house_name);
@@ -123,12 +125,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         //////////////////////////////////NAVIGATION DRAWER CONFIGS/////////////////////////////////
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        if(navigationView == null){
+            Log.i("null","null");
+        }
         navigationView.setNavigationItemSelectedListener(this);
         name = navigationView.getHeaderView(0).findViewById(R.id.name_surname);
         email = navigationView.getHeaderView(0).findViewById(R.id.email);
@@ -198,6 +203,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Log.i("NavigationId", "" + id);
+
+        if(id == R.id.feedback){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+            alertDialogBuilder.setTitle("Feedback and Help");
+
+            alertDialogBuilder
+                    .setMessage("muhammetabdullahsoyturk@gmail.com")
+                    .setCancelable(true);
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            alertDialog.show();
+        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
