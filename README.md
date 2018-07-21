@@ -11,6 +11,22 @@ https://play.google.com/store/apps/details?id=com.muhammet.communicator
   <img src="https://lh3.googleusercontent.com/xalwqHWY-16BYXPMYaA3GPSWWm4TV8Cmdm4ox4of-6lQ1rBZbJpWL3a7Fk0gUefB8zs=w1366-h631" alt="Communicator Landing Page"/>
 </p>
 
+## Project Structure
+
+```bash
+com.example.muhammet.communicator/        
+                          activities/        # Contains all activities.
+                          adapters/          # Contains all adapters.
+                          data/              # Contains data related things like DbHelper and Content Provider.
+                          fragments/         # Contains all fragments
+                          listeners/         # Contains all listeners.
+                          receivers/         # Contains broadcast receivers.
+                          services/          # Contains services.
+                          sync/              # Contains sync related classes like job services and intent service.
+                          tasks/             # Contains all async tasks.
+                          utilities/         # Contains helper classes.
+```
+
 ## MIT License
 
 Copyright (c) 2018 Muhammet Soytürk
